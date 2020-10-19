@@ -1,0 +1,9 @@
+asgiref==3.2.10
+Django==3.1.2
+djangorestframework==3.12.1
+mercurial==5.3
+protobuf==3.11.3
+pytz==2020.1
+six==1.14.0
+sqlparse==0.4.1
+virtualenv==16.7.8
