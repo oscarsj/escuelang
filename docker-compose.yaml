@@ -1,0 +1,32 @@
+version: "2.2"
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    healthcheck: # https://docs.docker.com/compose/compose-file/compose-file-v2/#healthcheck
+      # executing a command that *needs* to stablish a connection to db; the lighter, the better.
+      test: mysql --execute 'SHOW DATABASES' || exit 1
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=True
+    volumes:
+      - db-data:/var/lib/mysql/
+
+  escuela:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: escuelafutbol
+    command: python escuelang/manage.py runserver 0.0.0.0:8080
+    ports:
+      - 8080:8080
+    depends_on:
+      mysql:
+        condition: service_healthy # https://docs.docker.com/compose/compose-file/compose-file-v2/#depends_on
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - IS_DEVELOPMENT=True
+
+volumes:
+  db-data:
+    driver: local
