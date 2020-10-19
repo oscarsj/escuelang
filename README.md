@@ -1,16 +1,16 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### Django + React version of escueladefutbol app ###
 
-### What is this repository for? ###
+Following [this post](https://www.valentinog.com/blog/drf/)
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Dev env set up ###
 
-### How do I get set up? ###
-
-* Summary of set up
+* Create the python venv if needed:
+```
+python3 -m venv venv
+source venv/bin/activate
+```
 * Configuration
 * Dependencies
 * Database configuration
