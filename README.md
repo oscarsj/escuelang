@@ -6,12 +6,27 @@ Following [this post](https://www.valentinog.com/blog/drf/)
 
 ### Dev env set up ###
 
-* Create the python venv if needed:
+* Build a development environment
+- Add to your /etc/hosts:
 ```
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
+127.0.0.1 mysql
 ```
+- Create a database in the docker volume:
+```
+docker-compose run mysql
+mysql -h mysql -u root
+create database escuela;
+```
+- Populate it with django models
+```
+docker-compose run escuela python escuelang/manage.py migrate
+```
+- Run the app:
+```
+docker-compose up -d
+```
+
+- Connect to localhost:8080
 * Configuration
 * Dependencies
 * Database configuration
