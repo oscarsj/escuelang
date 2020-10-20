@@ -1,6 +1,5 @@
 import datetime
 from django.db import models
-import time
 
 
 class Parent(models.Model):
@@ -127,7 +126,7 @@ class Season(models.Model):
     class Meta:
         verbose_name = "temporada"
 
-    course = models.ForeignKey(Course, verbose_name="curso")
+    course = models.ForeignKey(Course, verbose_name="curso", on_delete=models.CASCADE)
     name = models.CharField("nombre", max_length=255)
     start_date = models.DateField("fecha de comienzo")
     end_date = models.DateField("fecha de finalización")
@@ -147,7 +146,7 @@ class PricesPerDay(models.Model):
     class Meta:
         verbose_name = "Precios por dias"
 
-    season = models.ForeignKey(Season, verbose_name="temporada")
+    season = models.ForeignKey(Season, verbose_name="temporada", on_delete=models.CASCADE)
     days = models.IntegerField("número de días")
     price = models.DecimalField("precio", default=0, decimal_places=2, max_digits=8)
 
@@ -177,12 +176,13 @@ class RegisteredChild(models.Model):
     class Meta:
         verbose_name = "registro"
 
-    child = models.ForeignKey(Child, verbose_name="alumno")
-    season = models.ForeignKey(Season, verbose_name="temporada")
+    child = models.ForeignKey(Child, verbose_name="alumno", on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, verbose_name="temporada", on_delete=models.CASCADE)
     price_month = models.DecimalField("precio/mes", decimal_places=2, max_digits=8, default=0)
     days = models.ManyToManyField(Days, blank=True, null=True, verbose_name="días de clase")
-    monitor = models.ForeignKey(Monitor, blank=True, null=True, verbose_name="monitor")
-    payment_method = models.ForeignKey(PaymentMethods, blank=True, null=True, verbose_name="método de pago")
+    monitor = models.ForeignKey(Monitor, blank=True, null=True, verbose_name="monitor", on_delete=models.CASCADE)
+    payment_method = models.ForeignKey(PaymentMethods, blank=True, null=True, verbose_name="método de pago",
+                                       on_delete=models.CASCADE)
     competition = models.BooleanField("competición", default=False)
 
 
@@ -200,7 +200,7 @@ class Payments(models.Model):
     class Meta:
         verbose_name = "pago"
 
-    register = models.ForeignKey(RegisteredChild, verbose_name="alumno")
+    register = models.ForeignKey(RegisteredChild, verbose_name="alumno", on_delete=models.CASCADE)
     date = models.DateField("fecha", null=True, blank=True)
     amount = models.DecimalField("cantidad", decimal_places=2, max_digits=8, default=0)
 

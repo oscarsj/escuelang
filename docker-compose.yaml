@@ -16,8 +16,10 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: escuelafutbol
+    image: escuelang
     command: python escuelang/manage.py runserver 0.0.0.0:8080
+    volumes:
+      - .:/code
     ports:
       - 8080:8080
     depends_on:

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '%&2zlyv725m!9fr41ikvcj_5rsp_qml+33xa*9&)&zx)al-5#v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+IS_DEVELOPMENT = os.environ.get('IS_DEVELOPMENT')
+DEBUG = IS_DEVELOPMENT
 
 ALLOWED_HOSTS = []
 
@@ -73,13 +74,23 @@ WSGI_APPLICATION = 'escuelang.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if IS_DEVELOPMENT:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'mysql',
+            'PORT': '3306',
+            'NAME': 'escuela',
+            'USER': 'root',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
