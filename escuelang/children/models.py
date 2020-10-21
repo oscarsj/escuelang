@@ -42,7 +42,7 @@ class Child(models.Model):
     telephone2 = models.CharField("teléfono 2", max_length=13, null=True, blank=True)
     address = models.CharField("dirección", max_length=255, null=True, blank=True)
     town = models.CharField("localidad", max_length=255, null=True, blank=True)
-    postal = models.CharField("código postal", max_length=5, null=True, blank=True)
+    postcode = models.CharField("código postal", max_length=5, null=True, blank=True)
     school = models.CharField("colegio", max_length=255, null=True, blank=True)
     email = models.EmailField(blank=True)
     parents = models.ManyToManyField(Parent, blank=True, null=True, verbose_name="padres")
@@ -118,7 +118,7 @@ class Course(models.Model):
     name = models.CharField("nombre", max_length=255)
     location = models.CharField("lugar", max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -207,14 +207,4 @@ class Payments(models.Model):
     def __unicode__(self):
         return "%s el %s (%s euros)" % (self.register, self.date, self.amount)
 
-
-class ModelFactory(object):
-    @staticmethod
-    def getModel(model_name):
-        if model_name == "Child":
-            return Child
-        if model_name == "Parent":
-            return Parent
-        if model_name == "Monitor":
-            return Monitor
 
