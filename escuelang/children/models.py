@@ -6,81 +6,43 @@ class Parent(models.Model):
     class Meta:
         verbose_name = "padre"
 
-    name = models.CharField("nombre", max_length=255)
-    first_surname = models.CharField("primer apellido", max_length=255)
-    second_surname = models.CharField("segundo apellido", max_length=255, null=True, blank=True)
-    address = models.CharField("dirección", max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255)
+    first_surname = models.CharField(max_length=255)
+    second_surname = models.CharField(max_length=255, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return "%s %s" % (self.name, self.first_surname)
 
-    def get_fields(self):
-        # make a list of field/values.
-        return [(field, field.value_to_string(self)) for field in Parent._meta.fields]
-
-    @classmethod
-    def create(cls, initial_values):
-        parent = cls(name=initial_values['name'],
-                     first_surname=initial_values['first_surname'],
-                     second_surname=initial_values['second_surname'],
-                     address=initial_values['address'],
-                     )
-        return parent
-
 
 class Child(models.Model):
     class Meta:
-        verbose_name = "niño"
-        ordering = ['first_surname', 'second_surname', 'name']
+        ordering = ['first_surname', 'second_surname', 'name', 'birthdate']
 
     id = models.AutoField(primary_key=True)
-    name = models.CharField("nombre", max_length=255)
-    first_surname = models.CharField("primer apellido", max_length=255)
-    second_surname = models.CharField("segundo apellido", max_length=255, blank=True)
-    birthdate = models.DateField("fecha de nacimiento", null=True, blank=True)
-    telephone = models.CharField("teléfono", max_length=13, null=True, blank=True)
-    telephone2 = models.CharField("teléfono 2", max_length=13, null=True, blank=True)
-    address = models.CharField("dirección", max_length=255, null=True, blank=True)
-    town = models.CharField("localidad", max_length=255, null=True, blank=True)
-    postcode = models.CharField("código postal", max_length=5, null=True, blank=True)
-    school = models.CharField("colegio", max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255)
+    first_surname = models.CharField(max_length=255)
+    second_surname = models.CharField(max_length=255,
+                                      blank=True)
+    birthdate = models.DateField(null=True, blank=True)
+    telephone = models.CharField(max_length=13, blank=True)
+    telephone2 = models.CharField(max_length=13, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    town = models.CharField(max_length=255, blank=True)
+    postcode = models.CharField(max_length=5, blank=True)
+    school = models.CharField(max_length=255, blank=True)
     email = models.EmailField(blank=True)
-    parents = models.ManyToManyField(Parent, blank=True, null=True, verbose_name="padres")
-    notes = models.CharField("notas", max_length=500, blank=True, null=True)
-    dni = models.CharField("DNI", max_length=9, blank=True, null=True)
+    parents = models.ManyToManyField(Parent, blank=True, null=True)
+    notes = models.CharField(max_length=500, blank=True)
+    dni = models.CharField(max_length=9, blank=True)
 
     def get_fullname(self):
-        return "%s %s %s".lower() % (self.first_surname,
-                                 self.second_surname,
-                                 self.name)
-
+        return "%s %s, %s".lower() % (self.first_surname,
+                                     self.second_surname,
+                                     self.name)
 
     def __str__(self):
         return self.get_fullname()
-
-    def get_fields(self):
-        # make a list of field/values.
-        return [(field, field.value_to_string(self)) for field in Child._meta.fields]
-
-    def get_data(self):
-        return {'name': self.name,
-                'first_surname': self.first_surname,
-                'second_surname': self.second_surname,
-                'birthdate': self.birthdate,
-                'address': self.address,
-                'school': self.school,
-                }
-
-    @classmethod
-    def create(cls, initial_values):
-        child = cls(name=initial_values['name'],
-                    first_surname=initial_values['first_surname'],
-                    second_surname=initial_values['second_surname'],
-                    birthdate=initial_values['birthdate'],
-                    address=initial_values['address'],
-                    school=initial_values['school'],
-                    )
-        return child
 
 
 class Monitor(models.Model):
@@ -115,8 +77,8 @@ class Course(models.Model):
     class Meta:
         verbose_name = "curso"
 
-    name = models.CharField("nombre", max_length=255)
-    location = models.CharField("lugar", max_length=255)
+    name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -126,13 +88,14 @@ class Season(models.Model):
     class Meta:
         verbose_name = "temporada"
 
-    course = models.ForeignKey(Course, verbose_name="curso", on_delete=models.CASCADE)
-    name = models.CharField("nombre", max_length=255)
-    start_date = models.DateField("fecha de comienzo")
-    end_date = models.DateField("fecha de finalización")
-    monitors = models.ManyToManyField(Monitor, blank=True, verbose_name="monitores")
-    children = models.ManyToManyField(Child, through='RegisteredChild', verbose_name="alumnos", null=True, blank=True)
-    active = models.BooleanField("temporada actual")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    monitors = models.ManyToManyField(Monitor, blank=True)
+    children = models.ManyToManyField(Child, through='RegisteredChild',
+                                      null=True, blank=True)
+    active = models.BooleanField()
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.course.name)
