@@ -11,7 +11,7 @@ class Parent(models.Model):
     second_surname = models.CharField("segundo apellido", max_length=255, null=True, blank=True)
     address = models.CharField("dirección", max_length=255, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % (self.name, self.first_surname)
 
     def get_fields(self):
@@ -55,7 +55,7 @@ class Child(models.Model):
                                  self.name)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return self.get_fullname()
 
     def get_fields(self):
@@ -94,7 +94,7 @@ class Monitor(models.Model):
     nick = models.CharField("apodo", max_length=255, blank=True, null=True)
     address = models.CharField("dirección", max_length=255, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.nick if self.nick else self.name
 
     def get_fields(self):
@@ -134,7 +134,7 @@ class Season(models.Model):
     children = models.ManyToManyField(Child, through='RegisteredChild', verbose_name="alumnos", null=True, blank=True)
     active = models.BooleanField("temporada actual")
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s (%s)" % (self.name, self.course.name)
 
     @staticmethod
@@ -157,7 +157,7 @@ class Days(models.Model):
 
     name = models.CharField("día", max_length=25)
     dow = models.IntegerField("día de la semana")
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.name
 
 
@@ -168,7 +168,7 @@ class PaymentMethods(models.Model):
 
     name = models.CharField("método de pago", max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -186,7 +186,7 @@ class RegisteredChild(models.Model):
     competition = models.BooleanField("competición", default=False)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s (%s)" % (self.child, self.season)
 
     def get_child_birthdate(self):
@@ -204,7 +204,7 @@ class Payments(models.Model):
     date = models.DateField("fecha", null=True, blank=True)
     amount = models.DecimalField("cantidad", decimal_places=2, max_digits=8, default=0)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s el %s (%s euros)" % (self.register, self.date, self.amount)
 
 
