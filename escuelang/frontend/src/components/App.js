@@ -37,7 +37,7 @@ class App extends Component {
         {this.state.data.map(child => {
           return (
             <li key={child.id}>
-              {child.name} - {child.surname}
+              {child.name} {child.firstSurname} {child.secondSurname}
             </li>
           );
         })}

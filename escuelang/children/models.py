@@ -3,8 +3,6 @@ from django.db import models
 
 
 class Parent(models.Model):
-    class Meta:
-        verbose_name = "padre"
 
     name = models.CharField(max_length=255)
     first_surname = models.CharField(max_length=255)
@@ -16,8 +14,6 @@ class Parent(models.Model):
 
 
 class Child(models.Model):
-    class Meta:
-        ordering = ['first_surname', 'second_surname', 'name', 'birthdate']
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -36,46 +32,25 @@ class Child(models.Model):
     notes = models.CharField(max_length=500, blank=True)
     dni = models.CharField(max_length=9, blank=True)
 
-    def get_fullname(self):
-        return "%s %s, %s".lower() % (self.first_surname,
-                                     self.second_surname,
-                                     self.name)
-
     def __str__(self):
-        return self.get_fullname()
+        return "%s %s, %s" % (self.first_surname,
+                              self.second_surname,
+                              self.name)
 
 
 class Monitor(models.Model):
-    class Meta:
-        verbose_name = "monitor"
-        verbose_name_plural = "monitores"
 
-    name = models.CharField("nombre", max_length=255)
-    first_surname = models.CharField("primer apellido", max_length=255, blank=True, null=True)
-    second_surname = models.CharField("segundo apellido", max_length=255, blank=True, null=True)
-    nick = models.CharField("apodo", max_length=255, blank=True, null=True)
-    address = models.CharField("dirección", max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255)
+    first_surname = models.CharField(max_length=255, blank=True, null=True)
+    second_surname = models.CharField(max_length=255, blank=True, null=True)
+    nick = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.nick if self.nick else self.name
-
-    def get_fields(self):
-        # make a list of field/values.
-        return [(field, field.value_to_string(self)) for field in Monitor._meta.fields]
-
-    @classmethod
-    def create(cls, initial_values):
-        monitor = cls(name=initial_values['name'],
-                      first_surname=initial_values['first_surname'],
-                      second_surname=initial_values['second_surname'],
-                      address=initial_values['address'],
-                      )
-        return monitor
+        return self.nick or self.name
 
 
 class Course(models.Model):
-    class Meta:
-        verbose_name = "curso"
 
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
@@ -85,8 +60,6 @@ class Course(models.Model):
 
 
 class Season(models.Model):
-    class Meta:
-        verbose_name = "temporada"
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -106,8 +79,6 @@ class Season(models.Model):
 
 
 class PricesPerDay(models.Model):
-    class Meta:
-        verbose_name = "Precios por dias"
 
     season = models.ForeignKey(Season, verbose_name="temporada", on_delete=models.CASCADE)
     days = models.IntegerField("número de días")
@@ -115,57 +86,43 @@ class PricesPerDay(models.Model):
 
 
 class Days(models.Model):
-    class Meta:
-        verbose_name = "día"
 
-    name = models.CharField("día", max_length=25)
-    dow = models.IntegerField("día de la semana")
+    name = models.CharField(max_length=25)
+    dow = models.IntegerField()
+
     def __str__(self):
         return "%s" % self.name
 
 
 class PaymentMethods(models.Model):
-    class Meta:
-        verbose_name = "método de pago"
-        verbose_name_plural = "métodos de pago"
 
-    name = models.CharField("método de pago", max_length=255)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 
 class RegisteredChild(models.Model):
-    class Meta:
-        verbose_name = "registro"
 
-    child = models.ForeignKey(Child, verbose_name="alumno", on_delete=models.CASCADE)
-    season = models.ForeignKey(Season, verbose_name="temporada", on_delete=models.CASCADE)
-    price_month = models.DecimalField("precio/mes", decimal_places=2, max_digits=8, default=0)
-    days = models.ManyToManyField(Days, blank=True, null=True, verbose_name="días de clase")
-    monitor = models.ForeignKey(Monitor, blank=True, null=True, verbose_name="monitor", on_delete=models.CASCADE)
-    payment_method = models.ForeignKey(PaymentMethods, blank=True, null=True, verbose_name="método de pago",
+    child = models.OneToOneField(Child, unique=True, on_delete=models.CASCADE)
+    season = models.OneToOneField(Season, unique=True, on_delete=models.CASCADE)
+    price_month = models.DecimalField(decimal_places=2, max_digits=8, default=0)
+    days = models.ManyToManyField(Days)
+    monitor = models.ForeignKey(Monitor, blank=True, null=True,
+                                on_delete=models.CASCADE)
+    payment_method = models.ForeignKey(PaymentMethods, blank=True, null=True,
                                        on_delete=models.CASCADE)
-    competition = models.BooleanField("competición", default=False)
-
+    competition = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s (%s)" % (self.child, self.season)
 
-    def get_child_birthdate(self):
-        if self.child.birthdate:
-            return self.child.birthdate
-        else:
-            return datetime.datetime.now().date()
-
 
 class Payments(models.Model):
-    class Meta:
-        verbose_name = "pago"
 
     register = models.ForeignKey(RegisteredChild, verbose_name="alumno", on_delete=models.CASCADE)
-    date = models.DateField("fecha", null=True, blank=True)
-    amount = models.DecimalField("cantidad", decimal_places=2, max_digits=8, default=0)
+    date = models.DateField(null=True, blank=True)
+    amount = models.DecimalField(decimal_places=2, max_digits=8, default=0)
 
     def __str__(self):
         return "%s el %s (%s euros)" % (self.register, self.date, self.amount)
