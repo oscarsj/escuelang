@@ -108,10 +108,10 @@ class RegisteredChild(models.Model):
     season = models.OneToOneField(Season, unique=True, on_delete=models.CASCADE)
     price_month = models.DecimalField(decimal_places=2, max_digits=8, default=0)
     days = models.ManyToManyField(Days)
-    monitor = models.ForeignKey(Monitor, blank=True, null=True,
-                                on_delete=models.CASCADE)
-    payment_method = models.ForeignKey(PaymentMethods, blank=True, null=True,
-                                       on_delete=models.CASCADE)
+    monitor = models.OneToOneField(Monitor, blank=True, null=True,
+                                   on_delete=models.CASCADE)
+    payment_method = models.OneToOneField(PaymentMethods, blank=True, null=True,
+                                          on_delete=models.CASCADE)
     competition = models.BooleanField(default=False)
 
     def __str__(self):
@@ -120,7 +120,7 @@ class RegisteredChild(models.Model):
 
 class Payments(models.Model):
 
-    register = models.ForeignKey(RegisteredChild, verbose_name="alumno", on_delete=models.CASCADE)
+    register = models.OneToOneField(RegisteredChild, on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
     amount = models.DecimalField(decimal_places=2, max_digits=8, default=0)
 
