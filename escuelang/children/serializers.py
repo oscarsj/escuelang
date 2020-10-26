@@ -11,6 +11,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class SeasonSerializer(serializers.ModelSerializer):
+    course = serializers.SlugRelatedField(slug_field='name', queryset=Course.objects.all())
+
     class Meta:
         model = Season
         fields = ('id', 'course',
