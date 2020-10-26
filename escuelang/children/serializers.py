@@ -11,13 +11,26 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class SeasonSerializer(serializers.ModelSerializer):
-    course = serializers.SlugRelatedField(slug_field='name', queryset=Course.objects.all())
+    course = serializers.SlugRelatedField(slug_field='name',
+                                          queryset=Course.objects.all())
 
     class Meta:
         model = Season
         fields = ('id', 'course',
                   'name', 'start_date', 'end_date',
-                  'active')
+                  'active', 'children')
+        depth = 1
+
+
+class SeasonShallowSerializer(SeasonSerializer):
+    course = serializers.SlugRelatedField(slug_field='name',
+                                          queryset=Course.objects.all())
+
+    class Meta:
+        model = Season
+        fields = (
+            'id', 'course', 'name', 'start_date', 'end_date', 'active', 'children')
+        depth = 0
 
 
 class MonitorSerializer(serializers.ModelSerializer):

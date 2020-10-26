@@ -78,7 +78,7 @@ class Season(models.Model):
 
     @staticmethod
     def get_active_season():
-        return Season.objects.get(active=True)
+        return Season.objects.filter(active=True)
 
 
 class PricesPerDay(models.Model):
