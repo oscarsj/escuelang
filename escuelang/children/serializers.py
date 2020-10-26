@@ -18,23 +18,6 @@ class SeasonSerializer(serializers.ModelSerializer):
                   'active')
 
 
-class ChildrenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Child
-        fields = ('id', 'name', 'first_surname', 'second_surname',
-                  'birthdate', 'telephone', 'telephone2',
-                  'address', 'town', 'postcode', 'school',
-                  'email', 'notes', 'dni')
-
-
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RegisteredChild
-        fields = ('id', 'child',
-                  'days', 'monitor', 'price_month',
-                  'payment_method', 'competition')
-
-
 class MonitorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Monitor
@@ -42,7 +25,40 @@ class MonitorSerializer(serializers.ModelSerializer):
                   'nick', 'address')
 
 
-class DaysSerializers(serializers.ModelSerializer):
+class DaysSerializer(serializers.ModelSerializer):
     class Meta:
         model = Days
         fields = ('id', 'name', 'dow')
+
+
+class ChildrenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = ('id', 'name', 'surname',
+                  'birthdate', 'telephone', 'telephone2',
+                  'address', 'town', 'postcode', 'school',
+                  'email', 'notes', 'dni')
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    child = ChildrenSerializer(many=False)
+    season = serializers.StringRelatedField(many=False)
+    days = serializers.StringRelatedField(many=True)
+    monitor = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = RegisteredChild
+        fields = ('id', 'season', 'child',
+                  'days', 'monitor', 'price_month',
+                  'payment_method', 'competition')
+
+    def create(self, validated_data):
+        child_data = validated_data['child']
+
+        child, created = Child.objects.get_or_create(
+            name=child_data['name'],
+            surname=child_data['surname'],
+            defaults=child_data,
+        )
+        register = RegisteredChild.objects.create(child=child, **validated_data)
+        return register

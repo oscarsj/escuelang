@@ -1,11 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('courses', views.CourseListCreate)
+router.register('children', views.ChildrenListCreate)
+router.register('seasons', views.SeasonListCreate)
+router.register('monitors', views.MonitorListCreate)
+router.register('days', views.DaysListCreate)
 
 urlpatterns = [
-    path('course/', views.CourseListCreate.as_view()),
-    path('children/', views.ChildrenListCreate.as_view()),
-    path('season/<str:season>/', views.RegisterListCreate.as_view()),
-    path('season/', views.SeasonListCreate.as_view()),
-    path('monitor/', views.MonitorListCreate.as_view()),
-    path('days/', views.DaysListCreate.as_view())
+    path('', include(router.urls))
 ]

@@ -17,9 +17,7 @@ class Child(models.Model):
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    first_surname = models.CharField(max_length=255)
-    second_surname = models.CharField(max_length=255,
-                                      blank=True)
+    surname = models.CharField(max_length=255)
     birthdate = models.DateField(null=True, blank=True)
     telephone = models.CharField(max_length=13, blank=True)
     telephone2 = models.CharField(max_length=13, blank=True)
@@ -33,9 +31,10 @@ class Child(models.Model):
     dni = models.CharField(max_length=9, blank=True)
 
     def __str__(self):
-        return "%s %s, %s" % (self.first_surname,
-                              self.second_surname,
-                              self.name)
+        return "%s, %s" % (self.surname, self.name)
+
+    class Meta:
+        unique_together = (('name', 'surname'),)
 
 
 class Monitor(models.Model):
@@ -73,6 +72,10 @@ class Season(models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.course.name)
 
+    @property
+    def repr(self):
+        return self.__str__()
+
     @staticmethod
     def get_active_season():
         return Season.objects.get(active=True)
@@ -80,9 +83,9 @@ class Season(models.Model):
 
 class PricesPerDay(models.Model):
 
-    season = models.ForeignKey(Season, verbose_name="temporada", on_delete=models.CASCADE)
-    days = models.IntegerField("número de días")
-    price = models.DecimalField("precio", default=0, decimal_places=2, max_digits=8)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    days = models.IntegerField()
+    price = models.DecimalField(default=0, decimal_places=2, max_digits=8)
 
 
 class Days(models.Model):
@@ -104,8 +107,11 @@ class PaymentMethods(models.Model):
 
 class RegisteredChild(models.Model):
 
-    child = models.OneToOneField(Child, unique=True, on_delete=models.CASCADE)
-    season = models.OneToOneField(Season, unique=True, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = (('child', 'season'),)
+
+    child = models.OneToOneField(Child, on_delete=models.CASCADE)
+    season = models.OneToOneField(Season, on_delete=models.CASCADE)
     price_month = models.DecimalField(decimal_places=2, max_digits=8, default=0)
     days = models.ManyToManyField(Days)
     monitor = models.OneToOneField(Monitor, blank=True, null=True,
