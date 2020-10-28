@@ -15,7 +15,7 @@ class CourseListCreate(viewsets.ModelViewSet):
 
 class SeasonListCreate(viewsets.ModelViewSet):
     queryset = Season.objects.all()
-    serializer_class = SeasonSerializer
+    serializer_class = SeasonShallowSerializer
 
 
 class SeasonDetailCreate(viewsets.ModelViewSet):
@@ -36,7 +36,7 @@ class ChildrenListCreate(viewsets.ModelViewSet):
     serializer_class = ChildrenSerializer
 
 
-class RegisterListCreate(generics.ListCreateAPIView):
+class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
 
     def get_queryset(self):
