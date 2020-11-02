@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("api/children")
+    fetch("api/seasons/active/children")
       .then(response => {
         if (response.status > 400) {
           return this.setState(() => {
@@ -33,15 +33,19 @@ class App extends Component {
 
   render() {
     return (
-      <ul>
-        {this.state.data.map(child => {
+<>
+  <h1> Escuela de Fútbol </h1>
+  <h2> Temporada </h2>
+  <ul>
+        {this.state.data.map(register => {
           return (
-            <li key={child.id}>
-              {child.name} {child.firstSurname} {child.secondSurname}
+            <li key={register.id}>
+              {register.child.name} {register.child.surname}
             </li>
           );
         })}
       </ul>
+</>
     );
   }
 }
