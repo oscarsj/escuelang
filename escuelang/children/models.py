@@ -75,6 +75,10 @@ class Season(models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.course.name)
 
+    @staticmethod
+    def get_active():
+        return Season.objects.get(active=True)
+
 
 class PricesPerDay(models.Model):
 
@@ -128,4 +132,4 @@ class Payments(models.Model):
                         default_currency='EUR')
 
     def __str__(self):
-        return "%s el %s (%s euros)" % (self.register, self.date, self.amount)
+        return "%s: %s" % (self.date, self.amount)

@@ -28,6 +28,8 @@ class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
 
     def get_queryset(self):
+        if self.kwargs.get('season_pk') == "active":
+            return RegisteredChild.objects.filter(season__active=True)
         return RegisteredChild.objects.filter(
             season__id=self.kwargs.get('season_pk')
         )
@@ -37,6 +39,8 @@ class DetailedRegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RegisterReadOnlySerializer
 
     def get_queryset(self):
+        if self.kwargs.get('season_pk') == "active":
+            return RegisteredChild.objects.filter(season__active=True)
         return RegisteredChild.objects.filter(
             season__id=self.kwargs.get('season_pk')
         )

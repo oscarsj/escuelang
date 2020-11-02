@@ -59,7 +59,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = RegisteredChild
         fields = ('id', 'season', 'child',
                   'days', 'monitor', 'price_month',
-                  'payment_method', 'competition')
+                  'payment_method', 'competition',
+                  'payments_set')
+        depth = 0
 
     def create(self, validated_data):
         request = self.context['request']
@@ -88,6 +90,7 @@ class RegisterReadOnlySerializer(serializers.ModelSerializer):
                                         slug_field='name',
                                         many=True)
     season = serializers.StringRelatedField()
+    payments_set = serializers.StringRelatedField(read_only=True, many=True)
 
     class Meta:
         model = RegisteredChild
