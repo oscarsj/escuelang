@@ -112,12 +112,13 @@ class RegisteredChild(models.Model):
 
     child = models.OneToOneField(Child, on_delete=models.CASCADE)
     season = models.OneToOneField(Season, on_delete=models.CASCADE)
-    price_month = models.DecimalField(decimal_places=2, max_digits=8, default=0)
+    price_month = models.DecimalField(decimal_places=2, max_digits=8,
+                                      default=0)
     days = models.ManyToManyField(Days)
     monitor = models.OneToOneField(Monitor, blank=True, null=True,
                                    on_delete=models.CASCADE)
-    payment_method = models.OneToOneField(PaymentMethods, blank=True, null=True,
-                                          on_delete=models.CASCADE)
+    payment_method = models.OneToOneField(PaymentMethods, null=True,
+                                          on_delete=models.SET_NULL)
     competition = models.BooleanField(default=False)
 
     def __str__(self):
@@ -132,5 +133,3 @@ class Payments(models.Model):
 
     def __str__(self):
         return "%s el %s (%s euros)" % (self.register, self.date, self.amount)
-
-

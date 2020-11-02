@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Season, Course, Child, RegisteredChild, Monitor, Days
+    Season, Course, Child, RegisteredChild, Monitor, Days, Payments
 )
 
 
@@ -74,17 +74,25 @@ class RegisterSerializer(serializers.ModelSerializer):
                   'payment_method', 'competition')
 
     def create(self, validated_data):
-        data = self.context['request'].POST.copy()
+        request = self.context['request']
+        season_id = request.parser_context['kwargs']['season_pk']
+
         register = RegisteredChild.objects.create(
-            season=data.get('season'),
+            season=Season.objects.get(id=season_id),
             child=validated_data['child'],
             monitor=validated_data['monitor'],
             price_month=validated_data['price_month'],
             payment_method=validated_data['payment_method'],
             competition=validated_data['competition'])
         register.save()
-        for day in validated_data['days']:
-            register.days.set(day)
-            
+        register.days = validated_data['days']
+        register.save()
+
         return register
 
+
+class PaymentsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payments
+        fields = ('data', 'amount')

@@ -1,11 +1,12 @@
 from .models import (
-    Course, Season, Child, RegisteredChild, Monitor, Days
+    Course, Season, Child, RegisteredChild, Monitor, Days, Payments
 )
 from .serializers import (
     CourseSerializer, SeasonSerializer, ChildrenSerializer, RegisterSerializer,
-    MonitorSerializer, DaysSerializer, SeasonShallowSerializer
+    MonitorSerializer, DaysSerializer, SeasonShallowSerializer,
+    PaymentsSerializer
 )
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 
 
 class CourseListCreate(viewsets.ModelViewSet):
@@ -41,7 +42,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return RegisteredChild.objects.filter(
-            season__id=self.kwargs.get('season')
+            season__id=self.kwargs.get('season_pk')
         )
 
 
@@ -53,3 +54,12 @@ class MonitorListCreate(viewsets.ModelViewSet):
 class DaysListCreate(viewsets.ModelViewSet):
     serializer_class = DaysSerializer
     queryset = Days.objects.all()
+
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    serializer_class = PaymentsSerializer
+
+    def get_queryset(self):
+        return Payments.objects.filter(
+            register__id=self.kwargs.get('register_pk')
+        )
