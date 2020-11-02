@@ -2,3 +2,4 @@ Django==3.1.2
 djangorestframework==3.12.1
 mysqlclient==2.0.1
 drf-nested-routers==0.92.1
+django-money==1.1

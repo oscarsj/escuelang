@@ -1,12 +1,12 @@
+from rest_framework import viewsets
 from .models import (
     Course, Season, Child, RegisteredChild, Monitor, Days, Payments
 )
 from .serializers import (
     CourseSerializer, SeasonSerializer, ChildrenSerializer, RegisterSerializer,
-    MonitorSerializer, DaysSerializer, SeasonShallowSerializer,
+    MonitorSerializer, DaysSerializer, SeasonSerializer,
     PaymentsSerializer
 )
-from rest_framework import viewsets
 
 
 class CourseListCreate(viewsets.ModelViewSet):
@@ -16,20 +16,7 @@ class CourseListCreate(viewsets.ModelViewSet):
 
 class SeasonListCreate(viewsets.ModelViewSet):
     queryset = Season.objects.all()
-    serializer_class = SeasonShallowSerializer
-
-
-class SeasonDetailCreate(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
-    lookup_field = 'id'
-
-    def get_queryset(self):
-        return Season.objects.get(id=self.kwargs['season'])
-
-
-class ActiveSeasonDetailCreate(viewsets.ModelViewSet):
-    serializer_class = SeasonSerializer
-    queryset = Season.get_active_season()
 
 
 class ChildrenListCreate(viewsets.ModelViewSet):

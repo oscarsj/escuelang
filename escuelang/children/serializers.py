@@ -16,21 +16,9 @@ class SeasonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Season
-        fields = ('id', 'course',
-                  'name', 'start_date', 'end_date',
-                  'active', 'children')
-        depth = 1
-
-
-class SeasonShallowSerializer(SeasonSerializer):
-    course = serializers.SlugRelatedField(slug_field='name',
-                                          queryset=Course.objects.all())
-
-    class Meta:
-        model = Season
         fields = (
-            'id', 'course', 'name', 'start_date', 'end_date', 'active',
-            'children')
+            'id', 'course', 'name', 'start_date', 'end_date', 'default_price',
+            'active', 'children')
         depth = 0
 
 
@@ -76,16 +64,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context['request']
         season_id = request.parser_context['kwargs']['season_pk']
-
+        season = Season.objects.get(id=season_id)
         register = RegisteredChild.objects.create(
-            season=Season.objects.get(id=season_id),
+            season=season,
             child=validated_data['child'],
             monitor=validated_data['monitor'],
-            price_month=validated_data['price_month'],
+            price_month=validated_data.get('price_month',
+                                           season.default_price),
             payment_method=validated_data['payment_method'],
             competition=validated_data['competition'])
         register.save()
-        register.days = validated_data['days']
+        register.days.set(validated_data['days'])
         register.save()
 
         return register
@@ -95,4 +84,15 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payments
-        fields = ('data', 'amount')
+        fields = ('date', 'amount')
+
+    def create(self, validated_data):
+        context = self.context['request'].parser_context['kwargs']
+        register_id = context['season_pk']
+
+        payment = Payments.objects.create(
+            register_id=register_id,
+            date=validated_data['date'],
+            amount=validated_data['amount'])
+        payment.save()
+        return payment

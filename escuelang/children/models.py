@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from djmoney.models.fields import MoneyField
 
 
 class Parent(models.Model):
@@ -68,17 +69,11 @@ class Season(models.Model):
     children = models.ManyToManyField(Child, through='RegisteredChild',
                                       null=True, blank=True)
     active = models.BooleanField()
+    default_price = MoneyField(max_digits=5, decimal_places=2,
+                               default_currency='EUR')
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.course.name)
-
-    @property
-    def repr(self):
-        return self.__str__()
-
-    @staticmethod
-    def get_active_season():
-        return Season.objects.filter(active=True)
 
 
 class PricesPerDay(models.Model):
@@ -111,12 +106,12 @@ class RegisteredChild(models.Model):
         unique_together = (('child', 'season'),)
 
     child = models.OneToOneField(Child, on_delete=models.CASCADE)
-    season = models.OneToOneField(Season, on_delete=models.CASCADE)
-    price_month = models.DecimalField(decimal_places=2, max_digits=8,
-                                      default=0)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    price_month = MoneyField(decimal_places=2, max_digits=8,
+                             default_currency='EUR')
     days = models.ManyToManyField(Days)
-    monitor = models.OneToOneField(Monitor, blank=True, null=True,
-                                   on_delete=models.CASCADE)
+    monitor = models.ForeignKey(Monitor, blank=True, null=True,
+                                on_delete=models.CASCADE)
     payment_method = models.OneToOneField(PaymentMethods, null=True,
                                           on_delete=models.SET_NULL)
     competition = models.BooleanField(default=False)
@@ -129,7 +124,8 @@ class Payments(models.Model):
 
     register = models.OneToOneField(RegisteredChild, on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
-    amount = models.DecimalField(decimal_places=2, max_digits=8, default=0)
+    amount = MoneyField(max_digits=5, decimal_places=2,
+                        default_currency='EUR')
 
     def __str__(self):
         return "%s el %s (%s euros)" % (self.register, self.date, self.amount)
