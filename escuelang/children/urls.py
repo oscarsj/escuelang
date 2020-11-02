@@ -15,6 +15,8 @@ season_router = nested_router.NestedSimpleRouter(router, r'seasons',
                                                  lookup='season')
 season_router.register(r'registers', views.RegisterViewSet,
                        basename='registers')
+season_router.register(r'children', views.DetailedRegisterViewSet,
+                       basename='children')
 
 payment_router = nested_router.NestedSimpleRouter(season_router, r'registers',
                                                   lookup='register')

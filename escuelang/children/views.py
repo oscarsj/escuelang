@@ -5,7 +5,7 @@ from .models import (
 from .serializers import (
     CourseSerializer, SeasonSerializer, ChildrenSerializer, RegisterSerializer,
     MonitorSerializer, DaysSerializer, SeasonSerializer,
-    PaymentsSerializer
+    PaymentsSerializer, RegisterReadOnlySerializer
 )
 
 
@@ -26,6 +26,15 @@ class ChildrenListCreate(viewsets.ModelViewSet):
 
 class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
+
+    def get_queryset(self):
+        return RegisteredChild.objects.filter(
+            season__id=self.kwargs.get('season_pk')
+        )
+
+
+class DetailedRegisterViewSet(viewsets.ModelViewSet):
+    serializer_class = RegisterReadOnlySerializer
 
     def get_queryset(self):
         return RegisteredChild.objects.filter(

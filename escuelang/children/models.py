@@ -122,7 +122,7 @@ class RegisteredChild(models.Model):
 
 class Payments(models.Model):
 
-    register = models.OneToOneField(RegisteredChild, on_delete=models.CASCADE)
+    register = models.ForeignKey(RegisteredChild, on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
     amount = MoneyField(max_digits=5, decimal_places=2,
                         default_currency='EUR')

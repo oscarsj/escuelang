@@ -80,6 +80,24 @@ class RegisterSerializer(serializers.ModelSerializer):
         return register
 
 
+class RegisterReadOnlySerializer(serializers.ModelSerializer):
+
+    monitor = serializers.SlugRelatedField(read_only=True,
+                                           slug_field='nick')
+    days = serializers.SlugRelatedField(read_only=True,
+                                        slug_field='name',
+                                        many=True)
+    season = serializers.StringRelatedField()
+
+    class Meta:
+        model = RegisteredChild
+        fields = ('id', 'season', 'child',
+                  'days', 'monitor', 'price_month',
+                  'payment_method', 'competition',
+                  'payments_set')
+        depth = 1
+
+
 class PaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -88,7 +106,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         context = self.context['request'].parser_context['kwargs']
-        register_id = context['season_pk']
+        register_id = context['register_pk']
 
         payment = Payments.objects.create(
             register_id=register_id,
