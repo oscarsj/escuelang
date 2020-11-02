@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ChildrenList from "./ChildrenList";
+import InputChild from "./InputChild";
 
 
 const App = (props) => {
@@ -8,6 +9,22 @@ const App = (props) => {
     event.preventDefault()
     console.log('button clicked', event.target)
   }
+
+  const [newChild, addNewChild] = useState(
+      {name: 'Nombre',
+      surname: 'Apellido',
+      address: 'Direccion',
+      postcode: 'Código Postal',
+      dni: 'DNI'}
+  )
+
+  const handleChange = (field) =>
+      (event) => {
+          let child = {...newChild};
+          child[field] = event.target.value;
+          addNewChild(child);
+      }
+
   fetch("api/children")
       .then(response => {
         if (response.status > 400) {
@@ -27,9 +44,8 @@ const App = (props) => {
     <h2> Temporada actual</h2>
     <ChildrenList children={children}/>
     <form onSubmit={addChild}>
-        <input id='name'/> <input id='surname' />
-        <button type="submit">save</button>
-  </form>
+        <InputChild child={newChild} onChange={handleChange} />
+    </form>
   </>
   );
 }

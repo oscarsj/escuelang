@@ -6,7 +6,7 @@ const ChildrenList = ({children}) => {
     <table>
       <thead>Alumno</thead>
         {children.map((child) =>
-        <tr><Child key={child.id} child={child}/></tr>
+        <tr key={child.id}><Child key={child.id} child={child}/></tr>
       )}
     </table>
   )
