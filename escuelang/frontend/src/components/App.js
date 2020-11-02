@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-import Registers from "./Registers";
+import RegisterList from "./RegisterList";
 
 
 class App extends Component {
@@ -38,7 +38,7 @@ class App extends Component {
 <>
   <h1> Escuela de Fútbol </h1>
   <h2> Temporada actual</h2>
-  <Registers registers={this.state.data}/>
+  <RegisterList registers={this.state.data}/>
 </>
     );
   }
