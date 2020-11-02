@@ -1,20 +1,14 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
-import RegisterList from "./RegisterList";
+import React, { useState } from "react";
+import ChildrenList from "./ChildrenList";
 
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      loaded: false,
-      placeholder: "Loading"
-    };
+const App = (props) => {
+  const [children, setChildren] = useState([])
+  const addChild = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
   }
-
-  componentDidMount() {
-    fetch("api/seasons/active/children")
+  fetch("api/children")
       .then(response => {
         if (response.status > 400) {
           return this.setState(() => {
@@ -24,24 +18,20 @@ class App extends Component {
         return response.json();
       })
       .then(data => {
-        this.setState(() => {
-          return {
-            data,
-            loaded: true
-          };
-        });
+        setChildren(data)
       });
-  }
 
-  render() {
-    return (
-<>
-  <h1> Escuela de Fútbol </h1>
-  <h2> Temporada actual</h2>
-  <RegisterList registers={this.state.data}/>
-</>
-    );
-  }
+  return (
+  <>
+    <h1> Escuela de Fútbol </h1>
+    <h2> Temporada actual</h2>
+    <ChildrenList children={children}/>
+    <form onSubmit={addChild}>
+        <input id='name'/> <input id='surname' />
+        <button type="submit">save</button>
+  </form>
+  </>
+  );
 }
 
 export default App;
