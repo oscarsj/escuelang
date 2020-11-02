@@ -1,4 +1,6 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from rest_framework.response import Response
 from .models import (
     Course, Season, Child, RegisteredChild, Monitor, Days, Payments
 )
@@ -17,6 +19,16 @@ class CourseListCreate(viewsets.ModelViewSet):
 class SeasonListCreate(viewsets.ModelViewSet):
     queryset = Season.objects.all()
     serializer_class = SeasonSerializer
+
+    def retrieve(self, request, pk=None):
+        queryset = Season.objects.all()
+        if pk == "active":
+            season_id = Season.get_active().id
+            season = get_object_or_404(queryset, pk=season_id)
+        else:
+            season = get_object_or_404(queryset, pk=pk)
+        serializer = SeasonSerializer(season)
+        return Response(serializer.data)
 
 
 class ChildrenListCreate(viewsets.ModelViewSet):
