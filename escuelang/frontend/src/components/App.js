@@ -18,14 +18,12 @@ const App = (props) => {
   const csrftoken = readCookie('csrftoken');
 
   const [children, setChildren] = useState([])
-
-  const [newChild, addNewChild] = useState(
-      {name: 'Nombre',
+  const defaultChild = {name: 'Nombre',
       surname: 'Apellido',
       address: 'Direccion',
       postcode: 'Código Postal',
       dni: 'DNI'}
-  )
+  const [newChild, addNewChild] = useState(defaultChild)
 
   const postNewChild = (event) => {
     // Simple POST request with a JSON body using fetch
@@ -37,7 +35,7 @@ const App = (props) => {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify(event.target.child),
+        body: JSON.stringify(newChild),
     };
     fetch('api/children/', requestOptions)
         .then(response => {
@@ -46,15 +44,12 @@ const App = (props) => {
             }
             return response.json();
         })
-        .then(data => addNewChild(data));
+        .then(data => {
+            addNewChild(defaultChild);
+            fetchChildren();
+        });
     }
-
-  const handleChange = (field) =>
-      (event) => {
-          let child = {...newChild};
-          child[field] = event.target.value;
-      }
-  useEffect(() => {
+  const fetchChildren = () => {
       fetch("api/children/")
           .then(response => {
               if (response.status > 400) {
@@ -62,9 +57,17 @@ const App = (props) => {
               }
               return response.json();
           })
-          .then(data => {
-              setChildren(data)
-      });
+          .then(data => setChildren(data));
+  }
+  const handleChange = (field) =>
+      (event) => {
+          let child = {...newChild};
+          child[field] = event.target.value;
+          addNewChild(child);
+      }
+
+  useEffect(() => {
+    fetchChildren();
   }, []);
 
   return (
