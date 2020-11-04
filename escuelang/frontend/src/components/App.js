@@ -4,11 +4,20 @@ import InputChild from "./InputChild";
 
 
 const App = (props) => {
-  const [children, setChildren] = useState([])
-  const addChild = (event) => {
-    event.preventDefault()
-    console.log('button clicked', event.target)
+  function readCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+        let c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
   }
+
+  const csrftoken = readCookie('csrftoken');
+
+  const [children, setChildren] = useState([])
 
   const [newChild, addNewChild] = useState(
       {name: 'Nombre',
@@ -24,7 +33,10 @@ const App = (props) => {
     console.log('New child: ', event.target.child);
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
         body: JSON.stringify(event.target.child),
     };
     fetch('api/children/', requestOptions)
@@ -34,14 +46,13 @@ const App = (props) => {
             }
             return response.json();
         })
-        .then(data => this.setState({ postId: data.id }));
+        .then(data => addNewChild(data));
     }
 
   const handleChange = (field) =>
       (event) => {
           let child = {...newChild};
           child[field] = event.target.value;
-          addNewChild(child);
       }
   useEffect(() => {
       fetch("api/children/")

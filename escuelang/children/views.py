@@ -5,7 +5,7 @@ from .models import (
     Course, Season, Child, RegisteredChild, Monitor, Days, Payments
 )
 from .serializers import (
-    CourseSerializer, SeasonSerializer, ChildrenSerializer, RegisterSerializer,
+    CourseSerializer, ChildrenSerializer, RegisterSerializer,
     MonitorSerializer, DaysSerializer, SeasonSerializer,
     PaymentsSerializer, RegisterReadOnlySerializer
 )
