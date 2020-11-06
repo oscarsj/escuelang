@@ -23,8 +23,6 @@ const ChildrenList = ({children}) => {
   const sortByField = (a, b) => {
     if (a[orderBy.field] == null) return orderBy.reversed?-1 : 1;
     if (b[orderBy.field] == null) return orderBy.reversed? 1 : -1;
-    console.log("Comparing", a[orderBy.field].toLocaleLowerCase('es-ES'));
-    // return a[orderBy.field].toLocaleLowerCase('es-ES') < b[orderBy.field].toLocaleLowerCase('es-ES')? (orderBy.reversed? 1 : -1) : (orderBy.reversed? -1 : 1)
     return a[orderBy.field].localeCompare(b[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
   }
 
