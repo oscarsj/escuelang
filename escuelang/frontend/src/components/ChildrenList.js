@@ -4,11 +4,19 @@ import Child from "./Child";
 
 const ChildrenList = ({children}) => {
   return (
-    <Table striped>
-      <thead>Alumno</thead>
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Fecha de nacimiento</th>
+        </tr>
+      </thead>
       <tbody>
-        {children.map((child) =>
-        <tr key={child.id}><Child key={child.id} child={child}/></tr>
+        {children
+        .sort((a, b) => a.surname > b.surname? 1 : -1)
+        .map((child) =>
+        <Child key={child.id} child={child}/>
       )}
       </tbody>
     </Table>

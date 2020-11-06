@@ -2,7 +2,11 @@ import React from 'react';
 
 const Child = ({child}) => {
     return (
-              <>{child.name} {child.surname}</>
+        <tr key={child.id}>
+            <td>{child.name}</td>
+            <td>{child.surname}</td>
+            <td>{child.birthdate}</td>
+        </tr>
           )
     }
 
