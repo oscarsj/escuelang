@@ -5,14 +5,15 @@ import childrenApi from "../client/children";
 
 
 const App = (props) => {
-    const [children, setChildren] = useState([])
+  const [children, setChildren] = useState([])
 
-    const defaultChild = {name: 'Nombre',
+  const [newChild, setNewChild] = useState({
+      name: 'Nombre',
       surname: 'Apellido',
       address: 'Direccion',
       postcode: 'Código Postal',
-      dni: 'DNI'}
-  const [newChild, setNewChild] = useState(defaultChild)
+      dni: 'DNI'
+    })
 
   const postNewChild = (event) => {
     // Simple POST request with a JSON body using fetch
@@ -25,6 +26,7 @@ const App = (props) => {
       })
       .catch(err => {
         if (err.response) {
+            console.log('Error in create child', err);
             setNewChild(err.response.data);
         } else if (err.request) {
             // client never received a response, or request never left
@@ -38,12 +40,6 @@ const App = (props) => {
       .getAll()
       .then(children => setChildren(children))
   }
-  const handleChange = (field) =>
-      (event) => {
-          let child = {...newChild};
-          child[field] = event.target.value;
-          setNewChild(child);
-      }
 
   useEffect(() => {
     fetchChildren();
@@ -55,7 +51,7 @@ const App = (props) => {
     <h2> Temporada actual</h2>
     <ChildrenList children={children}/>
     <form onSubmit={postNewChild}>
-        <InputChild child={newChild} onChange={handleChange}/>
+        <InputChild child={newChild} onChange={setNewChild}/>
     </form>
   </>
   );

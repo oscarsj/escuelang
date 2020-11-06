@@ -34,9 +34,4 @@ const update = (id, newChild) => {
     return request.then(response => response.data)
 }
 
-export default {
-    getAll,
-    get,
-    create,
-    update
-};
+export default { getAll, get, create, update };
