@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ChildrenList from "./ChildrenList";
 import InputChild from "./InputChild";
+import EscuelaNavbar from "./EscuelaNavbar";
 import childrenApi from "../client/children";
 
 
@@ -46,14 +47,12 @@ const App = (props) => {
   }, []);
 
   return (
-  <>
-    <h1> Escuela de Fútbol </h1>
+<div className="container">
+    <EscuelaNavbar title="Escuela de Fútbol"/>
     <h2> Temporada actual</h2>
     <ChildrenList children={children}/>
-    <form onSubmit={postNewChild}>
-        <InputChild child={newChild} onChange={setNewChild}/>
-    </form>
-  </>
+    <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
+</div>
   );
 }
 

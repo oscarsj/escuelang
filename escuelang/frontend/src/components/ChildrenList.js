@@ -1,14 +1,17 @@
 import React from "react";
+import { Table } from 'react-bootstrap'
 import Child from "./Child";
 
 const ChildrenList = ({children}) => {
   return (
-    <table>
+    <Table striped>
       <thead>Alumno</thead>
+      <tbody>
         {children.map((child) =>
         <tr key={child.id}><Child key={child.id} child={child}/></tr>
       )}
-    </table>
+      </tbody>
+    </Table>
   )
 }
 

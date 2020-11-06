@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "debug": "nodemon -e js,ts --watch src --exec \"webpack --mode development ./src/index.js\"",
     "dev": "webpack --mode development ./src/index.js",
     "build": "webpack --mode production ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +20,7 @@
     "babel-loader": "^8.1.0",
     "babel-preset-es2015": "^6.24.1",
     "html-webpack-plugin": "^4.5.0",
+    "nodemon": "^2.0.6",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "webpack": "^5.2.0",
