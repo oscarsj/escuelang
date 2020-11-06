@@ -4,9 +4,9 @@ import { Form, Button, Row, Col } from 'react-bootstrap'
 const InputChild = ({child, onChange, onSubmit}) => {
     const handleChange = (field) =>
       (event) => {
-          let child = {...child};
-          child[field] = event.target.value;
-          onChange(child);
+          let newChild = {...child};
+          newChild[field] = event.target.value;
+          onChange(newChild);
       }
 
     return (
@@ -18,7 +18,7 @@ const InputChild = ({child, onChange, onSubmit}) => {
     <Col><Form.Control type='text' id='address' value={child.address} onChange={handleChange('address')}/></Col>
     <Col><Form.Control type='text' id='postcode' value={child.postcode} onChange={handleChange('postcode')}/></Col>
     <Col><Form.Control type='text' id='dni' value={child.dni} onChange={handleChange('dni')}/></Col>
-    <Button id='new' varian="primary" type="submit">Guardar</Button>
+    <Button id='new' variant="primary" type="submit">Guardar</Button>
     </Row>
     </Form.Group>
   </Form>

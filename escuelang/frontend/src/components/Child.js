@@ -6,6 +6,7 @@ const Child = ({child}) => {
             <td>{child.name}</td>
             <td>{child.surname}</td>
             <td>{child.birthdate}</td>
+            <td>{child.address}</td>
         </tr>
           )
     }

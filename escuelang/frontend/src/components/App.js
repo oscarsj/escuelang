@@ -48,10 +48,12 @@ const App = (props) => {
 
   return (
 <div className="container">
-    <EscuelaNavbar title="Escuela de Fútbol"/>
-    <h2> Temporada actual</h2>
+  <EscuelaNavbar title="Escuela de Fútbol"/>
+  <span className="h1 center-block text-center text-muted" style={{ marginBottom: 25 }}>Alumnos</span>
+  <div className="center-block">
     <ChildrenList children={children}/>
     <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
+  </div>
 </div>
   );
 }
