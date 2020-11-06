@@ -1,23 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table } from 'react-bootstrap'
 import Child from "./Child";
+import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
 const ChildrenList = ({children}) => {
+  const [orderBy, setOrder] = useState({
+    field:'surname',
+    reversed: false}
+  );
+  const handleOnClick = (field) => {
+    return () => {
+      setOrder({
+          field: field,
+          reversed: field==orderBy.field? !orderBy.reversed : orderBy.reversed
+        })
+    }
+  }
+  const getIcon = (field) =>
+    orderBy.field==field?
+      (orderBy.reversed? <BsCaretUpFill/>:<BsCaretDownFill/>) : <BsCaretDown/>
+
+  const sortByField = (a, b) => {
+    if (a[orderBy.field] == null) return orderBy.reversed?-1 : 1;
+    if (b[orderBy.field] == null) return orderBy.reversed? 1 : -1;
+    console.log("Comparing", a[orderBy.field].toLocaleLowerCase('es-ES'));
+    // return a[orderBy.field].toLocaleLowerCase('es-ES') < b[orderBy.field].toLocaleLowerCase('es-ES')? (orderBy.reversed? 1 : -1) : (orderBy.reversed? -1 : 1)
+    return a[orderBy.field].localeCompare(b[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
+  }
+
+
   return (
     <Table striped bordered hover>
       <thead>
         <tr>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Fecha de nacimiento</th>
-        <th>Dirección</th>
+        <th>Nombre<a onClick={handleOnClick('name')} href="#">{getIcon('name')}</a></th>
+        <th>Apellidos<a onClick={handleOnClick('surname')} href="#">{getIcon('surname')}</a></th>
+        <th>Fecha de nacimiento<a onClick={handleOnClick('birthdate')} href="#">{getIcon('birthdate')}</a></th>
+        <th>Dirección<a onClick={handleOnClick('address')} href="#">{getIcon('address')}</a></th>
         </tr>
       </thead>
       <tbody>
         {children
-        .sort((a, b) => a.surname > b.surname? 1 : -1)
+        .sort(sortByField)
         .map((child) =>
-        <Child key={child.id} child={child}/>
+          <Child key={child.id} child={child}/>
       )}
       </tbody>
     </Table>
