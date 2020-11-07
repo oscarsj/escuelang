@@ -27,3 +27,14 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(cb221062-09aa-4166-bfec-6fedd2877255)'
+    appType: 'webAppContainer'
+    WebAppName: 'Escuelang'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'escuelang'
+    SlotName: 'production'
+    DockerNamespace: 'escuelang'
+    DockerRepository: 'oscarsjescuelang'
