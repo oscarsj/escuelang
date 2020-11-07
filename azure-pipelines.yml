@@ -25,6 +25,10 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: 'Free Trial(cb221062-09aa-4166-bfec-6fedd2877255)'
+    appName: 'Escuelang'
         tags: |
           $(tag)
 - task: AzureRmWebAppDeployment@4
