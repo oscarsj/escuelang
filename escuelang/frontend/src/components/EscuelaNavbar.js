@@ -1,5 +1,6 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import {Link} from "react-router-dom";
 
 const EscuelaNavbar = ({title}) => {
     return (
@@ -8,12 +9,19 @@ const EscuelaNavbar = ({title}) => {
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-        <Nav.Link href="#home">Inicio</Nav.Link>
-        <Nav.Link href="#link">Temporadas</Nav.Link>
+        <Nav.Link to="/" href="/" as={Link}>
+        Temporada actual
+        </Nav.Link>
+        <Nav.Link to="/seasons" href="/seasons" as={Link}>
+        Otras temporadas
+        </Nav.Link>
+        <Nav.Link to="/children" href="/children" as={Link}>
+        Antiguos alumnos
+        </Nav.Link>
         <NavDropdown title="Listados" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">General de alumnos</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">Por dias y entrenador</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Asistencia</NavDropdown.Item>
+            <NavDropdown.Item href="/reports/general">General de alumnos</NavDropdown.Item>
+            <NavDropdown.Item href="/reports/days">Por dias y entrenador</NavDropdown.Item>
+            <NavDropdown.Item href="/reports/attendance">Asistencia</NavDropdown.Item>
         </NavDropdown>
         </Nav>
     </Navbar.Collapse>

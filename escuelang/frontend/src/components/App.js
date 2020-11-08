@@ -4,12 +4,18 @@ import ChildrenList from "./ChildrenList";
 import InputChild from "./InputChild";
 import EscuelaNavbar from "./EscuelaNavbar";
 import childrenApi from "../client/children";
+import {
+  BrowserRouter as Router,
+  Switch, Route, Link
+} from "react-router-dom";
 
 
 const App = (props) => {
+  const [season, setSeason] = useState(props.season);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [children, setChildren] = useState([])
+  const [children, setChildren] = useState(props.children)
+  const [oldChildren, setOldChildren] = useState("")
 
   const [newChild, setNewChild] = useState({
       name: 'Nombre',
@@ -42,26 +48,42 @@ const App = (props) => {
         }
       })
   }
-  const fetchChildren = () => {
+  const fetchOldChildren = () => {
     childrenApi
       .getAll()
-      .then(children => setChildren(children))
+      .then(children => setOldChildren(children))
   }
 
   useEffect(() => {
-    fetchChildren();
+     fetchOldChildren();
   }, []);
 
   return (
 <div className="container">
+<Router>
   <EscuelaNavbar title="Escuela de Fútbol"/>
-  <span className="h1 center-block text-center text-muted" style={{ marginBottom: 25 }}>Alumnos</span>
   {(error && <Alert variant="danger">{error}</Alert>)}
   {(message && <Alert variant="success">{message}</Alert>)}
   <div className="container center-block">
-    <ChildrenList children={children}/>
-    <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
+      <Switch>
+        <Route exact path="/reports">
+        </Route>
+        <Route exact path="/">
+        <div className="h1 center-block">Temporada actual</div>
+          <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
+          <ChildrenList children={children}/>
+        </Route>
+        <Route exact path="/children">
+        <div className="h1 center-block">Antiguos alumnos</div>
+          <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
+          <ChildrenList children={oldChildren}/>
+        </Route>
+      </Switch>
+      <div>
+        <i>Escuela de Fútbol 2020</i>
+      </div>
   </div>
+  </Router>
 </div>
   );
 }

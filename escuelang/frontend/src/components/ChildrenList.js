@@ -31,18 +31,18 @@ const ChildrenList = ({children}) => {
     <Table striped bordered hover>
       <thead>
         <tr>
-        <th>Nombre<a onClick={handleOnClick('name')} href="#">{getIcon('name')}</a></th>
-        <th>Apellidos<a onClick={handleOnClick('surname')} href="#">{getIcon('surname')}</a></th>
-        <th>Fecha de nacimiento<a onClick={handleOnClick('birthdate')} href="#">{getIcon('birthdate')}</a></th>
-        <th>Dirección<a onClick={handleOnClick('address')} href="#">{getIcon('address')}</a></th>
+        <th className="text-muted">Nombre<a onClick={handleOnClick('name')} href="#">{getIcon('name')}</a></th>
+        <th className="text-muted">Apellidos<a onClick={handleOnClick('surname')} href="#">{getIcon('surname')}</a></th>
+        <th className="text-muted">Fecha de nacimiento<a onClick={handleOnClick('birthdate')} href="#">{getIcon('birthdate')}</a></th>
+        <th className="text-muted">Dirección<a onClick={handleOnClick('address')} href="#">{getIcon('address')}</a></th>
         </tr>
       </thead>
       <tbody>
-        {children
+        {children && children
         .sort(sortByField)
         .map((child) =>
           <Child key={child.id} child={child}/>
-      )}
+        )}
       </tbody>
     </Table>
   )
