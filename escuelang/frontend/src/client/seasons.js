@@ -19,7 +19,9 @@ const getActiveRegisters = () => {
 
 const getActiveChildren= () => {
     const request = axios.get('api/seasons/active/children/');
-    return request.then(response => response.data)
+    return request.then(
+        response => response.data.map(register => register.child)
+    )
 }
 
 
