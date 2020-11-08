@@ -3,16 +3,9 @@ import ChildDetails from './ChildDetails';
 
 const Child = ({child}) => {
     const [rolledOut, setRolledOut] = useState(false);
-    const handleOnClick = (id) => {
-        return (event) => {
-            console.log(event.target);
-            console.log(id);
-            setRolledOut(!rolledOut);
-        }
-    }
     
     return (<>
-<tr onClick={handleOnClick(child.id)}>
+<tr onClick={() => setRolledOut(!rolledOut)}>
 <td>
     {child.name}
 </td>
