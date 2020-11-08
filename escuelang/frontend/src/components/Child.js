@@ -1,10 +1,18 @@
-import React from 'react';
-import { Accordion, Card } from 'react-bootstrap'
+import React, {useState} from 'react';
 import ChildDetails from './ChildDetails';
 
 const Child = ({child}) => {
+    const [rolledOut, setRolledOut] = useState(false);
+    const handleOnClick = (id) => {
+        return (event) => {
+            console.log(event.target);
+            console.log(id);
+            setRolledOut(!rolledOut);
+        }
+    }
+    
     return (<>
-<tr>
+<tr onClick={handleOnClick(child.id)}>
 <td>
     {child.name}
 </td>
@@ -14,15 +22,11 @@ const Child = ({child}) => {
 <td>
     {child.birthdate}
 </td>
-<td>{child.address}
+<td>
+    {child.address}
 </td>
 </tr>
-<tr>
-<td colSpan="12">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti esse modi cum iusto veritatis odio ullam? Voluptatibus, laboriosam delectus dolor repudiandae, doloremque voluptatem eum maiores sint, facere facilis id explicabo!
-    <ChildDetails child={child}/>
-</td>
-</tr>
+{(rolledOut && <ChildDetails child={child}/>)}   
 </>
 )
     }

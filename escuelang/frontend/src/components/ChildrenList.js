@@ -28,8 +28,6 @@ const ChildrenList = ({children}) => {
 
 
   return (
-    <Accordion>
-        
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -47,8 +45,6 @@ const ChildrenList = ({children}) => {
         )}
       </tbody>
     </Table>
-
-    </Accordion>
   )
 }
 
