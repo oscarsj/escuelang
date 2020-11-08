@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table } from 'react-bootstrap'
+import { Table, Accordion } from 'react-bootstrap'
 import Child from "./Child";
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
@@ -28,6 +28,8 @@ const ChildrenList = ({children}) => {
 
 
   return (
+    <Accordion>
+        
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -37,7 +39,7 @@ const ChildrenList = ({children}) => {
         <th className="text-muted">Dirección<a onClick={handleOnClick('address')} href="#">{getIcon('address')}</a></th>
         </tr>
       </thead>
-      <tbody>
+        <tbody>
         {children && children
         .sort(sortByField)
         .map((child) =>
@@ -45,6 +47,8 @@ const ChildrenList = ({children}) => {
         )}
       </tbody>
     </Table>
+
+    </Accordion>
   )
 }
 

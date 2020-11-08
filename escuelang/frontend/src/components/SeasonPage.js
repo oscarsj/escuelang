@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import InputChild from './InputChild';
 import ChildrenList from './ChildrenList';
+import SeasonData from './SeasonData';
 import { useEffect } from 'react';
 import seasons from '../client/seasons';
 
 
-const SeasonPage = ({setError, setMessage}) => {
+const SeasonPage = ({defaultSeason="active", setError, setMessage}) => {
     const [newChild, setNewChild] = useState({
         name: 'Nombre',
         surname: 'Apellido',
@@ -14,7 +15,7 @@ const SeasonPage = ({setError, setMessage}) => {
         dni: 'DNI'
       })
     const [children, setChildren] = useState("");
-
+    const [season, setSeason] = useState(defaultSeason);
     const postNewChild = (event) => {
         // Simple POST request with a JSON body using fetch
         event.preventDefault();
@@ -41,15 +42,20 @@ const SeasonPage = ({setError, setMessage}) => {
     }
     useEffect(() => {
         seasons
-          .getActiveChildren()
+          .getChildren(season)
           .then(
               children => setChildren(children)
+          )
+        seasons
+          .get(season)
+          .then(
+              season => setSeason(season)
           )
     }, []);
 
     return (
     <>
-    <div className="h1 center-block">Temporada actual</div>
+    <SeasonData season={season}/>
     <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
     <ChildrenList children={children}/>
     </>
