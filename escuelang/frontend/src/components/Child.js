@@ -26,7 +26,8 @@ const Child = ({child}) => {
     {child.address}
 </td>
 </tr>
-{(rolledOut && <ChildDetails child={child}/>)}   
+{(rolledOut && (<tr>
+    <td colSpan="12"><ChildDetails child={child}/></td></tr>))}   
 </>
 )
     }
