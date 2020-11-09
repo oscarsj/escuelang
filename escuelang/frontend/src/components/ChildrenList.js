@@ -10,13 +10,14 @@ const ChildrenList = ({children}) => {
     reversed: false}
   );
   const [visibleFields, setVisibleFields] = useState(
-    ['name', 'surname', 'birthdate','dni']
+    ['name', 'surname', 'birthdate','age']
   )
   // TODO: move this to proper string translations
   const fieldTranslations = {
     name: 'Nombre', 
     surname: 'Apellidos',
     birthdate: 'Fecha de nacimiento',
+    age: 'Edad',
     address: 'Dirección',
     town: 'Ciudad',
     school: 'Colegio',

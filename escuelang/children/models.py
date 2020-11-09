@@ -31,6 +31,12 @@ class Child(models.Model):
     notes = models.CharField(max_length=500, blank=True)
     dni = models.CharField(max_length=9, blank=True)
 
+    @property
+    def age(self):
+        today = datetime.date.today()
+        return (today.year - self.birthdate.year - 
+            ((today.month, today.day) < (self.birthdate.month, self.birthdate.day)))
+    
     def __str__(self):
         return "%s, %s" % (self.surname, self.name)
 

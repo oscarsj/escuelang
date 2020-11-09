@@ -39,7 +39,7 @@ class ChildrenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Child
         fields = ('id', 'name', 'surname',
-                  'birthdate', 'telephone', 'telephone2',
+                  'birthdate', 'age', 'telephone', 'telephone2',
                   'address', 'town', 'postcode', 'school',
                   'email', 'notes', 'dni')
 

@@ -4,11 +4,11 @@ import { Form, Button, Overlay, Popover } from "react-bootstrap";
 const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) => {
     const [show, setShow] = useState(false);
     const [target, setTarget] = useState(null);
-    const [visibleFields, setVisibleFields] = useState(initialFields)
+    const [visibleFields, setVisibleFields] = useState(initialFields);
     const ref = useRef(null);
 
     const onShow = (event) => {
-        setShow(!false);
+        setShow(!show);
         if (event != null) {
             event.preventDefault();
             event.stopPropagation();
@@ -66,8 +66,8 @@ const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) =>
     <Form.Group>
       {renderedOptions}
     </Form.Group>
-  <Button className="m-1" variant="primary" type="submit">Guardar</Button>
-  <Button className="m-1" variant="secondary" type="close" onClick={onCancel}>Cancelar</Button>
+  <Button className="m-1" variant="primary" type="submit" size="sm">Aplicar</Button>
+  <Button className="m-1" variant="secondary" type="close" size="sm" onClick={onCancel}>Cancelar</Button>
   </Form>     
 </Popover.Content>
 </Popover>
