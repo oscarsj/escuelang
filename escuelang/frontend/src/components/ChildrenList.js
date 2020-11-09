@@ -4,7 +4,7 @@ import Child from "./Child";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
-const ChildrenList = ({children}) => {
+const ChildrenList = ({children, fieldTranslations}) => {
   const [orderBy, setOrder] = useState({
     field:'surname',
     reversed: false}
@@ -12,18 +12,6 @@ const ChildrenList = ({children}) => {
   const [visibleFields, setVisibleFields] = useState(
     ['name', 'surname', 'birthdate','age']
   )
-  // TODO: move this to proper string translations
-  const fieldTranslations = {
-    name: 'Nombre', 
-    surname: 'Apellidos',
-    birthdate: 'Fecha de nacimiento',
-    age: 'Edad',
-    address: 'Dirección',
-    town: 'Ciudad',
-    school: 'Colegio',
-    dni: 'DNI',
-    email: 'email'
-  }
   
   const handleOnClick = (field) => {
     return () => {
@@ -40,6 +28,7 @@ const ChildrenList = ({children}) => {
   const sortByField = (a, b) => {
     if (a[orderBy.field] == null) return orderBy.reversed?-1 : 1;
     if (b[orderBy.field] == null) return orderBy.reversed? 1 : -1;
+    if (typeof(a[orderBy.field]) != 'string') return a[orderBy.field] < (b[orderBy.field])? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
     return a[orderBy.field].localeCompare(b[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
   }
 

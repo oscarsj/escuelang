@@ -4,16 +4,11 @@ import ChildrenList from './ChildrenList';
 import SeasonData from './SeasonData';
 import { useEffect } from 'react';
 import seasons from '../client/seasons';
+import childrenApi from '../client/children';
 
 
-const SeasonPage = ({defaultSeason="active", setError, setMessage}) => {
-    const [newChild, setNewChild] = useState({
-        name: 'Nombre',
-        surname: 'Apellido',
-        address: 'Direccion',
-        postcode: 'Código Postal',
-        dni: 'DNI'
-      })
+const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslations}) => {
+    const [newChild, setNewChild] = useState(fieldTranslations)
     const [children, setChildren] = useState("");
     const [season, setSeason] = useState(defaultSeason);
     const postNewChild = (event) => {
@@ -56,8 +51,8 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage}) => {
     return (
     <>
     <SeasonData season={season}/>
-    <InputChild child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
-    <ChildrenList children={children}/>
+    <InputChild fieldTranslations={fieldTranslations} child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
+    <ChildrenList fieldTranslations={fieldTranslations} children={children}/>
     </>
     )
 }

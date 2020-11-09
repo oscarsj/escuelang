@@ -12,6 +12,20 @@ import {
 const App = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  // TODO: move this to proper string translations
+  const fieldTranslations = {
+    name: 'Nombre', 
+    surname: 'Apellidos',
+    birthdate: 'Fecha de nacimiento',
+    age: 'Edad',
+    address: 'Dirección',
+    town: 'Ciudad',
+    postcode: 'Código postal',
+    school: 'Colegio',
+    dni: 'DNI',
+    email: 'Correo',
+    notes: 'Notas'
+  }
   
   return (
 <div className="container">
@@ -24,10 +38,10 @@ const App = () => {
         <Route exact path="/reports">
         </Route>
         <Route exact path="/">
-          <SeasonPage setError={setError} setMessage={setMessage}/>
+          <SeasonPage fieldTranslations={fieldTranslations} setError={setError} setMessage={setMessage}/>
         </Route>
         <Route exact path="/children">
-          <OldChildrenPage/>
+          <OldChildrenPage fieldTranslations={fieldTranslations}/>
         </Route>
       </Switch>
       <div>

@@ -19,7 +19,7 @@ const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) =>
         console.log(event.target)
         const selected = [...event.target];
         const result = selected
-          .map((option) => option.checked? option.id : null)
+          .map((option) => option.checked? option.id.replace('check','') : null)
           .filter((option) => option != null)
         setShow(false);
         setVisibleFields(result);
@@ -41,7 +41,7 @@ const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) =>
         renderedOptions.push(
             <Form.Check 
             type="switch"
-            id={key}
+            id={`check${key}`}
             defaultChecked={visibleFields.includes(key)}
             label={translations[key]}/>
         )
