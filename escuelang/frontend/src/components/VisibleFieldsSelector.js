@@ -15,8 +15,11 @@ const VisibleFieldsSelector = (props) => {
         setTarget(event.target);
     }
     const onSubmit = (event) => {
-        const selected = [...event.target.elements[0].selectedOptions];
-        const result = selected.map((option) => option.value)
+        console.log(event.target)
+        const selected = [...event.target];
+        const result = selected
+          .map((option) => option.checked? option.id : null)
+          .filter((option) => option != null)
         setShow(false);
         props.onSubmit(result);
         setTarget(event.target);
@@ -33,7 +36,11 @@ const VisibleFieldsSelector = (props) => {
     }
     const renderedOptions = []
     for (var key in props.translations) {
-        renderedOptions.push(<option value={key}>{props.translations[key]}</option>)
+        //renderedOptions.push(<option value={key}>{props.translations[key]}</option>)
+        renderedOptions.push(<Form.Check 
+        type="switch"
+        id={key}
+        label={props.translations[key]}/>)
     }
 
     return (
@@ -53,9 +60,7 @@ const VisibleFieldsSelector = (props) => {
 <Popover.Content>
   <Form onSubmit={onSubmit}>
     <Form.Group>
-    <Form.Control id='fields' as="select" multiple>
       {renderedOptions}
-    </Form.Control>
     </Form.Group>
   <Button className="m-1" variant="primary" type="submit">Guardar</Button>
   <Button className="m-1" variant="secondary" type="close" onClick={onCancel}>Cancelar</Button>
