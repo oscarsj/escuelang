@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Overlay, Popover } from "react-bootstrap";
 
-const VisibleFieldsSelector = (props) => {
+const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) => {
     const [show, setShow] = useState(false);
     const [target, setTarget] = useState(null);
+    const [visibleFields, setVisibleFields] = useState(initialFields)
     const ref = useRef(null);
 
     const onShow = (event) => {
@@ -14,14 +15,15 @@ const VisibleFieldsSelector = (props) => {
         }
         setTarget(event.target);
     }
-    const onSubmit = (event) => {
+    const handleSubmit = (event) => {
         console.log(event.target)
         const selected = [...event.target];
         const result = selected
           .map((option) => option.checked? option.id : null)
           .filter((option) => option != null)
         setShow(false);
-        props.onSubmit(result);
+        setVisibleFields(result);
+        onSubmit(result);
         setTarget(event.target);
         event.preventDefault();
         event.stopPropagation();
@@ -35,12 +37,14 @@ const VisibleFieldsSelector = (props) => {
         setTarget(event.target);
     }
     const renderedOptions = []
-    for (var key in props.translations) {
-        //renderedOptions.push(<option value={key}>{props.translations[key]}</option>)
-        renderedOptions.push(<Form.Check 
-        type="switch"
-        id={key}
-        label={props.translations[key]}/>)
+    for (var key in translations) {
+        renderedOptions.push(
+            <Form.Check 
+            type="switch"
+            id={key}
+            defaultChecked={visibleFields.includes(key)}
+            label={translations[key]}/>
+        )
     }
 
     return (
@@ -58,7 +62,7 @@ const VisibleFieldsSelector = (props) => {
       <Popover id="popover-basic">
 <Popover.Title as="h3">Selecciona campos visibles</Popover.Title>
 <Popover.Content>
-  <Form onSubmit={onSubmit}>
+  <Form onSubmit={handleSubmit}>
     <Form.Group>
       {renderedOptions}
     </Form.Group>
