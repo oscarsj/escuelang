@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Form, Button, Overlay, OverlayTrigger, Popover } from "react-bootstrap";
+import { Form, Button, Overlay, Popover } from "react-bootstrap";
 
 const VisibleFieldsSelector = (props) => {
     const [show, setShow] = useState(false);
@@ -7,7 +7,7 @@ const VisibleFieldsSelector = (props) => {
     const ref = useRef(null);
 
     const onShow = (event) => {
-        setShow(true);
+        setShow(!false);
         if (event != null) {
             event.preventDefault();
             event.stopPropagation();
@@ -35,22 +35,6 @@ const VisibleFieldsSelector = (props) => {
     for (var key in props.translations) {
         renderedOptions.push(<option value={key}>{props.translations[key]}</option>)
     }
-    const popover = (
-<Popover id="popover-basic">
-<Popover.Title as="h3">Selecciona campos visibles</Popover.Title>
-<Popover.Content>
-  <Form onSubmit={onSubmit}>
-    <Form.Group>
-    <Form.Control id='fields' as="select" multiple>
-      {renderedOptions}
-    </Form.Control>
-    </Form.Group>
-  <Button className="m-1" variant="primary" type="submit">Guardar</Button>
-  <Button className="m-1" variant="secondary" type="close" onClick={onCancel}>Cancelar</Button>
-  </Form>     
-</Popover.Content>
-</Popover>
-      );
 
     return (
         <div ref={ref}>
@@ -64,7 +48,20 @@ const VisibleFieldsSelector = (props) => {
         container={ref.current}
         containerPadding={20}
       >
-        {popover}
+      <Popover id="popover-basic">
+<Popover.Title as="h3">Selecciona campos visibles</Popover.Title>
+<Popover.Content>
+  <Form onSubmit={onSubmit}>
+    <Form.Group>
+    <Form.Control id='fields' as="select" multiple>
+      {renderedOptions}
+    </Form.Control>
+    </Form.Group>
+  <Button className="m-1" variant="primary" type="submit">Guardar</Button>
+  <Button className="m-1" variant="secondary" type="close" onClick={onCancel}>Cancelar</Button>
+  </Form>     
+</Popover.Content>
+</Popover>
       </Overlay>
 </div>
     )
