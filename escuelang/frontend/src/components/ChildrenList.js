@@ -12,6 +12,7 @@ const ChildrenList = ({children}) => {
   const [visibleFields, setVisibleFields] = useState(
     ['name', 'surname', 'birthdate','dni']
   )
+  // TODO: move this to proper string translations
   const fieldTranslations = {
     name: 'Nombre', 
     surname: 'Apellidos',
@@ -42,13 +43,14 @@ const ChildrenList = ({children}) => {
   }
 
   return (
+    <div className="container">
+    <VisibleFieldsSelector className="float-left" initialFields={visibleFields} onSubmit={setVisibleFields} translations={fieldTranslations}/>
     <Table striped bordered hover>
       <thead>
         <tr>
         {(visibleFields.map((field) => {
           return <th className="text-muted">{fieldTranslations[field]}<a onClick={handleOnClick(field)} href="#">{getIcon(field)}</a></th>  ;
         }))}
-        <th><VisibleFieldsSelector initialFields={visibleFields} onSubmit={setVisibleFields} translations={fieldTranslations}/></th>
         </tr>
       </thead>
         <tbody>
@@ -59,6 +61,7 @@ const ChildrenList = ({children}) => {
         )}
       </tbody>
     </Table>
+    </div>
   )
 }
 
