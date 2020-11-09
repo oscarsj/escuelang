@@ -1,23 +1,12 @@
 import React, {useState} from 'react';
 import ChildDetails from './ChildDetails';
 
-const Child = ({child}) => {
+const Child = ({child, visibleFields}) => {
     const [rolledOut, setRolledOut] = useState(false);
     
     return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
-<td>
-    {child.name}
-</td>
-<td>
-    {child.surname}
-</td>
-<td>
-    {child.birthdate}
-</td>
-<td>
-    {child.address}
-</td>
+{visibleFields.map((field) => <td>{child[field]}</td>)}
 </tr>
 {(rolledOut && (<tr>
     <td colSpan="12"><ChildDetails child={child}/></td></tr>))}   

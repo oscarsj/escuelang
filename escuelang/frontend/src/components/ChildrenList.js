@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Table, Accordion } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import Child from "./Child";
+import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
 const ChildrenList = ({children}) => {
@@ -8,6 +9,20 @@ const ChildrenList = ({children}) => {
     field:'surname',
     reversed: false}
   );
+  const [visibleFields, setVisibleFields] = useState(
+    ['name', 'surname', 'birthdate','dni']
+  )
+  const fieldTranslations = {
+    name: 'Nombre', 
+    surname: 'Apellidos',
+    birthdate: 'Fecha de nacimiento',
+    address: 'Dirección',
+    town: 'Ciudad',
+    school: 'Colegio',
+    dni: 'DNI',
+    email: 'email'
+  }
+  
   const handleOnClick = (field) => {
     return () => {
       setOrder({
@@ -26,22 +41,21 @@ const ChildrenList = ({children}) => {
     return a[orderBy.field].localeCompare(b[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
   }
 
-
   return (
     <Table striped bordered hover>
       <thead>
         <tr>
-        <th className="text-muted">Nombre<a onClick={handleOnClick('name')} href="#">{getIcon('name')}</a></th>
-        <th className="text-muted">Apellidos<a onClick={handleOnClick('surname')} href="#">{getIcon('surname')}</a></th>
-        <th className="text-muted">Fecha de nacimiento<a onClick={handleOnClick('birthdate')} href="#">{getIcon('birthdate')}</a></th>
-        <th className="text-muted">Dirección<a onClick={handleOnClick('address')} href="#">{getIcon('address')}</a></th>
+        {(visibleFields.map((field) => {
+          return <th className="text-muted">{fieldTranslations[field]}<a onClick={handleOnClick(field)} href="#">{getIcon(field)}</a></th>  ;
+        }))}
+        <th><VisibleFieldsSelector initialFields={visibleFields} onSubmit={setVisibleFields} translations={fieldTranslations}/></th>
         </tr>
       </thead>
         <tbody>
         {children && children
         .sort(sortByField)
         .map((child) =>
-          <Child key={child.id} child={child}/>
+          <Child key={child.id} child={child} visibleFields={visibleFields}/>
         )}
       </tbody>
     </Table>
