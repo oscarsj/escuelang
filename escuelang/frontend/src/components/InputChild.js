@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Button, Col } from 'react-bootstrap'
 
-const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
+const InputChild = ({child, onChange, onSubmit, fieldTranslations={}, readOnly=false}) => {
     const handleChange = (field) =>
       (event) => {
           let newChild = {...child};
@@ -10,12 +10,14 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
       }
 
     const getInputForField = (field) => {
-      return (
-      <>
-      <Form.Label>{fieldTranslations[field]}</Form.Label>
-      <Form.Control type='text' id={field} placeholder={fieldTranslations[field]} onChange={handleChange(field)}/>
-      </>)
-    }
+        return (
+        <>
+        <Form.Label>{fieldTranslations[field]}</Form.Label>
+        <Form.Control type='text' id={field} placeholder={fieldTranslations[field]} onChange={handleChange(field)} readOnly={readOnly} value={readOnly? child[field]:""}/>
+        </>)
+      }
+    const button = readOnly? (<></>) : (<Button id='new' variant="primary" type="submit">Guardar</Button>)
+
     return (
 <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
   <Form onSubmit={onSubmit}>
@@ -55,7 +57,7 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
     <Col xs={2}>
   <Form.Group controlId="formGridBirthdate">
     <Form.Label>Fecha de nacimiento</Form.Label>
-    <Form.Control type='date'/>
+    <Form.Control type='date' readOnly={readOnly} value={readOnly? child.birthdate:""}/>
   </Form.Group>
   </Col>
   <Col>
@@ -79,7 +81,7 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
       {getInputForField('notes')}
     </Form.Group>
   </Form.Row>
-  <Button id='new' variant="primary" type="submit">Guardar</Button>
+  {button}
 </Form>
 </div>
 )
