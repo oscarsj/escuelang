@@ -17,6 +17,7 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
       </>)
     }
     return (
+<div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
   <Form onSubmit={onSubmit}>
 
   <Form.Row>
@@ -80,6 +81,7 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
   </Form.Row>
   <Button id='new' variant="primary" type="submit">Guardar</Button>
 </Form>
+</div>
 )
     }
 
