@@ -18,44 +18,60 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}}) => {
     }
     return (
   <Form onSubmit={onSubmit}>
+
   <Form.Row>
-    <Form.Group as={Col} controlId="formGridName">
+  <Col xs={4}>
+    <Form.Group controlId="formGridName">
       {getInputForField('name')}
     </Form.Group>
-
-    <Form.Group as={Col} controlId="formGridSurname">
+  </Col>
+  <Col>
+    <Form.Group controlId="formGridSurname">
       {getInputForField('surname')}
     </Form.Group>
+  </Col>
   </Form.Row>
-  
+
   <Form.Row>
+  <Col xs={7}>
   <Form.Group controlId="formGridAddress">
     {getInputForField('address')}
   </Form.Group>
-
-    <Form.Group as={Col} controlId="formGridTown">
+  </Col>
+  <Col xs={3}>
+    <Form.Group controlId="formGridTown">
       {getInputForField('town')}
     </Form.Group>
-    <Form.Group as={Col} controlId="formGridPostcode">
+  </Col>
+  <Col xs={2}>
+    <Form.Group controlId="formGridPostcode">
       {getInputForField('postcode')}
     </Form.Group>
+  </Col>
   </Form.Row>
+
   <Form.Row>
+    <Col xs={2}>
   <Form.Group controlId="formGridBirthdate">
     <Form.Label>Fecha de nacimiento</Form.Label>
-    <Form.Control type='date' />
+    <Form.Control type='date'/>
   </Form.Group>
-  <Form.Group as={Col} controlId="formGridSchool">
+  </Col>
+  <Col>
+  <Form.Group controlId="formGridSchool">
       {getInputForField('school')}
     </Form.Group>
-  </Form.Row>
-  <Form.Row>
-  <Form.Group as={Col} controlId="formGridEmail">
+  </Col>
+  <Col>
+    <Form.Group controlId="formGridEmail">
       {getInputForField('email')}
     </Form.Group>
-    <Form.Group as={Col} controlId="formGridDNI">
+  </Col>
+  <Col xs={2}>
+    <Form.Group controlId="formGridDNI">
       {getInputForField('dni')}
     </Form.Group>
+  </Col>
   </Form.Row>
   <Form.Row>
   <Form.Group as={Col} controlId="formGridNotes">
