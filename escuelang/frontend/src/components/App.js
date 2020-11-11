@@ -38,10 +38,14 @@ const App = () => {
         <Route exact path="/reports">
         </Route>
         <Route exact path="/">
-          <SeasonPage fieldTranslations={fieldTranslations} setError={setError} setMessage={setMessage}/>
+          <SeasonPage 
+            fieldTranslations={fieldTranslations} 
+            setError={setError} 
+            setMessage={setMessage}/>
         </Route>
         <Route exact path="/children">
-          <OldChildrenPage fieldTranslations={fieldTranslations}/>
+          <OldChildrenPage 
+            fieldTranslations={fieldTranslations}/>
         </Route>
       </Switch>
       <div>

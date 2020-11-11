@@ -1,18 +1,36 @@
-import React from 'react';
-import { Table } from 'react-bootstrap'
+import React, {useState} from 'react';
+import InputChild from './InputChild';
+import { Form, Button } from 'react-bootstrap';
 
-const ChildDetails = ({child}) => {
+const ChildDetails = ({child, translations, readOnly, onChildUpdated}) => {
+    const [editMode, setEditMode] = useState(!readOnly);
+
+    const onToggleEnable = () => {
+        setEditMode(!editMode);
+    }
+
+    const getButtons = () => {
+        editMode? 
+        (<>
+            <Button id='update' variant="primary" type="submit">Guardar</Button>
+            <Button id='cancel' variant="secondary" type="submit">Cancelar</Button>
+        </>)
+          : 
+        (<Button id='enable' variant="primary" type="submit">Actualizar</Button>) 
+         
+    }
     return (
-    
-        <Table striped bordered hover>
-        <tr><td>Fecha de nacimiento:</td><td>{child.birthdate}</td></tr>
-        <tr><td>Dirección:</td><td>{child.address}</td></tr>
-        <tr><td>Ciudad:</td><td>{child.town}</td></tr>
-        <tr><td>DNI:</td><td>{child.dni}</td></tr>
-        <tr><td>Colegio:</td><td>{child.school}</td></tr>
-        <tr><td>Email:</td><td>{child.email}</td></tr>        
-        </Table>
+    <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
+    <Form onSubmit={editMode? onChildUpdated:onToggleEnable}>
 
+        <InputChild 
+            child={child} 
+            fieldTranslations={translations} 
+            readOnly={editMode}/>
+
+        {getButtons()}
+    </Form>
+    </div>
     )
 }
 

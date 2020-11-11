@@ -1,53 +1,58 @@
-import React from 'react';
-import { Form, Button, Col } from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Form, Col } from 'react-bootstrap'
 
-const InputChild = ({child, onChange, onSubmit, fieldTranslations={}, readOnly=false}) => {
-    const handleChange = (field) =>
+const InputChild = ({child, onChange, fieldTranslations, readOnly}) => {
+  const [newChild, setNewChild] = useState(child);
+  const handleChange = (field) =>
       (event) => {
-          let newChild = {...child};
-          newChild[field] = event.target.value;
-          onChange(newChild);
+          event.stopPropagation();
+          event.preventDefault();
+          let tmpChild = {...child};
+          tmpChild[field] = event.target.value;
+          setNewChild(tmpChild);
+          onChange(tmpChild);
       }
 
     const getInputForField = (field) => {
         return (
         <>
         <Form.Label>{fieldTranslations[field]}</Form.Label>
-        <Form.Control type='text' id={field} placeholder={fieldTranslations[field]} onChange={handleChange(field)} readOnly={readOnly} value={readOnly? child[field]:""}/>
+        <Form.Control 
+          type='text' 
+          id={field} 
+          placeholder={fieldTranslations[field]} 
+          onChange={handleChange(field)} 
+          readOnly={readOnly} 
+          defaultValue={readOnly? newChild[field]:""}/>
         </>)
       }
-    const button = readOnly? (<></>) : (<Button id='new' variant="primary" type="submit">Guardar</Button>)
 
-    return (
-<div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
-  <Form onSubmit={onSubmit}>
-
+    return (<>
   <Form.Row>
   <Col xs={4}>
-    <Form.Group controlId="formGridName">
+    <Form.Group>
       {getInputForField('name')}
     </Form.Group>
   </Col>
   <Col>
-    <Form.Group controlId="formGridSurname">
+    <Form.Group>
       {getInputForField('surname')}
     </Form.Group>
   </Col>
   </Form.Row>
-
   <Form.Row>
   <Col xs={7}>
-  <Form.Group controlId="formGridAddress">
+  <Form.Group >
     {getInputForField('address')}
   </Form.Group>
   </Col>
   <Col xs={3}>
-    <Form.Group controlId="formGridTown">
+    <Form.Group>
       {getInputForField('town')}
     </Form.Group>
   </Col>
   <Col xs={2}>
-    <Form.Group controlId="formGridPostcode">
+    <Form.Group>
       {getInputForField('postcode')}
     </Form.Group>
   </Col>
@@ -55,35 +60,37 @@ const InputChild = ({child, onChange, onSubmit, fieldTranslations={}, readOnly=f
 
   <Form.Row>
     <Col xs={2}>
-  <Form.Group controlId="formGridBirthdate">
+  <Form.Group>
     <Form.Label>Fecha de nacimiento</Form.Label>
-    <Form.Control type='date' readOnly={readOnly} value={readOnly? child.birthdate:""}/>
+    <Form.Control 
+      type='date' 
+      readOnly={readOnly}
+      onChange={handleChange('birthdate')}
+      defaultValue={readOnly? newChild.birthdate:""}/>
   </Form.Group>
   </Col>
   <Col>
-  <Form.Group controlId="formGridSchool">
+  <Form.Group>
       {getInputForField('school')}
     </Form.Group>
   </Col>
   <Col>
-    <Form.Group controlId="formGridEmail">
+    <Form.Group>
       {getInputForField('email')}
     </Form.Group>
   </Col>
   <Col xs={2}>
-    <Form.Group controlId="formGridDNI">
+    <Form.Group>
       {getInputForField('dni')}
     </Form.Group>
   </Col>
   </Form.Row>
   <Form.Row>
-  <Form.Group as={Col} controlId="formGridNotes">
+  <Form.Group as={Col}>
       {getInputForField('notes')}
     </Form.Group>
   </Form.Row>
-  {button}
-</Form>
-</div>
+  </>
 )
     }
 

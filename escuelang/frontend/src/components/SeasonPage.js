@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
-import InputChild from './InputChild';
 import ChildrenList from './ChildrenList';
 import SeasonData from './SeasonData';
 import { useEffect } from 'react';
 import seasons from '../client/seasons';
 import childrenApi from '../client/children';
+import AddChildForm from './AddChildForm';
+
 
 
 const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslations}) => {
-    const [newChild, setNewChild] = useState(fieldTranslations)
+    const [newChild, setNewChild] = useState(fieldTranslations);
     const [children, setChildren] = useState("");
     const [season, setSeason] = useState(defaultSeason);
     const postNewChild = (event) => {
         // Simple POST request with a JSON body using fetch
+        console.log("Posting new child", newChild);
         event.preventDefault();
         childrenApi
           .create(newChild)
           .then(child => {
-            setNewChild(child);
+            setNewChild(fieldTranslations);
             setChildren(children.concat(child))
             setMessage("Alumno añadido!");
             setError("");
@@ -35,6 +37,16 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslat
             }
         })
     }
+    const onChildUpdated = (event) => {
+        const child = event.target.value
+        childrenApi
+          .update(child.id, child)
+          .then((result) => {
+              setMessage("Alumno actualizado");
+              setChild(result);
+          })
+    }
+
     useEffect(() => {
         seasons
           .getChildren(season)
@@ -51,8 +63,16 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslat
     return (
     <>
     <SeasonData season={season}/>
-    <InputChild fieldTranslations={fieldTranslations} child={newChild} onChange={setNewChild} onSubmit={postNewChild}/>
-    <ChildrenList fieldTranslations={fieldTranslations} children={children}/>
+    <AddChildForm 
+      fieldTranslations={fieldTranslations} 
+      child={newChild} 
+      onChange={setNewChild} 
+      onSubmit={postNewChild}
+    />
+    <ChildrenList 
+      fieldTranslations={fieldTranslations} 
+      children={children}
+      onChildUpdated={onChildUpdated}/>
     </>
     )
 }
