@@ -17,16 +17,14 @@ const SeasonPage = ({defaultSeason="active", setMessage, fieldTranslations}) => 
         .registerChild(season.id, registerChild)
       setChildren(setChildren(children.concat(child)));
     }
-    const onChildUpdated = (event) => {
-        const child = event.target.value
-        childrenApi
-          .update(child.id, child)
-          .then((result) => {
-            updatedChildIndex = children.findIndex(child => child.id == result.id);
-            setChildren({...children,
-              updatedChildIndex: result
-            });
-          })
+
+    const onChildUpdated = (newChild) => {
+      console.log("Result of update")
+      updatedChildIndex = children.findIndex(child => child.id == newChild.id);
+      setChildren({
+        ...children,
+        updatedChildIndex: newChild
+      });
     }
 
     useEffect(() => {

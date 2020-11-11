@@ -45,7 +45,7 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
     {(message && <Alert variant="success">{message}</Alert>)}
       <InputChild 
         child={newChild} 
-        onChange={setNewChild} 
+        onChildUpdated={setNewChild} 
         fieldTranslations={fieldTranslations} 
         readOnly={false}/>
 

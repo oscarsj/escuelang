@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Col } from 'react-bootstrap'
 
-const InputChild = ({child, onChange, fieldTranslations, readOnly}) => {
+const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly}) => {
   const [newChild, setNewChild] = useState(child);
   const handleChange = (field) =>
       (event) => {
@@ -10,7 +10,7 @@ const InputChild = ({child, onChange, fieldTranslations, readOnly}) => {
           let tmpChild = {...child};
           tmpChild[field] = event.target.value;
           setNewChild(tmpChild);
-          onChange(tmpChild);
+          onChildUpdated(tmpChild);
       }
 
     const getInputForField = (field) => {

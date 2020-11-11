@@ -30,7 +30,7 @@ const update = (id, newChild) => {
             'X-CSRFToken': readCookie('csrftoken'),
         }
     }
-    const request = axios.put(`api/children/${id}`, newChild, config);
+    const request = axios.put(`api/children/${id}/`, newChild, config);
     return request.then(response => response.data)
 }
 

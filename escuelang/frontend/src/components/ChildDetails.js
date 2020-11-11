@@ -1,22 +1,39 @@
 import React, {useState} from 'react';
 import InputChild from './InputChild';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
+import childrenApi from '../client/children';
 
-const ChildDetails = ({child, fieldTranslations, readOnly}) => {
+const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     const [editMode, setEditMode] = useState(!readOnly);
+    const [newChild, setNewChild] = useState(child);
+    const [error, setError] = useState("");
+    
     const onToggleEnable = (event) => {
         setEditMode(!editMode);
         event.preventDefault();
         event.stopPropagation();
     }
-    const onChildUpdated = (event) => {
-        const child = event.target.value
+    const handleChildUpdated = (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        console.log("child updated: ", event.target);
         childrenApi
-          .update(child.id, child)
+          .update(newChild.id, newChild)
           .then((result) => {
-              setMessage("Alumno actualizado");
-              setChildren(result);
+              onChildUpdated(result);
+              setEditMode(false);
           })
+          .catch(err => {
+            if (err.response) {
+                console.log('Error in create child', err);
+                setError("Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
+                setNewChild(err.response.data);
+            } else if (err.request) {
+                // client never received a response, or request never left
+            } else {
+                // anything else
+            }
+        })
     }
     const getButtons = () => {
         return editMode? 
@@ -29,9 +46,11 @@ const ChildDetails = ({child, fieldTranslations, readOnly}) => {
     }
     return (
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
-    <Form onSubmit={editMode? onChildUpdated:onToggleEnable}>
+    <Form onSubmit={editMode? handleChildUpdated:onToggleEnable}>
+        {(error && <Alert variant="danger">{error}</Alert>)}
         <InputChild 
-            child={child} 
+            child={newChild} 
+            onChildUpdated={setNewChild} 
             fieldTranslations={fieldTranslations} 
             readOnly={!editMode}/>
 
