@@ -2,15 +2,22 @@ import React, {useState} from 'react';
 import InputChild from './InputChild';
 import { Form, Button } from 'react-bootstrap';
 
-const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
+const ChildDetails = ({child, fieldTranslations, readOnly}) => {
     const [editMode, setEditMode] = useState(!readOnly);
-    const [newChildDetails, setNewChildDetails] = useState(child);
     const onToggleEnable = (event) => {
         setEditMode(!editMode);
         event.preventDefault();
         event.stopPropagation();
     }
-
+    const onChildUpdated = (event) => {
+        const child = event.target.value
+        childrenApi
+          .update(child.id, child)
+          .then((result) => {
+              setMessage("Alumno actualizado");
+              setChildren(result);
+          })
+    }
     const getButtons = () => {
         return editMode? 
         (<>
@@ -24,7 +31,7 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
     <Form onSubmit={editMode? onChildUpdated:onToggleEnable}>
         <InputChild 
-            child={newChildDetails} 
+            child={child} 
             fieldTranslations={fieldTranslations} 
             readOnly={!editMode}/>
 

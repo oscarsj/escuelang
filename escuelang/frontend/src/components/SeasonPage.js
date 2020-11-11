@@ -8,56 +8,39 @@ import AddChildForm from './AddChildForm';
 
 
 
-const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslations}) => {
-    const [newChild, setNewChild] = useState(fieldTranslations);
+const SeasonPage = ({defaultSeason="active", setMessage, fieldTranslations}) => {
     const [children, setChildren] = useState("");
-    const [season, setSeason] = useState(defaultSeason);
-    const postNewChild = (event) => {
-        // Simple POST request with a JSON body using fetch
-        console.log("Posting new child", newChild);
-        event.stopPropagation();
-        event.preventDefault();
-        childrenApi
-          .create(newChild)
-          .then(child => {
-            setNewChild(fieldTranslations);
-            setChildren(children.concat(child))
-            setMessage("Alumno añadido!");
-            setError("");
-          })
-          .catch(err => {
-            if (err.response) {
-                console.log('Error in create child', err);
-                setMessage("");
-                setError("Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
-                setNewChild(err.response.data);
-            } else if (err.request) {
-                // client never received a response, or request never left
-            } else {
-                // anything else
-            }
-        })
+    const [seasonId, setSeasonId] = useState(defaultSeason);
+    const [season, setSeason] = useState({});
+    const onNewChild = (child) => {
+      seasons
+        .registerChild(season.id, registerChild)
+      setChildren(setChildren(children.concat(child)));
     }
     const onChildUpdated = (event) => {
         const child = event.target.value
         childrenApi
           .update(child.id, child)
           .then((result) => {
-              setMessage("Alumno actualizado");
-              setChildren(result);
+            updatedChildIndex = children.findIndex(child => child.id == result.id);
+            setChildren({...children,
+              updatedChildIndex: result
+            });
           })
     }
 
     useEffect(() => {
         seasons
           .getChildren(season)
-          .then(
-              children => setChildren(children)
+          .then(children => 
+            setChildren(children)
           )
         seasons
-          .get(season)
-          .then(
-              season => setSeason(season)
+          .get(seasonId)
+          .then(newSeason => {
+               setSeason(newSeason);
+               setSeasonId(newSeason.id);
+              }
           )
     }, []);
 
@@ -65,10 +48,8 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslat
     <>
     <SeasonData season={season}/>
     <AddChildForm 
+      onNewChild={onNewChild}
       fieldTranslations={fieldTranslations} 
-      child={newChild} 
-      onSubmit={postNewChild}
-      onChange={setNewChild}
     />
     <ChildrenList 
       fieldTranslations={fieldTranslations} 

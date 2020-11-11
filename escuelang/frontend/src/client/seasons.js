@@ -17,12 +17,15 @@ const getRegisters = (id) => {
     return request.then(response => response.data)
 }
 
-const getChildren= (id) => {
+const getChildren = (id) => {
     const request = axios.get(`api/seasons/${id}/children/`);
     return request.then(
         response => response.data.map(register => register.child)
     )
 }
+const registerChild = (seasonId, child) => {
+
+}
 
 
-export default {get, getAll, getRegisters, getChildren};
+export default {get, getAll, getRegisters, getChildren, registerChild};
