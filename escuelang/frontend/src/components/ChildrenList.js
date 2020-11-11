@@ -46,8 +46,9 @@ const ChildrenList = ({children, fieldTranslations, onChildUpdated}) => {
         <tbody>
         {children && children
         .sort(sortByField)
-        .map((child) => (<Child 
-            translations={fieldTranslations} 
+        .map((child) => (
+          <Child 
+            fieldTranslations={fieldTranslations} 
             key={child.id} 
             child={child} 
             visibleFields={visibleFields}

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import ChildDetails from './ChildDetails';
 
-const Child = ({child, visibleFields, translations, onChildUpdated}) => {
+const Child = ({child, visibleFields, fieldTranslations, onChildUpdated}) => {
     const [rolledOut, setRolledOut] = useState(false);
     
     return (<>
@@ -12,7 +12,7 @@ const Child = ({child, visibleFields, translations, onChildUpdated}) => {
     <td colSpan="12">
         <ChildDetails 
           child={child} 
-          fieldTranslations={translations} 
+          fieldTranslations={fieldTranslations} 
           readOnly={true}
           onChildUpdated={onChildUpdated}
           />

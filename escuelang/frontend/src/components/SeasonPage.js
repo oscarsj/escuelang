@@ -15,6 +15,7 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslat
     const postNewChild = (event) => {
         // Simple POST request with a JSON body using fetch
         console.log("Posting new child", newChild);
+        event.stopPropagation();
         event.preventDefault();
         childrenApi
           .create(newChild)
@@ -43,7 +44,7 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslat
           .update(child.id, child)
           .then((result) => {
               setMessage("Alumno actualizado");
-              setChild(result);
+              setChildren(result);
           })
     }
 
@@ -66,8 +67,8 @@ const SeasonPage = ({defaultSeason="active", setError, setMessage, fieldTranslat
     <AddChildForm 
       fieldTranslations={fieldTranslations} 
       child={newChild} 
-      onChange={setNewChild} 
       onSubmit={postNewChild}
+      onChange={setNewChild}
     />
     <ChildrenList 
       fieldTranslations={fieldTranslations} 
