@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import InputChild from './InputChild';
 import { Form, Button, Alert } from 'react-bootstrap';
 import childrenApi from '../client/children';
+import { BsPencilSquare } from 'react-icons/bs'
+
 
 const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     const [editMode, setEditMode] = useState(!readOnly);
@@ -25,8 +27,8 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
           })
           .catch(err => {
             if (err.response) {
-                console.log('Error in create child', err);
-                setError("Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
+                console.log('Error in create child', err.response);
+                setError("Ha habido errores al guardar. Revise los valores introducidos");
                 setNewChild(err.response.data);
             } else if (err.request) {
                 // client never received a response, or request never left
@@ -38,11 +40,11 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     const getButtons = () => {
         return editMode? 
         (<>
-            <Button id='update' variant="primary" type="submit">Guardar</Button>
-            <Button id='cancel' variant="secondary" type="reset">Cancelar</Button>
+            <Button id='update' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}}>Guardar</Button>
+            <Button id='cancel' variant="secondary" type="reset" style={{ padding: "10px"}}>Cancelar</Button>
         </>)
           : 
-        (<Button id='enable' variant="primary" type="submit">Editar</Button>) 
+        (<Button id='enable' variant="secondary" type="submit"><BsPencilSquare/></Button>) 
     }
     return (
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>

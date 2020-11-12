@@ -3,12 +3,11 @@ import ChildrenList from './ChildrenList';
 import SeasonData from './SeasonData';
 import { useEffect } from 'react';
 import seasons from '../client/seasons';
-import childrenApi from '../client/children';
 import AddChildForm from './AddChildForm';
 
 
 
-const SeasonPage = ({defaultSeason="active", setMessage, fieldTranslations}) => {
+const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const [children, setChildren] = useState("");
     const [seasonId, setSeasonId] = useState(defaultSeason);
     const [season, setSeason] = useState({});
@@ -29,7 +28,7 @@ const SeasonPage = ({defaultSeason="active", setMessage, fieldTranslations}) => 
 
     useEffect(() => {
         seasons
-          .getChildren(season)
+          .getChildren(seasonId)
           .then(children => 
             setChildren(children)
           )
