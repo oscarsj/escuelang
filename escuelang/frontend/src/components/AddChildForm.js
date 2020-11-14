@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap'
 import InputChild from './InputChild';
 import childrenApi from '../client/children';
+import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 
 const AddChildForm = ({onNewChild, fieldTranslations}) => {
-    const [newChild, setNewChild] = useState(fieldTranslations);
-    const [message, setMessage] = useState("");
+    const [newChild, setNewChild] = useState({});
     const [error, setError] = useState("");
+    const [errors, setErrors] = useState({});
+    const [unrolled, setUnrolled] = useState(false);
     
     const postNewChild = (event) => {
         
@@ -20,16 +22,16 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
           .then(child => {
             console.log('Child created!');
             setNewChild(fieldTranslations);
-            setMessage("Alumno añadido!");
             setError("");
+            setUnrolled(event.target.id == 'another');
             onNewChild(child);
           })
           .catch(err => {
             if (err.response) {
-                console.log('Error in create child', err);
-                setMessage("");
-                setError("Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
-                setNewChild(err.response.data);
+                console.log('Error in create child: ', err.response);
+                const nonFieldErrors = err.response.data.non_field_errors;
+                setError(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
+                setErrors(err.response.data);
             } else if (err.request) {
                 // client never received a response, or request never left
             } else {
@@ -38,20 +40,26 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
         })
     }
 
-    return (
+    return (<>
+    {!unrolled && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
+    {unrolled && <>
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
     <Form onSubmit={postNewChild}>
     {(error && <Alert variant="danger">{error}</Alert>)}
-    {(message && <Alert variant="success">{message}</Alert>)}
       <InputChild 
         child={newChild} 
         onChildUpdated={setNewChild} 
         fieldTranslations={fieldTranslations} 
-        readOnly={false}/>
+        readOnly={false}
+        errors={errors}/>
 
-    <Button id='new' variant="primary" type="submit">Guardar</Button>
+    <Button id='new' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
+    <Button id='another' variant="secondary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>
+    <Button id='cancel' variant="secondary" onClick={()=>setUnrolled(false)} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Cancelar</Button>
+    
     </Form>
-    </div>
+    </div></>}
+    </>
     )
 }
 
