@@ -23,14 +23,14 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
         childrenApi
           .update(newChild.id, newChild)
           .then((result) => {
-              onChildUpdated(result);
               setEditMode(false);
               setErrors({});
               setError("");
+              onChildUpdated(result);
           })
           .catch(err => {
             if (err.response) {
-                console.log('Error in create child', err.response);
+                console.log('Error in update child', err.response);
                 setError("Ha habido errores al guardar. Revise los valores introducidos");
                 setErrors(err.response.data);
             } else if (err.request) {
@@ -43,8 +43,8 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     const getButtons = () => {
         return editMode? 
         (<>
-            <Button id='update' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}}>Guardar</Button>
-            <Button id='cancel' variant="secondary" type="reset" style={{ padding: "10px"}}>Cancelar</Button>
+            <Button id='update' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
+            <Button id='cancel' variant="secondary" type="reset" style={{ padding: "10px"}} size='sm'>Cancelar</Button>
         </>)
           : 
         (<Button id='enable' variant="secondary" type="submit"><BsPencilSquare/></Button>) 

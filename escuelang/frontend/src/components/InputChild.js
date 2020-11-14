@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Col } from 'react-bootstrap'
+import { Form, Col, FormControl } from 'react-bootstrap'
 
 const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}) => {
   const [newChild, setNewChild] = useState(child);
@@ -13,20 +13,21 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
           onChildUpdated(tmpChild);
       }
 
-    const getInputForField = (field) => {
+    const getInputForField = (field, type='text') => {
       return (  
       <Form.Group>
       <Form.Label>{fieldTranslations[field]}</Form.Label>
       <Form.Control 
-        type='text' 
+        type={type}
         id={field} 
         placeholder={fieldTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={readOnly} 
-        defaultValue={readOnly? newChild[field]:""}/>
-     {errors[field] && <div>
-        Error: {errors[field][0]}
-      </div>}
+        defaultValue={readOnly? newChild[field]:""}
+        isInvalid={Boolean(errors?errors[field]:false)}/>
+      <Form.Control.Feedback type="invalid">
+        Error: {errors? errors[field]:""}
+      </Form.Control.Feedback>
       </Form.Group>)
     }
 
@@ -53,17 +54,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
 
   <Form.Row>
     <Col xs={2}>
-  <Form.Group>
-    <Form.Label>Fecha de nacimiento</Form.Label>
-    <Form.Control 
-      type='date' 
-      readOnly={readOnly}
-      onChange={handleChange('birthdate')}
-      defaultValue={readOnly? newChild.birthdate:""}/>
-    {errors.birthdate && 
-        <div>{errors.birthdate[0]}</div>
-    }
-  </Form.Group>
+  {getInputForField('birthdate', 'date')}
   </Col>
   <Col>
       {getInputForField('school')}

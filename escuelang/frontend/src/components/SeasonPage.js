@@ -18,12 +18,11 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     }
 
     const onChildUpdated = (newChild) => {
-      console.log("Result of update")
-      updatedChildIndex = children.findIndex(child => child.id == newChild.id);
-      setChildren({
-        ...children,
-        updatedChildIndex: newChild
-      });
+      console.log("Result of update: newChild");
+      const updatedChildIndex = children.findIndex(child => child.id == newChild.id);
+      const tmpChildren = [...children];
+      tmpChildren[updatedChildIndex] = newChild;
+      setChildren(tmpChildren);
     }
 
     useEffect(() => {
