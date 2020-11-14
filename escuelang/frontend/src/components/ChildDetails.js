@@ -54,6 +54,7 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     <Form onSubmit={editMode? handleChildUpdated:onToggleEnable}>
         {(error && <Alert variant="danger">{error}</Alert>)}
         <InputChild 
+            key={newChild.id}
             child={newChild} 
             onChildUpdated={setNewChild} 
             fieldTranslations={fieldTranslations} 

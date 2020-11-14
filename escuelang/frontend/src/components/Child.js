@@ -12,8 +12,9 @@ const Child = ({child, visibleFields, fieldTranslations, onChildUpdated}) => {
 {visibleFields.map((field) => <td key={child[field]}>{child[field]}</td>)}
 </tr>
 {(rolledOut && (<tr>
-    <td colSpan="12">
+    <td key={child.id} colSpan="12">
         <ChildDetails 
+          key={child.id}
           child={child} 
           fieldTranslations={fieldTranslations} 
           readOnly={true}

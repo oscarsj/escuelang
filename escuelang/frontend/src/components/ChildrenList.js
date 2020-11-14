@@ -48,8 +48,8 @@ const ChildrenList = ({children, fieldTranslations, onChildUpdated}) => {
         .sort(sortByField)
         .map((child) => (
           <Child 
-            fieldTranslations={fieldTranslations} 
             key={child.id} 
+            fieldTranslations={fieldTranslations} 
             child={child} 
             visibleFields={visibleFields}
             onChildUpdated={onChildUpdated}/>)

@@ -40,6 +40,7 @@ const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) =>
     for (var key in translations) {
         renderedOptions.push(
             <Form.Check 
+            key={`check${key}`}
             type="switch"
             id={`check${key}`}
             defaultChecked={visibleFields.includes(key)}
