@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Col } from 'react-bootstrap'
 
-const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly}) => {
+const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}) => {
   const [newChild, setNewChild] = useState(child);
   const handleChange = (field) =>
       (event) => {
@@ -14,47 +14,40 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly}) => {
       }
 
     const getInputForField = (field) => {
-        return (
-        <>
-        <Form.Label>{fieldTranslations[field]}</Form.Label>
-        <Form.Control 
-          type='text' 
-          id={field} 
-          placeholder={fieldTranslations[field]} 
-          onChange={handleChange(field)} 
-          readOnly={readOnly} 
-          defaultValue={readOnly? newChild[field]:""}/>
-        </>)
-      }
+      return (  
+      <Form.Group>
+      <Form.Label>{fieldTranslations[field]}</Form.Label>
+      <Form.Control 
+        type='text' 
+        id={field} 
+        placeholder={fieldTranslations[field]} 
+        onChange={handleChange(field)} 
+        readOnly={readOnly} 
+        defaultValue={readOnly? newChild[field]:""}/>
+     {errors[field] && <div>
+        Error: {errors[field][0]}
+      </div>}
+      </Form.Group>)
+    }
 
     return (<>
   <Form.Row>
   <Col xs={4}>
-    <Form.Group>
       {getInputForField('name')}
-    </Form.Group>
   </Col>
   <Col>
-    <Form.Group>
       {getInputForField('surname')}
-    </Form.Group>
   </Col>
   </Form.Row>
   <Form.Row>
   <Col xs={7}>
-  <Form.Group >
     {getInputForField('address')}
-  </Form.Group>
   </Col>
   <Col xs={3}>
-    <Form.Group>
       {getInputForField('town')}
-    </Form.Group>
   </Col>
   <Col xs={2}>
-    <Form.Group>
       {getInputForField('postcode')}
-    </Form.Group>
   </Col>
   </Form.Row>
 
@@ -67,31 +60,28 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly}) => {
       readOnly={readOnly}
       onChange={handleChange('birthdate')}
       defaultValue={readOnly? newChild.birthdate:""}/>
+    {errors.birthdate && 
+        <div>{errors.birthdate[0]}</div>
+    }
   </Form.Group>
   </Col>
   <Col>
-  <Form.Group>
       {getInputForField('school')}
-    </Form.Group>
   </Col>
   <Col>
-    <Form.Group>
       {getInputForField('email')}
-    </Form.Group>
   </Col>
   <Col xs={2}>
-    <Form.Group>
       {getInputForField('dni')}
-    </Form.Group>
   </Col>
   </Form.Row>
   <Form.Row>
-  <Form.Group as={Col}>
+  <Col>
       {getInputForField('notes')}
-    </Form.Group>
+  </Col>
   </Form.Row>
   </>
 )
-    }
+}
 
 export default InputChild;

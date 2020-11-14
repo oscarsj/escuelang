@@ -9,6 +9,7 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     const [editMode, setEditMode] = useState(!readOnly);
     const [newChild, setNewChild] = useState(child);
     const [error, setError] = useState("");
+    const [errors, setErrors] = useState({});
     
     const onToggleEnable = (event) => {
         setEditMode(!editMode);
@@ -24,12 +25,14 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
           .then((result) => {
               onChildUpdated(result);
               setEditMode(false);
+              setErrors({});
+              setError("");
           })
           .catch(err => {
             if (err.response) {
                 console.log('Error in create child', err.response);
                 setError("Ha habido errores al guardar. Revise los valores introducidos");
-                setNewChild(err.response.data);
+                setErrors(err.response.data);
             } else if (err.request) {
                 // client never received a response, or request never left
             } else {
@@ -54,7 +57,8 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
             child={newChild} 
             onChildUpdated={setNewChild} 
             fieldTranslations={fieldTranslations} 
-            readOnly={!editMode}/>
+            readOnly={!editMode}
+            errors={errors}/>
 
         {getButtons()}
     </Form>
