@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import InputChild from './InputChild';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Alert } from 'react-bootstrap';
 import childrenApi from '../client/children';
-import { BsPencilSquare } from 'react-icons/bs'
+import EditSaveCancelButtons from './EditSaveCancelButtons';
 
 
 const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
@@ -11,11 +11,6 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({});
     
-    const onToggleEnable = (event) => {
-        setEditMode(!editMode);
-        event.preventDefault();
-        event.stopPropagation();
-    }
     const handleChildUpdated = (event) => {
         event.stopPropagation();
         event.preventDefault();
@@ -40,18 +35,10 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
             }
         })
     }
-    const getButtons = () => {
-        return editMode? 
-        (<>
-            <Button id='update' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
-            <Button id='cancel' variant="secondary" type="reset" style={{ padding: "10px"}} size='sm'>Cancelar</Button>
-        </>)
-          : 
-        (<Button id='enable' variant="secondary" type="submit"><BsPencilSquare/></Button>) 
-    }
+
     return (
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
-    <Form onSubmit={editMode? handleChildUpdated:onToggleEnable}>
+    <Form onSubmit={handleChildUpdated}>
         {(error && <Alert variant="danger">{error}</Alert>)}
         <InputChild 
             key={newChild.id}
@@ -61,7 +48,7 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
             readOnly={!editMode}
             errors={errors}/>
 
-        {getButtons()}
+        <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/>
     </Form>
     </div>
     )

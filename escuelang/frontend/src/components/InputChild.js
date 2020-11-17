@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Col, FormControl } from 'react-bootstrap'
+import { Form, Col } from 'react-bootstrap'
 
 const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}) => {
   const [newChild, setNewChild] = useState(child);
@@ -7,7 +7,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
       (event) => {
           event.stopPropagation();
           event.preventDefault();
-          let tmpChild = {...child};
+          const tmpChild = {...child};
           tmpChild[field] = event.target.value;
           setNewChild(tmpChild);
           onChildUpdated(tmpChild);

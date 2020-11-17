@@ -23,9 +23,20 @@ const getChildren = (id) => {
         response => response.data.map(register => register.child)
     )
 }
-const registerChild = (seasonId, child) => {
+const registerChild = (seasonId, register) => {
 
 }
 
+const update = (seasonId, season) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': readCookie('csrftoken'),
+        }
+    }
+    const request = axios.put(`api/seasons/${seasonId}/`, season, config);
+    return request.then(response => response.data)
+}
 
-export default {get, getAll, getRegisters, getChildren, registerChild};
+
+export default {get, getAll, getRegisters, getChildren, registerChild, update};

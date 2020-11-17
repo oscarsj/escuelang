@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChildrenList from './ChildrenList';
 import SeasonData from './SeasonData';
-import { useEffect } from 'react';
-import seasons from '../client/seasons';
 import AddChildForm from './AddChildForm';
-
+import seasons from '../client/seasons';
 
 
 const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
@@ -16,33 +14,57 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
         .registerChild(season.id, registerChild)
       setChildren(setChildren(children.concat(child)));
     }
-
+    const seasonFieldsTranslation = {
+      name: "Nombre",
+      course: "Curso",
+      start_date: "Fecha de inicio",
+      end_date: "Fecha de fin",
+      default_price: "Precio base",
+      active: "Temporada actual"
+    }
     const onChildUpdated = (newChild) => {
-      console.log("Result of update: newChild");
+      console.log("Replacing child: ", newChild);
       const updatedChildIndex = children.findIndex(child => child.id == newChild.id);
       const tmpChildren = [...children];
       tmpChildren[updatedChildIndex] = newChild;
       setChildren(tmpChildren);
     }
+    const onSeasonUpdated = (newSeason) => {
+      console.log("New season data: ", newSeason);
+      const seasonData = Object.assign(newSeason, season);
+      seasons
+        .update(seasonId, seasonData)
+        .then((result) => {
+          setSeason(result)
+        })
+        .catch((err) => {
+          console.log("Error updating season: ", err.response);
+        })
+    }
 
     useEffect(() => {
-        seasons
+      seasons
+          .get(seasonId)
+          .then(newSeason => {
+              console.log("Season loaded: ", newSeason);
+              setSeason(newSeason);
+              setSeasonId(newSeason.id);
+            }
+          );  
+      seasons
           .getChildren(seasonId)
           .then(children => 
             setChildren(children)
-          )
-        seasons
-          .get(seasonId)
-          .then(newSeason => {
-               setSeason(newSeason);
-               setSeasonId(newSeason.id);
-              }
-          )
+          );
+        
     }, []);
 
     return (
     <>
-    <SeasonData season={season}/>
+    <SeasonData 
+      season={season}
+      fieldTranslations={seasonFieldsTranslation}
+      onSeasonUpdated={onSeasonUpdated}/>
     <AddChildForm 
       onNewChild={onNewChild}
       fieldTranslations={fieldTranslations} 
