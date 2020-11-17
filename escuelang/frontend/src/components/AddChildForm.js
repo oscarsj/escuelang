@@ -3,7 +3,6 @@ import { Form, Button, Alert } from 'react-bootstrap'
 import InputChild from './InputChild';
 import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
-
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 
@@ -47,8 +46,8 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
       console.log("Posting new child", newChild);
       event.stopPropagation();
       event.preventDefault();
-      seasons
-        .create(seasonId, newRegister)
+      seasonsApi
+        .registerChild(seasonId, newRegister)
         .then(register => {
           console.log('Child created!');
           setNewChild(fieldTranslations.child);
