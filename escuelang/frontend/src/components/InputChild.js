@@ -12,7 +12,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
           setNewChild(tmpChild);
           onChildUpdated(tmpChild);
       }
-
+    
     const getInputForField = (field, type='text') => {
       return (  
       <Form.Group>

@@ -21,6 +21,7 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
               setEditMode(false);
               setErrors({});
               setError("");
+              console.log("update on ChildDetails: ", result)
               onChildUpdated(result);
           })
           .catch(err => {
@@ -43,7 +44,7 @@ const ChildDetails = ({child, fieldTranslations, readOnly, onChildUpdated}) => {
         <InputChild 
             key={newChild.id}
             child={newChild} 
-            onChildUpdated={setNewChild} 
+            onChildUpdated={setNewChild}
             fieldTranslations={fieldTranslations} 
             readOnly={!editMode}
             errors={errors}/>

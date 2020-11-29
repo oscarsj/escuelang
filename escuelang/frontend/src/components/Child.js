@@ -5,14 +5,15 @@ const Child = ({child, visibleFields, fieldTranslations, onChildUpdated}) => {
     const [rolledOut, setRolledOut] = useState(false);
     const handleChildUpdated = (child) => {
         //setRolledOut(false);
+        console.log("Update on Child: ", child)
         onChildUpdated(child);
     }
     return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
-{visibleFields.map((field) => <td key={child[field]}>{child[field]}</td>)}
+{visibleFields.map((field) => <td key={`td${child[field]}`}>{child[field]}</td>)}
 </tr>
 {(rolledOut && (<tr>
-    <td key={child.id} colSpan="12">
+    <td key={`tdUnrolled${child.id}`} colSpan="12">
         <ChildDetails 
           key={child.id}
           child={child} 
