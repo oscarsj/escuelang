@@ -81,7 +81,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return register
 
-
 class RegisterReadOnlySerializer(serializers.ModelSerializer):
 
     monitor = serializers.SlugRelatedField(read_only=True,
@@ -91,7 +90,8 @@ class RegisterReadOnlySerializer(serializers.ModelSerializer):
                                         many=True)
     season = serializers.StringRelatedField()
     payments_set = serializers.StringRelatedField(read_only=True, many=True)
-
+    child = ChildrenSerializer()
+    
     class Meta:
         model = RegisteredChild
         fields = ('id', 'season', 'child',

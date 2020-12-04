@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap'
+import InputRegister from './InputRegister';
 import InputChild from './InputChild';
 import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
@@ -8,6 +9,7 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 const AddChildForm = ({onNewChild, fieldTranslations}) => {
     const [newChild, setNewChild] = useState({});
+    const [newRegister, setNewRegister] = useState({});
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({});
     const [unrolled, setUnrolled] = useState(false);
@@ -50,7 +52,7 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
         .registerChild(seasonId, newRegister)
         .then(register => {
           console.log('Child created!');
-          setNewChild(fieldTranslations.child);
+          setNewRegister(fieldTranslations.register);
           setError("");
           setUnrolled(event.target.id == 'another');
           onNewChild(child);

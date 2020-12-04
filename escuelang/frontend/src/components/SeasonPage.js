@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import ChildrenList from './ChildrenList';
+import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddChildForm from './AddChildForm';
 import seasons from '../client/seasons';
 
 
 const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
-    const [children, setChildren] = useState("");
+    const [registers, setRegisters] = useState("");
     const [seasonId, setSeasonId] = useState(defaultSeason);
     const [season, setSeason] = useState({});
-    const onNewChild = (child) => {
+    const onNewRegister = (register) => {
       seasons
-        .registerChild(season.id, registerChild)
-      setChildren(setChildren(children.concat(child)));
+        .registerChild(season.id, register)
+      setRegisters(children.concat(register));
     }
     const seasonFieldsTranslation = {
       name: "Nombre",
@@ -22,12 +22,12 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       default_price: "Precio base",
       active: "Temporada actual"
     }
-    const onChildUpdated = (newChild) => {
-      console.log("Replacing child: ", newChild);
-      const updatedChildIndex = children.findIndex(child => child.id == newChild.id);
-      const tmpChildren = [...children];
-      tmpChildren[updatedChildIndex] = newChild;
-      setChildren(tmpChildren);
+    const onRegisterUpdated = (newRegister) => {
+      console.log("Replacing register: ", newRegister);
+      const updatedRegisterIndex = registers.findIndex(register => register.id == register.id);
+      const tmpRegisters = [...registers];
+      tmpRegisters[updatedRegisterIndex] = newRegister;
+      setRegisters(tmpRegisters);
     }
     const onSeasonUpdated = (newSeason) => {
       console.log("New season data: ", newSeason);
@@ -43,6 +43,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     }
 
     useEffect(() => {
+      console.log("Getting registers for season ", seasonId);
       seasons
           .get(seasonId)
           .then(newSeason => {
@@ -52,9 +53,9 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
             }
           );  
       seasons
-          .getChildren(seasonId)
-          .then(children => 
-            setChildren(children)
+          .getRegisters(seasonId)
+          .then(registers => 
+            setRegisters(registers)
           );
         
     }, []);
@@ -66,13 +67,13 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       fieldTranslations={seasonFieldsTranslation}
       onSeasonUpdated={onSeasonUpdated}/>
     <AddChildForm 
-      onNewChild={onNewChild}
+      onNewChild={onNewRegister}
       fieldTranslations={fieldTranslations} 
     />
-    <ChildrenList 
+    <RegisterList 
       fieldTranslations={fieldTranslations} 
-      children={children}
-      onChildUpdated={onChildUpdated}/>
+      registers={registers}
+      onRegisterUpdated={onRegisterUpdated}/>
     </>
     )
 }

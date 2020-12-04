@@ -13,8 +13,8 @@ const get = (id) => {
 }
 
 const getRegisters = (id) => {
-    const request = axios.get(`api/seasons/${id}/registers/`);
-    return request.then(response => response.data)
+    const request = axios.get(`api/seasons/${id}/children/`);
+    return request.then(response => response.data);
 }
 
 const getChildren = (id) => {
@@ -24,7 +24,7 @@ const getChildren = (id) => {
     )
 }
 const registerChild = (seasonId, register) => {
-
+    
 }
 
 const update = (seasonId, season) => {

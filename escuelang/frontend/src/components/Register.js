@@ -1,12 +1,15 @@
 import React from 'react';
 import Child from "./Child";
 
-const Register = ({register}) => {
+const Register = ({register, fieldTranslations, visibleFields, onChildUpdated}) => {
     console.log("Register ",  register);
+
     return (
-            <tr key={register.id}>
-              <Child child={register.child}/>
-            </tr>
+              <Child 
+                child={register.child}
+                visibleFields={visibleFields}
+                fieldTranslations={fieldTranslations.child}
+                onChildUpdated={onChildUpdated}/>
           )
     }
 export default Register;
