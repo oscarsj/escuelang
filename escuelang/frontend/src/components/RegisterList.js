@@ -8,7 +8,10 @@ import { Table } from 'react-bootstrap'
 const RegisterList = ({registers, fieldTranslations}) => {
   console.log('Register list for ', registers);
   const [visibleFields, setVisibleFields] = useState(
-    ['name', 'surname', 'birthdate','age']
+    {
+      'child': ['name', 'surname', 'birthdate','age'],
+      'register': ['monitor']
+    }
   );
   const [orderBy, setOrder] = useState({
     field:'surname',
@@ -33,14 +36,18 @@ const RegisterList = ({registers, fieldTranslations}) => {
     return a[orderBy.child.field].localeCompare(b[orderBy.child.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
   }
 
+  const flattenFields = (fields) => {
+    return fields.child.concat(fields.register);
+  }
+  const allFieldTranslations = Object.assign({}, fieldTranslations.child, fieldTranslations.register)
   return (
      <div className="container">
-       <VisibleFieldsSelector className="float-left" initialFields={visibleFields} onSubmit={setVisibleFields} translations={fieldTranslations}/>
+       <VisibleFieldsSelector className="float-left" initialFields={flattenFields(visibleFields)} onSubmit={setVisibleFields} translations={allFieldTranslations}/>
     <Table striped bordered hover>
       <thead>
         <tr>
-        {(visibleFields.map((field) => {
-          return <th key={`header-${field}`} className="text-muted">{fieldTranslations[field]}<a onClick={handleOnClick(field)} href="#">{getIcon(field)}</a></th>;
+        {(flattenFields(visibleFields).map((field) => {
+          return <th key={`header-${field}`} className="text-muted">{allFieldTranslations[field]}<a onClick={handleOnClick(field)} href="#">{getIcon(field)}</a></th>;
         }))}
         </tr>
       </thead>

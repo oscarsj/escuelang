@@ -14,17 +14,23 @@ const App = () => {
   const [message, setMessage] = useState("");
   // TODO: move this to proper string translations
   const fieldTranslations = {
-    name: 'Nombre', 
-    surname: 'Apellidos',
-    birthdate: 'Fecha de nacimiento',
-    age: 'Edad',
-    address: 'Dirección',
-    town: 'Ciudad',
-    postcode: 'Código postal',
-    school: 'Colegio',
-    dni: 'DNI',
-    email: 'Correo',
-    notes: 'Notas'
+    child: {
+      name: 'Nombre', 
+      surname: 'Apellidos',
+      birthdate: 'Fecha de nacimiento',
+      age: 'Edad',
+      address: 'Dirección',
+      town: 'Ciudad',
+      postcode: 'Código postal',
+      school: 'Colegio',
+      dni: 'DNI',
+      email: 'Correo',
+      notes: 'Notas'
+    },
+    register: {
+      monitor: 'Monitor',
+      days: 'Días',
+    }
   }
   
   return (
@@ -45,7 +51,7 @@ const App = () => {
         </Route>
         <Route exact path="/children">
           <OldChildrenPage 
-            fieldTranslations={fieldTranslations}/>
+            fieldTranslations={fieldTranslations.child}/>
         </Route>
       </Switch>
       <div>

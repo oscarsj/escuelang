@@ -7,7 +7,7 @@ const Register = ({register, fieldTranslations, visibleFields, onChildUpdated}) 
     return (
               <Child 
                 child={register.child}
-                visibleFields={visibleFields}
+                visibleFields={visibleFields.child}
                 fieldTranslations={fieldTranslations.child}
                 onChildUpdated={onChildUpdated}/>
           )
