@@ -30,6 +30,8 @@ const App = () => {
     register: {
       monitor: 'Monitor',
       days: 'Días',
+      price_month: 'Precio al mes',
+      competition: '¿Compite?'
     }
   }
   

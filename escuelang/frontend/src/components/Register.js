@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import ChildDetails from './ChildDetails';
+import RegisterDetails from './RegisterDetails';
 
 const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const child = register.child;
-  const handleRegisterUpdated = (child) => {
+  const handleRegisterUpdated = (register) => {
       //setRolledOut(false);
-      console.log("Update on Child: ", child)
-      onChildUpdated(child);
+      console.log("Update on register: ", register)
+      onRegisterUpdated(register);
   }
   console.log("Register rendered: ", register);
   console.log("visible fields: ", visibleFields);
@@ -18,12 +18,12 @@ const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated
 </tr>
 {(rolledOut && (<tr>
     <td key={`tdUnrolled${child.id}`} colSpan="12">
-        <ChildDetails 
-          key={child.id}
-          child={child} 
+        <RegisterDetails 
+          key={register.id}
+          register={register} 
           fieldTranslations={fieldTranslations} 
           readOnly={true}
-          onChildUpdated={handleRegisterUpdated}
+          onRegsiterUpdated={handleRegisterUpdated}
           />
     </td></tr>))}   
 </> 
