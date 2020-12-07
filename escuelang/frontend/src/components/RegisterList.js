@@ -13,6 +13,13 @@ const RegisterList = ({registers, fieldTranslations}) => {
       'register': ['monitor']
     }
   );
+  const handleSetVisibleFields = (visibleFieldsList) => {
+    console.log("visibleFieldList changed: ", visibleFieldsList);
+    setVisibleFields({
+      child: visibleFieldsList.filter(field => Object.keys(fieldTranslations.child).includes(field)),
+      register: visibleFieldsList.filter(field => Object.keys(fieldTranslations.register).includes(field))
+    })
+  }
   const [orderBy, setOrder] = useState({
     field:'surname',
     reversed: false}
@@ -42,7 +49,7 @@ const RegisterList = ({registers, fieldTranslations}) => {
   const allFieldTranslations = Object.assign({}, fieldTranslations.child, fieldTranslations.register)
   return (
      <div className="container">
-       <VisibleFieldsSelector className="float-left" initialFields={flattenFields(visibleFields)} onSubmit={setVisibleFields} translations={allFieldTranslations}/>
+       <VisibleFieldsSelector className="float-left" initialFields={flattenFields(visibleFields)} onSubmit={handleSetVisibleFields} translations={allFieldTranslations}/>
     <Table striped bordered hover>
       <thead>
         <tr>
