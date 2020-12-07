@@ -3,6 +3,7 @@ import { Alert } from 'react-bootstrap';
 import SeasonPage from './SeasonPage';
 import OldChildrenPage from './OldChildrenPage';
 import EscuelaNavbar from "./EscuelaNavbar";
+import allTranslations from "../translations";
 import {
   BrowserRouter as Router,
   Switch, Route
@@ -12,29 +13,9 @@ import {
 const App = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const language = 'es_ES';
   // TODO: move this to proper string translations
-  const fieldTranslations = {
-    child: {
-      name: 'Nombre', 
-      surname: 'Apellidos',
-      birthdate: 'Fecha de nacimiento',
-      age: 'Edad',
-      address: 'Dirección',
-      town: 'Ciudad',
-      postcode: 'Código postal',
-      school: 'Colegio',
-      dni: 'DNI',
-      email: 'Correo',
-      notes: 'Notas'
-    },
-    register: {
-      monitor: 'Monitor',
-      days: 'Días',
-      price_month: 'Precio al mes',
-      competition: '¿Compite?'
-    }
-  }
-  
+  const translations = allTranslations[language];
   return (
 <div className="container">
 <Router>
@@ -47,13 +28,13 @@ const App = () => {
         </Route>
         <Route exact path="/">
           <SeasonPage 
-            fieldTranslations={fieldTranslations} 
+            fieldTranslations={translations} 
             setError={setError} 
             setMessage={setMessage}/>
         </Route>
         <Route exact path="/children">
           <OldChildrenPage 
-            fieldTranslations={fieldTranslations.child}/>
+            fieldTranslations={translations.child}/>
         </Route>
       </Switch>
       <div>

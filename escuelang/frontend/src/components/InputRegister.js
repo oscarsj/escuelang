@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Col } from 'react-bootstrap'
+import daysApi from '../client/days';
 
 const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, errors}) => {
-  const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const daysTranslations = {
-    Monday: 'Lunes',
-    Tuesday: 'Martes',
-    Wednesday: 'Miércoles',
-    Thursday: 'Jueves',
-    Friday: 'Viernes'
-  };
+  const daysTranslations = fieldTranslations.days;
+  const registerTranslations = fieldTranslations.register;
+  const [allDays, setAllDays] = useState([]);
+  
+  useEffect( () => { 
+    daysApi
+      .getNames()
+      .then(days => setAllDays(days))
+    console.log(allDays);
+  }, []);
+  
   const [newRegister, setNewRegister] = useState(register);
   const handleChange = (field) =>
       (event) => {
@@ -26,11 +30,11 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     const getInputForField = (field, type='text') => {
       return (  
       <Form.Group>
-      <Form.Label>{fieldTranslations[field]}</Form.Label>
+      <Form.Label>{registerTranslations[field]}</Form.Label>
       <Form.Control 
         type={type}
         id={field} 
-        placeholder={fieldTranslations[field]} 
+        placeholder={registerTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={readOnly} 
         defaultValue={readOnly? newRegister[field]:""}
@@ -52,15 +56,15 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   <Col xs={2}>
   <Form.Group controlId="formBasicCheckbox">
   <Form.Label></Form.Label>
-    <Form.Check type="checkbox" label={fieldTranslations['competition']} defaultValue={newRegister.competition} />
+    <Form.Check type="checkbox" label={registerTranslations['competition']} defaultChecked={newRegister.competition} />
   </Form.Group>
   </Col>
   </Form.Row>
   <Form.Row>
   <Col xs={4}>
   <Form.Group controlId="exampleForm.ControlSelect2">
-    <Form.Label>{fieldTranslations['days']}</Form.Label>
-      {allDays.map((day) => {
+    <Form.Label>{registerTranslations['days']}</Form.Label>
+      {allDays && allDays.map((day) => {
         return (
           <Form.Check 
             key={`check${day}`}
@@ -68,8 +72,8 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
             id={`check${day}`}
             defaultChecked={register.days.includes(day)}
             label={daysTranslations[day]}/>
-          )
-      })}
+          )}
+        )}
   </Form.Group>
   </Col>
   </Form.Row>

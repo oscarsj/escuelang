@@ -53,7 +53,7 @@ const RegisterDetails = ({register, fieldTranslations, readOnly, onResgisterUpda
             key={newRegister.id}
             register={newRegister} 
             onChildUpdated={setNewRegister}
-            fieldTranslations={fieldTranslations.register} 
+            fieldTranslations={fieldTranslations} 
             readOnly={!editMode}
             errors={errors}/>
 
