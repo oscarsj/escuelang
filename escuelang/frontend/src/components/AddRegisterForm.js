@@ -9,7 +9,7 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
     const [newChild, setNewChild] = useState({});
-    const [newRegister, setNewRegister] = useState({});
+    const [newRegister, setNewRegister] = useState(fieldTranslations.register);
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({});
     const [unrolled, setUnrolled] = useState(false);
@@ -90,9 +90,9 @@ const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
       <InputRegister
         register={newRegister}
         onRegisterUpdated={setNewRegister}
-        fieldTranslations={fieldTranslations.register}
+        fieldTranslations={fieldTranslations}
         readOnly={false}
-        errors={registerErrors}/>
+        errors={errors}/>
 
     <Button id='new' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
     <Button id='another' variant="secondary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>

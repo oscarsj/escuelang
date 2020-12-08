@@ -16,6 +16,7 @@ const App = () => {
   const language = 'es_ES';
   // TODO: move this to proper string translations
   const translations = allTranslations[language];
+  console.log("Got translations: ", translations);
   return (
 <div className="container">
 <Router>

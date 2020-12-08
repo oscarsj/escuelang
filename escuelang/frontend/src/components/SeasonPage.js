@@ -14,14 +14,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
         .registerChild(season.id, register)
       setRegisters(children.concat(register));
     }
-    const seasonFieldsTranslation = {
-      name: "Nombre",
-      course: "Curso",
-      start_date: "Fecha de inicio",
-      end_date: "Fecha de fin",
-      default_price: "Precio base",
-      active: "Temporada actual"
-    }
+
     const onRegisterUpdated = (newRegister) => {
       console.log("Replacing register: ", newRegister);
       const updatedRegisterIndex = registers.findIndex(register => register.id == register.id);
@@ -64,7 +57,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     <>
     <SeasonData 
       season={season}
-      fieldTranslations={seasonFieldsTranslation}
+      fieldTranslations={fieldTranslations.season}
       onSeasonUpdated={onSeasonUpdated}/>
     <AddRegisterForm 
       onNewChild={onNewRegister}

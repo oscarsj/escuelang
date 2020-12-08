@@ -25,6 +25,14 @@ const translations = {
             Wednesday: 'Miércoles',
             Thursday: 'Jueves',
             Friday: 'Viernes'
+        },
+        season: {
+            name: "Nombre",
+            course: "Curso",
+            start_date: "Fecha de inicio",
+            end_date: "Fecha de fin",
+            default_price: "Precio base",
+            active: "Temporada actual"
         }
     }
 }
