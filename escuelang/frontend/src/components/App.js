@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Alert } from 'react-bootstrap';
 import SeasonPage from './SeasonPage';
 import OldChildrenPage from './OldChildrenPage';
@@ -14,6 +14,7 @@ const App = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const language = 'es_ES';
+  const activeSeason = "1";
   // TODO: move this to proper string translations
   const translations = allTranslations[language];
   console.log("Got translations: ", translations);
@@ -29,6 +30,7 @@ const App = () => {
         </Route>
         <Route exact path="/">
           <SeasonPage 
+            defaultSeason={activeSeason}
             fieldTranslations={translations} 
             setError={setError} 
             setMessage={setMessage}/>

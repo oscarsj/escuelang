@@ -31,7 +31,7 @@ const getChildren = (id) => {
 }
 
 const registerChild = (seasonId, register) => {
-    const request = axios.post(`api/seasons/${seasonId}/register/`, register, config);
+    const request = axios.post(`api/seasons/${seasonId}/registers/`, register, config);
     return request.then(response => response.data);    
 }
 

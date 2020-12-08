@@ -73,8 +73,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             monitor=validated_data['monitor'],
             price_month=validated_data.get('price_month',
                                            season.default_price),
-            payment_method=validated_data['payment_method'],
-            competition=validated_data['competition'])
+            payment_method=validated_data.get('payment_method'),
+            competition=validated_data.get('competition', False)
+        )
         register.save()
         register.days.set(validated_data['days'])
         register.save()

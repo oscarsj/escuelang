@@ -7,7 +7,7 @@ import seasonsApi from '../client/seasons';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 
-const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
+const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations}) => {
     const [newChild, setNewChild] = useState({});
     const [newRegister, setNewRegister] = useState({});
     const [error, setError] = useState("");
@@ -20,13 +20,13 @@ const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
         console.log("Posting new child", newChild);
         event.stopPropagation();
         event.preventDefault();
-        childrenApi
+        return childrenApi
           .create(newChild)
           .then(child => {
             console.log('Child created!');
-            setNewChild({});
+            setNewChild(child);
             setError("");
-            onNewChild(child);
+            return child;
           })
           .catch(err => {
             if (err.response) {
@@ -41,34 +41,44 @@ const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
             }
         })
     }
-    const postNewRegister = (event) => {
+    const postNewRegister = async (event) => {
         
       // Simple POST request with a JSON body using fetch
       console.log("Posting new register", newRegister);
-      postNewChild(newChild);
       event.stopPropagation();
       event.preventDefault();
-      seasonsApi
-        .registerChild(seasonId, newRegister)
-        .then(register => {
-          console.log('Child created!');
-          setNewRegister({});
-          setError("");
-          setUnrolled(event.target.id == 'another');
-          onNewChild(child);
+      postNewChild(event)
+        .then(child => {
+          seasonsApi
+            .registerChild(seasonId, {
+                ...newRegister,
+                child: child.id
+            })
+            .then(register => {
+                console.log('Register created!');
+                setNewRegister({});
+                setNewChild({});
+                setError("");
+                setUnrolled(event.target.id == 'another');
+                console.log("Notifying upstream of addRegister");
+                onNewRegister({
+                    ...register,
+                    child: child
+                });
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.log('Error in create register: ', err.response);
+                    const nonFieldErrors = err.response.data.non_field_errors;
+                    setError(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
+                    setErrors(err.response.data);
+                } else if (err.request) {
+                    // client never received a response, or request never left
+                } else {
+                    // anything else
+                }
         })
-        .catch(err => {
-          if (err.response) {
-              console.log('Error in create child: ', err.response);
-              const nonFieldErrors = err.response.data.non_field_errors;
-              setError(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
-              setErrors(err.response.data);
-          } else if (err.request) {
-              // client never received a response, or request never left
-          } else {
-              // anything else
-          }
-      })
+    })
   }
 
   const fetchChild = (child) => {

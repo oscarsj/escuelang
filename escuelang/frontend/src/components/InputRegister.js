@@ -9,32 +9,33 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   const registerTranslations = fieldTranslations.register;
   const [allDays, setAllDays] = useState([]);
   const [allMonitors, setAllMonitors] = useState([]);
-  const registerId = register? register.id:"new";
+  const registerId = register.id? register.id:"new";
+  const [newRegister, setNewRegister] = useState(register);
+  const [newMonitor, setNewMonitor] = useState("");
+  const [newDays, setNewDays] = useState([]);
+  const initDayStatus = (days) => {
+    const result = {};
+    days.forEach(day => {
+      result[day.name] = false;
+    });
+    return result;
+  }
+  const getDayList = (days) => allDays.filter(day => days[day.name]).map(day => day.name)
   useEffect( () => { 
     daysApi
       .get()
-      .then(days => setAllDays(days));
+      .then(days => {
+        setAllDays(days);
+        if (registerId == 'new') setNewDays(initDayStatus(days));
+      });
     console.log(allDays);
     monitorsApi
       .get()
       .then(monitors => {
         setAllMonitors(monitors);
-        console.log("Monitors: ", monitors);
+        if (registerId == 'new') setNewMonitor(monitors[0]);
       });
   }, []);
-  
-  const [newRegister, setNewRegister] = useState(register);
-  const handleChange = (field) =>
-      (event) => {
-          event.stopPropagation();
-          event.preventDefault();
-          const tmpRegister = {
-              ...newRegister,
-              field: event.target.value,
-          };
-          setNewRegister(tmpRegister);
-          onRegisterdUpdated(tmpRegister);
-      }
 
     const getInputForField = (field, type='text') => {
       return (  
@@ -53,7 +54,40 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
       </Form.Control.Feedback>
       </Form.Group>)
     }
-
+  const handleChange = (field) =>
+    (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        const tmpRegister = {...newRegister};
+        tmpRegister[field] = event.target.value;
+        setNewRegister(tmpRegister);
+        onRegisterUpdated({
+          ...tmpRegister,
+          monitor: newMonitor.nick,
+          payments_set: [],
+          days: getDayList(newDays)
+        });
+    }
+  const handleChangeMonitor = (event) => {
+    console.log("Monitor changed ", event.target.value);
+    setNewMonitor(allMonitors.find((monitor => monitor.nick == event.target.value)));
+    onRegisterUpdated({...register,
+      monitor: event.target.value,
+      payments_set: [],
+      days: getDayList(newDays)
+    });
+  }
+  const handleChangeDays = (event) => {
+    console.log("Days changed ", event.target.id);
+    const tmpDays = {...newDays};
+    tmpDays[event.target.id] = !tmpDays[event.target.id];
+    setNewDays(tmpDays);
+    onRegisterUpdated({...register,
+      monitor: newMonitor.nick,
+      payments_set: [],
+      days: getDayList(tmpDays)
+    });
+  }
     return (<>
   <Form.Row>
   <Col xs={4}>
@@ -61,7 +95,8 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   <Form.Label>{registerTranslations['monitor']}</Form.Label>
       <Form.Control 
         id={`${registerId}-monitor`} 
-        as="select">
+        as="select"
+        onChange={handleChangeMonitor}>
       {allMonitors && allMonitors.map(monitor => 
         <option key={`monitor-${monitor.id}`}>{monitor.nick}</option>)}
   </Form.Control>
@@ -90,7 +125,8 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
           <Form.Check 
             key={`check-day${day.id}`}
             type="switch"
-            id={`${registerId}-check${day.id}`}
+            onChange={handleChangeDays}
+            id={day.name}
             defaultChecked={register.days? register.days.includes(day.name): false}
             label={daysTranslations[day.name]}/>
           )}

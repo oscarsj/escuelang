@@ -9,11 +9,6 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const [registers, setRegisters] = useState("");
     const [seasonId, setSeasonId] = useState(defaultSeason);
     const [season, setSeason] = useState({});
-    const onNewRegister = (register) => {
-      seasons
-        .registerChild(season.id, register)
-      setRegisters(children.concat(register));
-    }
 
     const onRegisterUpdated = (newRegister) => {
       console.log("Replacing register: ", newRegister);
@@ -21,6 +16,10 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       const tmpRegisters = [...registers];
       tmpRegisters[updatedRegisterIndex] = newRegister;
       setRegisters(tmpRegisters);
+    }
+    const onNewRegister = (register) => {
+      console.log("new register received ", register);
+      setRegisters(registers.concat(register));
     }
     const onSeasonUpdated = (newSeason) => {
       console.log("New season data: ", newSeason);
@@ -60,7 +59,8 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       fieldTranslations={fieldTranslations.season}
       onSeasonUpdated={onSeasonUpdated}/>
     <AddRegisterForm 
-      onNewChild={onNewRegister}
+      seasonId={seasonId}
+      onNewRegister={onNewRegister}
       fieldTranslations={fieldTranslations} 
     />
     <RegisterList 
