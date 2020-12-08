@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Col } from 'react-bootstrap'
 import daysApi from '../client/days';
+import monitorsApi from '../client/monitors';
+
 
 const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, errors}) => {
   const daysTranslations = fieldTranslations.days;
   const registerTranslations = fieldTranslations.register;
   const [allDays, setAllDays] = useState([]);
-  
+  const [allMonitors, setAllMonitors] = useState([]);
+  const registerId = register? register.id:"new";
   useEffect( () => { 
     daysApi
-      .getNames()
-      .then(days => setAllDays(days))
+      .get()
+      .then(days => setAllDays(days));
     console.log(allDays);
+    monitorsApi
+      .get()
+      .then(monitors => setAllMonitors(monitors));
   }, []);
   
   const [newRegister, setNewRegister] = useState(register);
@@ -33,7 +39,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
       <Form.Label>{registerTranslations[field]}</Form.Label>
       <Form.Control 
         type={type}
-        id={field} 
+        id={`${registerId}-${field}`}
         placeholder={registerTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={readOnly} 
@@ -56,10 +62,14 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   <Col xs={2}>
   <Form.Group controlId="formBasicCheckbox">
   <Form.Label></Form.Label>
-    <Form.Check type="checkbox" label={registerTranslations['competition']} defaultChecked={newRegister.competition} />
+    <Form.Check
+       type="checkbox" 
+       id={`${registerId}-competition`} 
+       label={registerTranslations['competition']} 
+       defaultChecked={newRegister.competition} />
   </Form.Group>
   </Col>
-  </Form.Row>
+  </Form.Row> 
   <Form.Row>
   <Col xs={4}>
   <Form.Group controlId="exampleForm.ControlSelect2">
@@ -67,11 +77,11 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
       {allDays && allDays.map((day) => {
         return (
           <Form.Check 
-            key={`check${day}`}
+            key={`check-day${day.id}`}
             type="switch"
-            id={`check${day}`}
-            defaultChecked={register.days.includes(day)}
-            label={daysTranslations[day]}/>
+            id={`${registerId}-check${day.id}`}
+            defaultChecked={register.days? register.days.includes(day.name): false}
+            label={daysTranslations[day.name]}/>
           )}
         )}
   </Form.Group>

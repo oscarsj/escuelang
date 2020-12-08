@@ -9,7 +9,7 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
     const [newChild, setNewChild] = useState({});
-    const [newRegister, setNewRegister] = useState(fieldTranslations.register);
+    const [newRegister, setNewRegister] = useState({});
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({});
     const [unrolled, setUnrolled] = useState(false);
@@ -24,7 +24,7 @@ const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
           .create(newChild)
           .then(child => {
             console.log('Child created!');
-            setNewChild(fieldTranslations.child);
+            setNewChild({});
             setError("");
             onNewChild(child);
           })
@@ -52,7 +52,7 @@ const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
         .registerChild(seasonId, newRegister)
         .then(register => {
           console.log('Child created!');
-          setNewRegister(fieldTranslations.register);
+          setNewRegister({});
           setError("");
           setUnrolled(event.target.id == 'another');
           onNewChild(child);
