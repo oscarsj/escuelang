@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
-import AddChildForm from './AddChildForm';
+import AddRegisterForm from './AddRegisterForm';
 import seasons from '../client/seasons';
 
 
@@ -66,7 +66,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       season={season}
       fieldTranslations={seasonFieldsTranslation}
       onSeasonUpdated={onSeasonUpdated}/>
-    <AddChildForm 
+    <AddRegisterForm 
       onNewChild={onNewRegister}
       fieldTranslations={fieldTranslations} 
     />

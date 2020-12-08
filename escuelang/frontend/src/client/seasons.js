@@ -1,6 +1,12 @@
 import axios from 'axios'
 import readCookie from "../utils/cookie";
 
+const config = {
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': readCookie('csrftoken'),
+    }
+}
 
 const getAll = () => {
     const request = axios.get('api/seasons/');
@@ -23,17 +29,14 @@ const getChildren = (id) => {
         response => response.data.map(register => register.child)
     )
 }
+
 const registerChild = (seasonId, register) => {
-    
+    const request = axios.post(`api/seasons/${seasonId}/register/`, register, config);
+    return request.then(response => response.data);    
 }
 
 const update = (seasonId, season) => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': readCookie('csrftoken'),
-        }
-    }
+    
     const request = axios.put(`api/seasons/${seasonId}/`, season, config);
     return request.then(response => response.data)
 }

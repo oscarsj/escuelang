@@ -7,7 +7,7 @@ import seasonsApi from '../client/seasons';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 
-const AddChildForm = ({onNewChild, fieldTranslations}) => {
+const AddRegisterForm = ({onNewChild, fieldTranslations}) => {
     const [newChild, setNewChild] = useState({});
     const [newRegister, setNewRegister] = useState({});
     const [error, setError] = useState("");
@@ -26,7 +26,6 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
             console.log('Child created!');
             setNewChild(fieldTranslations.child);
             setError("");
-            setUnrolled(event.target.id == 'another');
             onNewChild(child);
           })
           .catch(err => {
@@ -45,7 +44,8 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
     const postNewRegister = (event) => {
         
       // Simple POST request with a JSON body using fetch
-      console.log("Posting new child", newChild);
+      console.log("Posting new register", newRegister);
+      postNewChild(newChild);
       event.stopPropagation();
       event.preventDefault();
       seasonsApi
@@ -71,11 +71,15 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
       })
   }
 
-    return (<>
+  const fetchChild = (child) => {
+   
+  }
+
+  return (<>
     {!unrolled && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
     {unrolled && <>
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
-    <Form onSubmit={postNewChild}>
+    <Form onSubmit={postNewRegister}>
     {(error && <Alert variant="danger">{error}</Alert>)}
       <InputChild 
         child={newChild} 
@@ -85,7 +89,7 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
         errors={errors}/>
       <InputRegister
         register={newRegister}
-        onRegisterUpdated={onRegisterUpdated}
+        onRegisterUpdated={setNewRegister}
         fieldTranslations={fieldTranslations.register}
         readOnly={false}
         errors={registerErrors}/>
@@ -100,4 +104,4 @@ const AddChildForm = ({onNewChild, fieldTranslations}) => {
     )
 }
 
-export default AddChildForm;
+export default AddRegisterForm;
