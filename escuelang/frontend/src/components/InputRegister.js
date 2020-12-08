@@ -17,7 +17,10 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     console.log(allDays);
     monitorsApi
       .get()
-      .then(monitors => setAllMonitors(monitors));
+      .then(monitors => {
+        setAllMonitors(monitors);
+        console.log("Monitors: ", monitors);
+      });
   }, []);
   
   const [newRegister, setNewRegister] = useState(register);
@@ -54,7 +57,15 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     return (<>
   <Form.Row>
   <Col xs={4}>
-      {getInputForField('monitor')}
+  <Form.Group>
+  <Form.Label>{registerTranslations['monitor']}</Form.Label>
+      <Form.Control 
+        id={`${registerId}-monitor`} 
+        as="select">
+      {allMonitors && allMonitors.map(monitor => 
+        <option key={`monitor-${monitor.id}`}>{monitor.nick}</option>)}
+  </Form.Control>
+  </Form.Group>
   </Col>
   <Col>
       {getInputForField('price_month')}
@@ -72,7 +83,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   </Form.Row> 
   <Form.Row>
   <Col xs={4}>
-  <Form.Group controlId="exampleForm.ControlSelect2">
+  <Form.Group>
     <Form.Label>{registerTranslations['days']}</Form.Label>
       {allDays && allDays.map((day) => {
         return (
