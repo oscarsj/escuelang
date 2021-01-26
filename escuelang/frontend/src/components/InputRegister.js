@@ -1,50 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Col } from 'react-bootstrap'
-import daysApi from '../client/days';
-import monitorsApi from '../client/monitors';
 
 
-const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, errors}) => {
-  const daysTranslations = fieldTranslations.days;
-  const registerTranslations = fieldTranslations.register;
-  const [allDays, setAllDays] = useState([]);
-  const [allMonitors, setAllMonitors] = useState([]);
-  const registerId = register.id? register.id:"new";
-  const [newRegister, setNewRegister] = useState(register);
-  const [newMonitor, setNewMonitor] = useState({});
-  const [newDays, setNewDays] = useState({});
-  const [newCompetition, setNewCompetition] = useState(register.competition);
-
+const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, allDays, allMonitors, errors}) => {
+  const getMonitorStatus = (registerId) => {
+    allMonitors? 
+      registerId == 'new'?
+      allMonitors[0]:allMonitors.filter(
+        (monitor) => monitor.nick == register.monitor
+    )[0]:{}
+  }
   const getDayStatus = (days, allDays) => {
     const result = {};
-    allDays.forEach(day => {
-      result[day.name] = days.includes(day.name);
-    });
+    allDays?
+      allDays.forEach(day => {
+        result[day.name] = days.includes(day.name);
+      }):{};
     return result;
   }
-  const getDayList = (days) => allDays.filter(day => days[day.name]).map(day => day.name)
-  useEffect( () => { 
-    daysApi
-      .get()
-      .then(days => {
-        setAllDays(days);
-        setNewDays(getDayStatus(register.days, days));
-      });
-    console.log("allDays: ", allDays);
-    monitorsApi
-      .get()
-      .then(monitors => {
-        setAllMonitors(monitors);
-        if (registerId == 'new') {
-          setNewMonitor(monitors[0]);
-        } else {
-          setNewMonitor(monitors.filter(
-            (monitor) => monitor.nick == register.monitor
-          )[0]);
-        }
-      });
-  }, []);
+  const daysTranslations = fieldTranslations.days;
+  const registerTranslations = fieldTranslations.register;
+  const registerId = register.id? register.id:"new";
+  const [newRegister, setNewRegister] = useState(register);
+  const [newMonitor, setNewMonitor] = useState(getMonitorStatus(registerId));
+  const [newDays, setNewDays] = useState(getDayStatus(register.days, allDays));
+  const [newCompetition, setNewCompetition] = useState(register.competition);
 
+  
+
+  const getDayList = (days) => allDays.filter(day => days[day.name]).map(day => day.name)
+  
     const getInputForField = (field, type='text') => {
       return (  
       <Form.Group>
@@ -116,7 +101,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     <Form.Control 
       id={`register-${registerId}-monitor`} 
       as="select"
-      value={newMonitor.nick}
+      value={newMonitor? newMonitor.nick:""}
       onChange={handleChangeMonitor}
       isInvalid={Boolean(errors?errors.monitor:false)}
       disabled={readOnly}>

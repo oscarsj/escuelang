@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import RegisterDetails from './RegisterDetails';
 
-const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated}) => {
+const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated, allDays, allMonitors}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const child = register.child;
   const handleRegisterUpdated = (register) => {
@@ -24,6 +24,8 @@ const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated
           fieldTranslations={fieldTranslations} 
           readOnly={true}
           onRegsiterUpdated={handleRegisterUpdated}
+          allDays={allDays}
+          allMonitors={allMonitors}
           />
     </td></tr>))}   
 </> 

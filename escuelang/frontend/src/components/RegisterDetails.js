@@ -7,7 +7,7 @@ import childrenApi from '../client/children';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
 
 
-const RegisterDetails = ({register, fieldTranslations, readOnly, onResgisterUpdated}) => {
+const RegisterDetails = ({register, fieldTranslations, readOnly, onResgisterUpdated, allDays, allMonitors}) => {
     const [editMode, setEditMode] = useState(!readOnly);
     const [newRegister, setNewRegister] = useState(register);
     const [error, setError] = useState("");
@@ -69,7 +69,9 @@ const RegisterDetails = ({register, fieldTranslations, readOnly, onResgisterUpda
             onRegisterUpdated={setNewRegister}
             fieldTranslations={fieldTranslations} 
             readOnly={!editMode}
-            errors={errors}/>
+            errors={errors}
+            allDays={allDays}
+            allMonitors={allMonitors}/>
 
         <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/>
     </Form>

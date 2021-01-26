@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table } from 'react-bootstrap'
+import daysApi from '../client/days';
+import monitorsApi from '../client/monitors';
 
 
 const RegisterList = ({registers, fieldTranslations}) => {
+  const [allMonitors, setAllMonitors] = useState([]);
+  const [allDays, setAllDays] = useState([]);
+  
   console.log('Register list for ', registers);
   const [visibleFields, setVisibleFields] = useState(
     {
@@ -47,6 +52,21 @@ const RegisterList = ({registers, fieldTranslations}) => {
     return fields.child.concat(fields.register);
   }
   const allFieldTranslations = Object.assign({}, fieldTranslations.child, fieldTranslations.register)
+  
+  useEffect( () => { 
+    daysApi
+      .get()
+      .then(days => {
+        setAllDays(days);
+      });
+    console.log("allDays: ", allDays);
+    monitorsApi
+      .get()
+      .then(monitors => {
+        setAllMonitors(monitors);
+      });
+  }, []);
+
   return (
      <div className="container">
        <VisibleFieldsSelector className="float-left" initialFields={flattenFields(visibleFields)} onSubmit={handleSetVisibleFields} translations={allFieldTranslations}/>
@@ -66,7 +86,9 @@ const RegisterList = ({registers, fieldTranslations}) => {
            key={register.id}
            register={register}
            visibleFields={visibleFields}
-           fieldTranslations={fieldTranslations}/>
+           fieldTranslations={fieldTranslations}
+           allDays={allDays}
+           allMonitors={allMonitors}/>
       )}
       </tbody>
     </Table>
