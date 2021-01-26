@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from .models import (
     Course, Season, Child, RegisteredChild, Monitor, Days, Payments
@@ -79,3 +79,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class RegisterListCreate(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
     queryset = RegisteredChild.objects.all()
+
+
+class SearchChildView(generics.ListAPIView):
+    serializer_class = ChildrenSerializer
+    
+    def get_queryset(self):
+        return Child.objects.filter(
+                name=self.request.query_params.get('name', None),
+                surname=self.request.query_params.get('surname', None))

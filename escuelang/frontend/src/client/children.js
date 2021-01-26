@@ -34,4 +34,10 @@ const update = (id, newChild) => {
     return request.then(response => response.data)
 }
 
-export default { getAll, get, create, update };
+const search = (name, surname) => {
+    const request = axios.get(`api/search?name=${name}&surname=${surname}`);
+    return request.then(response => response.data[0])
+
+}
+
+export default { getAll, get, create, update, search };

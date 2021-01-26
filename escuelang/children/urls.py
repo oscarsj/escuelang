@@ -27,7 +27,6 @@ router.register('seasons', views.SeasonListCreate)
 router.register('monitors', views.MonitorListCreate)
 router.register('days', views.DaysListCreate)
 router.register('registers', views.RegisterListCreate)
-
 season_router = nested_router.NestedSimpleRouter(router, r'seasons',
                                                  lookup='season')
 season_router.register(r'registers', views.RegisterViewSet,
@@ -42,6 +41,7 @@ payment_router.register(r'payments', views.PaymentViewSet,
 
 urlpatterns = [
     url(r'^swagger$', schema_view.with_ui('swagger', cache_timeout=0),),
+    url(r'search', views.SearchChildView.as_view()),
     path('', include(router.urls)),
     path('', include(season_router.urls)),
     path('', include(payment_router.urls))

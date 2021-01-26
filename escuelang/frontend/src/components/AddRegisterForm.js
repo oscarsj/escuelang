@@ -82,7 +82,21 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
   }
 
   const fetchChild = (child) => {
-   
+    const oldName = newChild.name;
+    const oldSurname = newChild.surname;
+    setNewChild(child);
+    if(child.name != oldName || child.surname != oldSurname) {
+      childrenApi.search(child.name, child.surname)
+        .then((fullChild) => {
+          console.log("Setting new child ", fullChild);
+          setNewChild({...fullChild,
+            name: child.name,
+            surname: child.surname
+          });
+        })
+        .catch()
+    }
+    
   }
 
   return (<>
@@ -93,7 +107,7 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
     {(error && <Alert variant="danger">{error}</Alert>)}
       <InputChild 
         child={newChild} 
-        onChildUpdated={setNewChild} 
+        onChildUpdated={fetchChild} 
         fieldTranslations={fieldTranslations.child} 
         readOnly={false}
         errors={errors}/>
