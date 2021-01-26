@@ -13,6 +13,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   const [newRegister, setNewRegister] = useState(register);
   const [newMonitor, setNewMonitor] = useState({});
   const [newDays, setNewDays] = useState({});
+  const [newCompetition, setNewCompetition] = useState(register.competition);
 
   const getDayStatus = (days, allDays) => {
     const result = {};
@@ -72,16 +73,18 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
           ...tmpRegister,
           monitor: newMonitor.nick,
           payments_set: [],
-          days: getDayList(newDays)
+          days: getDayList(newDays),
+          competition: newCompetition
         });
     }
   const handleChangeMonitor = (event) => {
     console.log("Monitor changed ", event.target.value);
     setNewMonitor(allMonitors.find((monitor => monitor.nick == event.target.value)));
-    onRegisterUpdated({...register,
+    onRegisterUpdated({...newRegister,
       monitor: event.target.value,
       payments_set: [],
-      days: getDayList(newDays)
+      days: getDayList(newDays),
+      competition: newCompetition
     });
   }
   const handleChangeDays = (event) => {
@@ -89,10 +92,20 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     const tmpDays = {...newDays};
     tmpDays[event.target.id] = !tmpDays[event.target.id];
     setNewDays(tmpDays);
-    onRegisterUpdated({...register,
+    onRegisterUpdated({...newRegister,
       monitor: newMonitor.nick,
       payments_set: [],
-      days: getDayList(tmpDays)
+      days: getDayList(tmpDays),
+      competition: newCompetition
+    });
+  }
+  const handleChangeCompetition = (event) => {
+    setNewCompetition(!newCompetition);
+    onRegisterUpdated({...newRegister,
+      monitor: newMonitor.nick,
+      payments_set: [],
+      days: getDayList(newDays),
+      competition: !newCompetition
     });
   }
     return (<>
@@ -103,7 +116,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     <Form.Control 
       id={`register-${registerId}-monitor`} 
       as="select"
-      value={newRegister.monitor}
+      value={newMonitor.nick}
       onChange={handleChangeMonitor}
       isInvalid={Boolean(errors?errors.monitor:false)}
       disabled={readOnly}>
@@ -125,7 +138,8 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
        type="checkbox" 
        id={`${registerId}-competition`} 
        label={registerTranslations['competition']} 
-       defaultChecked={newRegister.competition} 
+       defaultChecked={newCompetition} 
+       onChange={handleChangeCompetition}
        disabled={readOnly} />
   </Form.Group>
   </Col>
