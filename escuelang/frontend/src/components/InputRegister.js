@@ -4,18 +4,24 @@ import { Form, Col } from 'react-bootstrap'
 
 const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, allDays, allMonitors, errors}) => {
   const getMonitorStatus = (registerId) => {
-    allMonitors? 
-      registerId == 'new'?
-      allMonitors[0]:allMonitors.filter(
-        (monitor) => monitor.nick == register.monitor
-    )[0]:{}
+    if(allMonitors != undefined) { 
+      if(registerId == 'new') {
+        return allMonitors[0];
+      } else {
+        return allMonitors.filter(
+          (monitor) => monitor.nick == register.monitor
+        )[0];
+      }
+    }
   }
+  
   const getDayStatus = (days, allDays) => {
     const result = {};
-    allDays?
+    if (allDays != undefined) {
       allDays.forEach(day => {
-        result[day.name] = days.includes(day.name);
-      }):{};
+        result[day.name] = days!=undefined? days.includes(day.name):false;
+      });
+    }
     return result;
   }
   const daysTranslations = fieldTranslations.days;

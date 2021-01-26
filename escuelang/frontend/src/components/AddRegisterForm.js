@@ -7,7 +7,7 @@ import seasonsApi from '../client/seasons';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
 
-const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations}) => {
+const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, allMonitors}) => {
     const [newChild, setNewChild] = useState({});
     const [newRegister, setNewRegister] = useState({});
     const [error, setError] = useState("");
@@ -102,7 +102,9 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations}) => {
         onRegisterUpdated={setNewRegister}
         fieldTranslations={fieldTranslations}
         readOnly={false}
-        errors={errors}/>
+        errors={errors}
+        allDays={allDays}
+        allMonitors={allMonitors}/>
 
     <Button id='new' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
     <Button id='another' variant="secondary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>

@@ -3,13 +3,17 @@ import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
 import seasons from '../client/seasons';
+import daysApi from '../client/days';
+import monitorsApi from '../client/monitors';
 
 
 const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const [registers, setRegisters] = useState("");
     const [seasonId, setSeasonId] = useState(defaultSeason);
     const [season, setSeason] = useState({});
-
+    const [allMonitors, setAllMonitors] = useState([]);
+    const [allDays, setAllDays] = useState([]);
+  
     const onRegisterUpdated = (newRegister) => {
       console.log("Replacing register: ", newRegister);
       const updatedRegisterIndex = registers.findIndex(register => register.id == register.id);
@@ -44,12 +48,23 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
               setSeasonId(newSeason.id);
             }
           );  
+      daysApi
+        .get()
+        .then(days => {
+          setAllDays(days);
+        });
+      console.log("allDays: ", allDays);
+      monitorsApi
+        .get()
+        .then(monitors => {
+          setAllMonitors(monitors);
+        });
       seasons
-          .getRegisters(seasonId)
-          .then(registers => 
-            setRegisters(registers)
-          );
-        
+        .getRegisters(seasonId)
+        .then(registers => 
+          setRegisters(registers)
+        );
+    
     }, []);
 
     return (
@@ -62,11 +77,15 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       seasonId={seasonId}
       onNewRegister={onNewRegister}
       fieldTranslations={fieldTranslations} 
+      allDays={allDays}
+      allMonitors={allMonitors}
     />
     <RegisterList 
       fieldTranslations={fieldTranslations} 
       registers={registers}
-      onRegisterUpdated={onRegisterUpdated}/>
+      onRegisterUpdated={onRegisterUpdated}
+      allDays={allDays}
+      allMonitors={allMonitors}/>
     </>
     )
 }
