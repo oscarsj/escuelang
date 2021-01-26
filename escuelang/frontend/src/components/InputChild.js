@@ -9,6 +9,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
           event.preventDefault();
           const tmpChild = {...child};
           tmpChild[field] = event.target.value;
+          console.log("InputChild: ", tmpChild);
           setNewChild(tmpChild);
           onChildUpdated(tmpChild);
       }
@@ -30,7 +31,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
       </Form.Control.Feedback>
       </Form.Group>)
     }
-
+          
     return (<>
   <Form.Row>
   <Col xs={4}>

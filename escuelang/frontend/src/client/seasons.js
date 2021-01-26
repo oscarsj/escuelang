@@ -35,11 +35,16 @@ const registerChild = (seasonId, register) => {
     return request.then(response => response.data);    
 }
 
+const updateRegister = (registerId, newRegister) => {
+    const request = axios.put(`api/registers/${registerId}/`, newRegister, config);
+    return request.then(response => response.data);
+}
+
 const update = (seasonId, season) => {
     
     const request = axios.put(`api/seasons/${seasonId}/`, season, config);
-    return request.then(response => response.data)
+    return request.then(response => response.data);
 }
 
 
-export default {get, getAll, getRegisters, getChildren, registerChild, update};
+export default {get, getAll, getRegisters, updateRegister, getChildren, registerChild, update};

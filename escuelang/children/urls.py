@@ -26,6 +26,7 @@ router.register('children', views.ChildrenListCreate)
 router.register('seasons', views.SeasonListCreate)
 router.register('monitors', views.MonitorListCreate)
 router.register('days', views.DaysListCreate)
+router.register('registers', views.RegisterListCreate)
 
 season_router = nested_router.NestedSimpleRouter(router, r'seasons',
                                                  lookup='season')

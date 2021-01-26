@@ -75,3 +75,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return Payments.objects.filter(
             register__id=self.kwargs.get('register_pk')
         )
+
+class RegisterListCreate(viewsets.ModelViewSet):
+    serializer_class = RegisterSerializer
+    queryset = RegisteredChild.objects.all()
