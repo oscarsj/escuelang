@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Card } from 'react-bootstrap';
 import ChildrenList from './ChildrenList';
-import { useEffect } from 'react';
 import childrenApi from "../client/children";
 import trans from "../translations";
 
@@ -60,7 +60,11 @@ const OldChildrenPage = ({fieldTranslations}) => {
     }
     return (
         <>
-        <div className="h1 center-block">Antiguos alumnos</div>
+        <Card className="bg-dark text-white" style={{ bottom_marging: "50px", heigth: '300rem' }}>
+        <Card.Body>
+          <Card.Title>Antiguos alumnos</Card.Title>
+        </Card.Body>
+        </Card>
         <ChildrenList 
           fieldTranslations={fieldTranslations} 
           children={oldChildren}

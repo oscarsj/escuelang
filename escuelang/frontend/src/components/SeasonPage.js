@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
+import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
 import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';

@@ -16,7 +16,7 @@ const RegisterDetails = ({register, fieldTranslations, readOnly, onRegisterUpdat
 
     return (
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
-    <Form onSubmit={(event) => {onRegisterUpdated(event, newRegister.id)}}>
+    <Form onSubmit={(event) => onRegisterUpdated(event, newRegister)}>
         {(error && <Alert variant="danger">{error}</Alert>)}
         <InputChild 
             key={newRegister.child.id}

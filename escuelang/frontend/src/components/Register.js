@@ -4,13 +4,13 @@ import RegisterDetails from './RegisterDetails';
 const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated, onRegisterDeleted, allDays, allMonitors}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const child = register.child;
-  const handleRegisterUpdated = (register) => {
-      //setRolledOut(false);
-      console.log("Update on register: ", register)
-      onRegisterUpdated(register);
-  }
   console.log("Register rendered: ", register);
   console.log("visible fields: ", visibleFields);
+  const rollAndForward = (originalHandler) =>
+   (...params) => {
+    setRolledOut(false);
+    return originalHandler(...params);
+  } 
   return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
 {visibleFields.child.map((field) => <td key={`td${child[field]}`}>{child[field]}</td>)}
@@ -23,8 +23,8 @@ const Register = ({register, visibleFields, fieldTranslations, onRegisterUpdated
           register={register} 
           fieldTranslations={fieldTranslations} 
           readOnly={true}
-          onRegsiterUpdated={handleRegisterUpdated}
-          onRegisterDeleted={onRegisterDeleted}
+          onRegisterUpdated={rollAndForward(onRegisterUpdated)}
+          onRegisterDeleted={rollAndForward(onRegisterDeleted)}
           allDays={allDays}
           allMonitors={allMonitors}
           />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Col, Alert } from 'react-bootstrap'
+import { Form, Col, Alert, Card } from 'react-bootstrap';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
 import seasons from '../client/seasons';
 
@@ -7,7 +7,7 @@ import seasons from '../client/seasons';
 const SeasonData = ({season, fieldTranslations, onSeasonUpdated}) => {
     const [editMode, setEditMode] = useState(false);
     const [error, setError] = useState("");
-    const [errors, setErrors] = useState({});
+    const [errors] = useState({});
     const [newSeason, setNewSeason] = useState(season);
     
     const handleChange = (field) =>
@@ -54,8 +54,8 @@ const SeasonData = ({season, fieldTranslations, onSeasonUpdated}) => {
       </Form.Control.Feedback>
       </Form.Group>)
     }
-    return (
-    <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
+    return (<>
+    {(editMode && <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
     <Form onSubmit={handleSeasonUpdated}>
         {(error && <Alert variant="danger">{error}</Alert>)}
     
@@ -100,7 +100,21 @@ const SeasonData = ({season, fieldTranslations, onSeasonUpdated}) => {
   </Form.Row>
   <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/>
   </Form>
-  </div>
+  </div>)}
+  {(!editMode && 
+  <Card className="bg-dark text-white" style={{ heigth: '300rem' }}>
+  <Card.Body>
+    <Card.Title>Temporada {season.name}</Card.Title>
+    <Card.Subtitle className="mb-2 text-muted">{season.course}</Card.Subtitle>
+    <Card.Text>
+    <div>De {season.start_date} a {season.end_date}</div>
+    <div>Precio por alumno {season.default_price}</div>
+    </Card.Text>
+    <Card.Link href="#"><EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/></Card.Link>
+  </Card.Body>
+</Card>
+    )}
+  </>
 )
 }
 
