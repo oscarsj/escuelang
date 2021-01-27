@@ -47,8 +47,8 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
       console.log("Posting new register", newRegister);
       event.stopPropagation();
       event.preventDefault();
-      postNewChild(event)
-        .then(child => {
+      const childPromise = childId != undefined? postNewChild(event): updateChild(event);
+      childPromise.then(child => {
           seasonsApi
             .registerChild(seasonId, {
                 ...newRegister,
@@ -84,14 +84,16 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
   const fetchChild = (child) => {
     const oldName = newChild.name;
     const oldSurname = newChild.surname;
-    setNewChild(child);
+    setNewChild({...child,
+       id: newChild.id});
     if(child.name != oldName || child.surname != oldSurname) {
       childrenApi.search(child.name, child.surname)
         .then((fullChild) => {
           console.log("Setting new child ", fullChild);
           setNewChild({...fullChild,
             name: child.name,
-            surname: child.surname
+            surname: child.surname,
+            id: fullChild.id
           });
         })
         .catch()
