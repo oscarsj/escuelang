@@ -46,5 +46,10 @@ const update = (seasonId, season) => {
     return request.then(response => response.data);
 }
 
+const deleteRegister = (registerId) => {
+    const request = axios.delete(`api/registers/${registerId}/`, config);
+    return request.then(response => response.data)
+}
 
-export default {get, getAll, getRegisters, updateRegister, getChildren, registerChild, update};
+
+export default {get, getAll, getRegisters, deleteRegister, updateRegister, getChildren, registerChild, update};

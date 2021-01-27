@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
-import seasons from '../client/seasons';
+import seasonsApi from '../client/seasons';
 import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';
 
@@ -15,12 +15,48 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const [allDays, setAllDays] = useState([]);
   
     const onRegisterUpdated = (newRegister) => {
-      console.log("Replacing register: ", newRegister);
-      const updatedRegisterIndex = registers.findIndex(register => register.id == register.id);
-      const tmpRegisters = [...registers];
-      tmpRegisters[updatedRegisterIndex] = newRegister;
-      setRegisters(tmpRegisters);
+      childrenApi
+          .update(newRegister.child.id, newRegister.child)
+          .then((result) => {
+            console.log("update child on RegisterDetails: ", result)
+            const tmpRegister = {
+                ...newRegister,
+                child: newRegister.child.id};
+            seasonsApi
+            .updateRegister(newRegister.id, tmpRegister)
+            .then((result) => {
+                setEditMode(false);
+                setErrors({});
+                setError("");
+                console.log("update on RegisterDetails: ", result)
+                const updatedRegisterIndex = registers.findIndex(register => register.id == register.id);
+                const tmpRegisters = [...registers];
+                tmpRegisters[updatedRegisterIndex] = newRegister;
+                setRegisters(tmpRegisters);
+              })
+            .catch(err => {
+                if (err.response) {
+                    console.log('Error in update register', err.response);
+                    setError("Ha habido errores al guardar. Revise los valores introducidos");
+                    setErrors(err.response.data);
+                } else if (err.request) {
+                    // client never received a response, or request never left
+                } else {
+                    // anything else
+                }
+            })
+        })
     }
+    const onRegisterDeleted = (registerId) => {
+      seasonsApi
+        .deleteRegister(registerId)
+        .then((result) => {
+          console.log("Season page deleted register ", registerId);
+          setRegisters(registers.filter((register) => register.id != registerId));
+        })
+        .catch()
+    }
+
     const onNewRegister = (register) => {
       console.log("new register received ", register);
       setRegisters(registers.concat(register));
@@ -28,7 +64,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const onSeasonUpdated = (newSeason) => {
       console.log("New season data: ", newSeason);
       const seasonData = Object.assign(newSeason, season);
-      seasons
+      seasonsApi
         .update(seasonId, seasonData)
         .then((result) => {
           setSeason(result)
@@ -40,7 +76,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
 
     useEffect(() => {
       console.log("Getting registers for season ", seasonId);
-      seasons
+      seasonsApi
           .get(seasonId)
           .then(newSeason => {
               console.log("Season loaded: ", newSeason);
@@ -59,7 +95,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
         .then(monitors => {
           setAllMonitors(monitors);
         });
-      seasons
+        seasonsApi
         .getRegisters(seasonId)
         .then(registers => 
           setRegisters(registers)
@@ -84,6 +120,7 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
       fieldTranslations={fieldTranslations} 
       registers={registers}
       onRegisterUpdated={onRegisterUpdated}
+      onRegisterDeleted={onRegisterDeleted}
       allDays={allDays}
       allMonitors={allMonitors}/>
     </>

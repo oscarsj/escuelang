@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BsPencilSquare } from 'react-icons/bs';
 import { ImBin } from 'react-icons/im';
 import { Button } from 'react-bootstrap';
@@ -16,6 +16,7 @@ const EditSaveCancelButtons = ({editMode, onSetEditMode, onDelete}) => {
     const deleteRegister = (event) => {
         event.stopPropagation();
         event.preventDefault();
+        onSetEditMode(false);
         onDelete(event);
     }
     const getButtons = () => {
@@ -26,8 +27,8 @@ const EditSaveCancelButtons = ({editMode, onSetEditMode, onDelete}) => {
         </>)
           : 
         (<>
-            <Button id='enable' variant="primary" type="submit" onClick={handleToogle}><BsPencilSquare/></Button>
-            {onDelete && <Button id='enable' variant="secondary" type="submit" onClick={deleteRegister}><ImBin/></Button>}
+            <Button id='enable' variant="primary" type="submit" onClick={handleToogle} style={{ padding: "5px", marginRight: "5px"}}><BsPencilSquare/></Button>
+            {onDelete && <Button id='enable' variant="secondary" type="submit" onClick={(event) => { if (window.confirm('¿Estás seguro de querer borrar?')) deleteRegister(event) } } style={{ padding: "5px", marginRight: "10px"}}><ImBin/></Button>}
         </>) 
     }
 

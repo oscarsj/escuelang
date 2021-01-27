@@ -5,7 +5,7 @@ import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table } from 'react-bootstrap'
 
 
-const RegisterList = ({registers, fieldTranslations, allDays, allMonitors}) => {
+const RegisterList = ({registers, fieldTranslations, onRegisterUpdated, onRegisterDeleted, allDays, allMonitors}) => {
   
   console.log('Register list for ', registers);
   const [visibleFields, setVisibleFields] = useState(
@@ -69,6 +69,8 @@ const RegisterList = ({registers, fieldTranslations, allDays, allMonitors}) => {
            register={register}
            visibleFields={visibleFields}
            fieldTranslations={fieldTranslations}
+           onRegisterUpdated={onRegisterUpdated}
+           onRegisterDeleted={onRegisterDeleted}
            allDays={allDays}
            allMonitors={allMonitors}/>
       )}
