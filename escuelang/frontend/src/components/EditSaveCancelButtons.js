@@ -13,9 +13,7 @@ const EditSaveCancelButtons = ({editMode, onSetEditMode, onDelete}) => {
     const handleCancel = (event) => {
         onSetEditMode(false);
     }
-    const deleteRegister = (event) => {
-        event.stopPropagation();
-        event.preventDefault();
+    const handleOnDelete = (event) => {
         onSetEditMode(false);
         onDelete(event);
     }
@@ -28,7 +26,7 @@ const EditSaveCancelButtons = ({editMode, onSetEditMode, onDelete}) => {
           : 
         (<>
             <Button id='enable' variant="primary" type="submit" onClick={handleToogle} style={{ padding: "5px", marginRight: "5px"}}><BsPencilSquare/></Button>
-            {onDelete && <Button id='enable' variant="secondary" type="submit" onClick={(event) => { if (window.confirm('¿Estás seguro de querer borrar?')) deleteRegister(event) } } style={{ padding: "5px", marginRight: "10px"}}><ImBin/></Button>}
+            {onDelete && <Button id='enable' variant="secondary" type="submit" onClick={handleOnDelete} style={{ padding: "5px", marginRight: "10px"}}><ImBin/></Button>}
         </>) 
     }
 

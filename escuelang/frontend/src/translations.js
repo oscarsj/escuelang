@@ -1,4 +1,4 @@
-const translations = {
+const allTranslations = {
     es_ES: {
         child: {
             name: 'Nombre', 
@@ -36,4 +36,8 @@ const translations = {
         }
     }
 }
-export default translations;
+const seasonTranslations = {
+    confirmDeleteRegister: '¿Estás seguro de querer borrar el registro? Esto cancelará el registro del alumno a la temporada actual'
+}
+
+export default { allTranslations, seasonTranslations };

@@ -5,7 +5,7 @@ import AddRegisterForm from './AddRegisterForm';
 import seasonsApi from '../client/seasons';
 import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';
-
+import trans from '../translations';
 
 const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const [registers, setRegisters] = useState("");
@@ -14,7 +14,9 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
     const [allMonitors, setAllMonitors] = useState([]);
     const [allDays, setAllDays] = useState([]);
   
-    const onRegisterUpdated = (newRegister) => {
+    const onRegisterUpdated = (event, newRegister) => {
+      event.stopPropagation();
+      event.preventDefault();
       childrenApi
           .update(newRegister.child.id, newRegister.child)
           .then((result) => {
@@ -47,14 +49,18 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
             })
         })
     }
-    const onRegisterDeleted = (registerId) => {
-      seasonsApi
-        .deleteRegister(registerId)
-        .then((result) => {
-          console.log("Season page deleted register ", registerId);
-          setRegisters(registers.filter((register) => register.id != registerId));
-        })
-        .catch()
+    const onRegisterDeleted = (event, registerId) => {
+      event.stopPropagation();
+      event.preventDefault();
+      if (window.confirm(trans.seasonTranslations.confirmDeleteRegister)) {
+        seasonsApi
+          .deleteRegister(registerId)
+          .then((result) => {
+            console.log("Season page deleted register ", registerId);
+            setRegisters(registers.filter((register) => register.id != registerId));
+          })
+          .catch()
+      }
     }
 
     const onNewRegister = (register) => {
