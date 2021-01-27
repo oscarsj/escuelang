@@ -45,7 +45,6 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
           .create(newChild)
           .then(child => {
             console.log('Child created!');
-            setNewChild(child);
             setError("");
             return child;
           })
@@ -62,8 +61,7 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
             }
         })
     }
-    const postNewRegister = async (event) => {
-        
+    const postNewRegister = (event, buttonId) => {        
       // Simple POST request with a JSON body using fetch
       console.log("Posting new register", newRegister);
       event.stopPropagation();
@@ -77,15 +75,18 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
             })
             .then(register => {
                 console.log('Register created!');
-                setNewRegister({});
+                setNewRegister(register);
                 setNewChild({});
                 setError("");
-                setUnrolled(event.target.id == 'another');
+                if(buttonId=='new') {
+                  setUnrolled(buttonId == 'another');
+                }
                 console.log("Notifying upstream of addRegister");
                 onNewRegister({
                     ...register,
                     child: child
                 });
+                setNewRegister({});
             })
             .catch(err => {
                 if (err.response) {
@@ -123,6 +124,11 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
     }
     
   }
+  const handleCancel = (event) => {
+    setNewChild({});
+    setNewRegister({});
+    setUnrolled(false);
+  }
 
   return (<>
     {!unrolled && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
@@ -138,6 +144,7 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
         readOnly={false}
         errors={errors}/>
       <InputRegister
+        key={newRegister? newRegister.id:undefined}
         register={newRegister}
         onRegisterUpdated={setNewRegister}
         fieldTranslations={fieldTranslations}
@@ -146,9 +153,9 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
         allDays={allDays}
         allMonitors={allMonitors}/>
 
-    <Button id='new' variant="primary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
-    <Button id='another' variant="secondary" type="submit" style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>
-    <Button id='cancel' variant="secondary" onClick={()=>setUnrolled(false)} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Cancelar</Button>
+    <Button id='new' variant="primary" onClick={(event)=>postNewRegister(event, "new")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
+    <Button id='another' variant="secondary" onClick={(event)=>postNewRegister(event, "another")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>
+    <Button id='cancel' variant="secondary" onClick={handleCancel} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Cancelar</Button>
     
     </Form>
     </div></>}
