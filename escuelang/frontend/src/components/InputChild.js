@@ -24,7 +24,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
         placeholder={fieldTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={readOnly} 
-        defaultValue={readOnly? newChild[field]:""}
+        defaultValue={newChild? newChild[field]:""}
         isInvalid={Boolean(errors?errors[field]:false)}/>
       <Form.Control.Feedback type="invalid">
         Error: {errors? errors[field]:""}
@@ -32,7 +32,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
       </Form.Group>)
     }
           
-    return (<>
+    return (<div key={newChild.id}>
   <Form.Row>
   <Col xs={4}>
       {getInputForField('name')}
@@ -72,7 +72,7 @@ const InputChild = ({child, onChildUpdated, fieldTranslations, readOnly, errors}
       {getInputForField('notes')}
   </Col>
   </Form.Row>
-  </>
+  </div>
 )
 }
 
