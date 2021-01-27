@@ -3,11 +3,13 @@ import ChildDetails from './ChildDetails';
 
 const Child = ({child, visibleFields, fieldTranslations, onChildUpdated, onChildDeleted}) => {
     const [rolledOut, setRolledOut] = useState(false);
-    const handleChildUpdated = (child) => {
-        //setRolledOut(false);
-        console.log("Update on Child: ", child)
-        onChildUpdated(child);
+
+    const rollAndForward = (originalHandler) => 
+    (...params) => {
+        setRolledOut(false);
+        originalHandler(...params);
     }
+    
     return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
 {visibleFields.map((field) => <td key={`td${child[field]}`}>{child[field]}</td>)}
@@ -19,8 +21,8 @@ const Child = ({child, visibleFields, fieldTranslations, onChildUpdated, onChild
           child={child} 
           fieldTranslations={fieldTranslations} 
           readOnly={true}
-          onChildUpdated={handleChildUpdated}
-          onChildDeleted={onChildDeleted}
+          onChildUpdated={rollAndForward(onChildUpdated)}
+          onChildDeleted={rollAndForward(onChildDeleted)}
           />
     </td></tr>))}   
 </> 

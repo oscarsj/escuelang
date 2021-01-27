@@ -7,7 +7,8 @@ import trans from "../translations";
 
 const OldChildrenPage = ({fieldTranslations}) => {
     const [oldChildren, setOldChildren] = useState("")
-  
+    const [error, setError] = useState("");
+    const [errors, setErrors] = useState("");
     useEffect(() => {
         childrenApi
         .getAll()
@@ -17,19 +18,17 @@ const OldChildrenPage = ({fieldTranslations}) => {
     const onChildUpdated = (event, newChild) => {
       event.stopPropagation();
       event.preventDefault();
-      console.log("child updated: ", event.target);
+      console.log(`child updated: ${newChild.name} ${newChild.surname}`);
       childrenApi
         .update(newChild.id, newChild)
         .then((result) => {
-            setEditMode(false);
             setErrors({});
             setError("");
-            console.log("Result of update: ", newChild);
-            const updatedChildIndex = oldChildren.findIndex(child => child.id == newChild.id);
+            console.log("Result of update: ", result);
+            const updatedChildIndex = oldChildren.findIndex(child => child.id == result.id);
             console.log("found index: ", updatedChildIndex);
             const children = [...oldChildren];
-            children[updatedChildIndex] = newChild;
-      
+            children[updatedChildIndex] = result;
             console.log("New children: ", children);
             setOldChildren(children);
         })
@@ -66,7 +65,10 @@ const OldChildrenPage = ({fieldTranslations}) => {
           fieldTranslations={fieldTranslations} 
           children={oldChildren}
           onChildUpdated={onChildUpdated}
-          onChildDeleted={onChildDeleted}/>
+          onChildDeleted={onChildDeleted}
+          errors={errors}
+          error={error}
+          />
         </>
     )
 }
