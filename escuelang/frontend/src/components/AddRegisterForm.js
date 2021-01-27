@@ -14,12 +14,33 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
     const [errors, setErrors] = useState({});
     const [unrolled, setUnrolled] = useState(false);
     
+    const updateChild = (event) => {
+      console.log("Updating child", newChild);
+      return childrenApi
+        .update(newChild.id, newChild)
+        .then(child => {
+          console.log('Child updated!');
+          setNewChild(child);
+          setError("");
+          return child;
+        })
+        .catch(err => {
+          if (err.response) {
+              console.log('Error in update child: ', err.response);
+              const nonFieldErrors = err.response.data.non_field_errors;
+              setError(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
+              setErrors(err.response.data);
+          } else if (err.request) {
+              // client never received a response, or request never left
+          } else {
+              // anything else
+          }
+      })
+    }
     const postNewChild = (event) => {
         
         // Simple POST request with a JSON body using fetch
         console.log("Posting new child", newChild);
-        event.stopPropagation();
-        event.preventDefault();
         return childrenApi
           .create(newChild)
           .then(child => {
@@ -47,7 +68,7 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
       console.log("Posting new register", newRegister);
       event.stopPropagation();
       event.preventDefault();
-      const childPromise = childId != undefined? postNewChild(event): updateChild(event);
+      const childPromise = newChild.id == undefined? postNewChild(event): updateChild(event);
       childPromise.then(child => {
           seasonsApi
             .registerChild(seasonId, {
@@ -89,12 +110,14 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
     if(child.name != oldName || child.surname != oldSurname) {
       childrenApi.search(child.name, child.surname)
         .then((fullChild) => {
-          console.log("Setting new child ", fullChild);
-          setNewChild({...fullChild,
-            name: child.name,
-            surname: child.surname,
-            id: fullChild.id
-          });
+          if(fullChild != undefined) {
+            console.log("Setting new child ", fullChild);
+            setNewChild({...fullChild,
+              name: child.name,
+              surname: child.surname,
+              id: fullChild.id
+            });
+          }
         })
         .catch()
     }
@@ -108,6 +131,7 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
     <Form onSubmit={postNewRegister}>
     {(error && <Alert variant="danger">{error}</Alert>)}
       <InputChild 
+        key={newChild? newChild.id : undefined}
         child={newChild} 
         onChildUpdated={fetchChild} 
         fieldTranslations={fieldTranslations.child} 
