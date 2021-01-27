@@ -39,5 +39,8 @@ const allTranslations = {
 const seasonTranslations = {
     confirmDeleteRegister: '¿Estás seguro de querer borrar el registro? Esto cancelará el registro del alumno a la temporada actual'
 }
+const oldChildrenTranslations = {
+    confirmDeleteChild: '¿Estás seguro de querer borrar el alumno? ¡Esto eliminará totalmente al alumno de la base de datos!'
+}
 
-export default { allTranslations, seasonTranslations };
+export default { allTranslations, seasonTranslations, oldChildrenTranslations };

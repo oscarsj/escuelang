@@ -1,43 +1,46 @@
 import axios from 'axios'
 import readCookie from "../utils/cookie";
 
+const config = {
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': readCookie('csrftoken'),
+    }
+}
 
-const getAll = () => {
+const getAll = async () => {
     const request = axios.get('api/children/');
-    return request.then(response => response.data)
+    const response = await request;
+    return response.data;
 }
 
-const get = (id) => {
+const get = async (id) => {
     const request = axios.get(`api/children/${id}/`);
-    return request.then(response => response.data)
+    const response = await request;
+    return response.data;
 }
 
-const create = newChild => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': readCookie('csrftoken'),
-        }
-    }
+const create = async newChild => {
     const request = axios.post('api/children/', newChild, config);
-    return request.then(response => response.data)
+    const response = await request;
+    return response.data;
 }
 
-const update = (id, newChild) => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': readCookie('csrftoken'),
-        }
-    }
+const update = async (id, newChild) => {
     const request = axios.put(`api/children/${id}/`, newChild, config);
-    return request.then(response => response.data)
+    const response = await request;
+    return response.data;
 }
 
-const search = (name, surname) => {
+const search = async (name, surname) => {
     const request = axios.get(`api/search?name=${name}&surname=${surname}`);
-    return request.then(response => response.data[0])
-
+    const response = await request;
+    return response.data[0];
 }
 
-export default { getAll, get, create, update, search };
+const deleteChild = async (id) => {
+    const request = axios.delete(`api/children/${id}/`, config);
+    const response = await request;
+    return response.data;
+}
+export default { getAll, get, create, update, search, deleteChild };

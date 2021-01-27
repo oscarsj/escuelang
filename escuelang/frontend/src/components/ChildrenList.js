@@ -4,7 +4,7 @@ import Child from "./Child";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 
-const ChildrenList = ({children, fieldTranslations, onChildUpdated}) => {
+const ChildrenList = ({children, fieldTranslations, onChildUpdated, onChildDeleted}) => {
   const [orderBy, setOrder] = useState({
     field:'surname',
     reversed: false}
@@ -52,7 +52,8 @@ const ChildrenList = ({children, fieldTranslations, onChildUpdated}) => {
             fieldTranslations={fieldTranslations} 
             child={child} 
             visibleFields={visibleFields}
-            onChildUpdated={onChildUpdated}/>)
+            onChildUpdated={onChildUpdated}
+            onChildDeleted={onChildDeleted}/>)
         )}
       </tbody>
     </Table>
