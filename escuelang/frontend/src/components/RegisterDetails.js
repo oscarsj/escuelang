@@ -18,6 +18,9 @@ const RegisterDetails = ({register, fieldTranslations, readOnly, onResgisterUpda
             child: newChild});
     }
 
+    const handleRegisterDeleted = (event) => {
+
+    }
     const handleChildUpdated = (event) => {
         event.stopPropagation();
         event.preventDefault();
@@ -73,7 +76,7 @@ const RegisterDetails = ({register, fieldTranslations, readOnly, onResgisterUpda
             allDays={allDays}
             allMonitors={allMonitors}/>
 
-        <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/>
+        <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode} onDelete={handleRegisterDeleted}/>
     </Form>
     </div>
     )
