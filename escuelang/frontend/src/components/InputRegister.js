@@ -3,18 +3,17 @@ import { Form, Col } from 'react-bootstrap'
 
 
 const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, allDays, allMonitors, errors}) => {
-  const getMonitorStatus = (registerId) => {
+  const getMonitorStatus = (registerId, currentRegister) => {
     if(allMonitors != undefined) { 
       if(registerId == 'new') {
         return allMonitors[0];
       } else {
         return allMonitors.filter(
-          (monitor) => monitor.nick == register.monitor
+          (monitor) => monitor.nick == currentRegister.monitor
         )[0];
       }
     }
   }
-  
   const getDayStatus = (days, allDays) => {
     const result = {};
     if (allDays != undefined) {
@@ -28,11 +27,9 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   const registerTranslations = fieldTranslations.register;
   const registerId = register.id? register.id:"new";
   const [newRegister, setNewRegister] = useState(register);
-  const [newMonitor, setNewMonitor] = useState(getMonitorStatus(registerId));
+  const [newMonitor, setNewMonitor] = useState(getMonitorStatus(registerId, register.monitor));
   const [newDays, setNewDays] = useState(getDayStatus(register.days, allDays));
   const [newCompetition, setNewCompetition] = useState(register.competition);
-
-  
 
   const getDayList = (days) => allDays.filter(day => days[day.name]).map(day => day.name)
   
@@ -57,26 +54,26 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     (event) => {
         event.stopPropagation();
         event.preventDefault();
-        const tmpRegister = {...newRegister};
-        tmpRegister[field] = event.target.value;
-        setNewRegister(tmpRegister);
-        onRegisterUpdated({
-          ...tmpRegister,
+        const tmpRegister = {...newRegister,
           monitor: newMonitor.nick,
           payments_set: [],
           days: getDayList(newDays),
-          competition: newCompetition
-        });
+          competition: newCompetition};
+        tmpRegister[field] = event.target.value;
+        setNewRegister(tmpRegister);
+        onRegisterUpdated(tmpRegister);
     }
   const handleChangeMonitor = (event) => {
     console.log("Monitor changed ", event.target.value);
-    setNewMonitor(allMonitors.find((monitor => monitor.nick == event.target.value)));
-    onRegisterUpdated({...newRegister,
-      monitor: event.target.value,
+    const tmpMonitor = allMonitors.find((monitor => monitor.nick == event.target.value))
+    setNewMonitor(tmpMonitor);
+    const tmpRegister = {...newRegister,
+      monitor: tmpMonitor.nick,
       payments_set: [],
       days: getDayList(newDays),
-      competition: newCompetition
-    });
+      competition: newCompetition};
+    setNewRegister(tmpRegister);
+    onRegisterUpdated(tmpRegister);
   }
   const handleChangeDays = (event) => {
     console.log("Days changed ", event.target.id);

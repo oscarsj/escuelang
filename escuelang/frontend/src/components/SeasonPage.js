@@ -24,15 +24,15 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
             console.log("update child on RegisterDetails: ", result)
             const tmpRegister = {
                 ...newRegister,
-                child: newRegister.child.id};
+                child: result.id};
             seasonsApi
-            .updateRegister(newRegister.id, tmpRegister)
+            .updateRegister(tmpRegister.id, tmpRegister)
             .then((result) => {
                 setEditMode(false);
                 setErrors({});
                 setError("");
                 console.log("update on RegisterDetails: ", result)
-                const updatedRegisterIndex = registers.findIndex(register => register.id == register.id);
+                const updatedRegisterIndex = registers.findIndex(register => register.id == result.id);
                 const tmpRegisters = [...registers];
                 tmpRegisters[updatedRegisterIndex] = newRegister;
                 setRegisters(tmpRegisters);
