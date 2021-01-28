@@ -29,8 +29,6 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
             .updateRegister(tmpRegister.id, tmpRegister)
             .then((result) => {
                 setEditMode(false);
-                setErrors({});
-                setError("");
                 console.log("update on RegisterDetails: ", result)
                 const updatedRegisterIndex = registers.findIndex(register => register.id == result.id);
                 const tmpRegisters = [...registers];
