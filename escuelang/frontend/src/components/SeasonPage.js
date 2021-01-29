@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
@@ -7,14 +7,23 @@ import seasonsApi from '../client/seasons';
 import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';
 import trans from '../translations';
+import store from '../seasonStore';
 
-const SeasonPage = ({defaultSeason="active", fieldTranslations, setError, setMessage}) => {
-    const [registers, setRegisters] = useState("");
-    const [seasonId, setSeasonId] = useState(defaultSeason);
-    const [season, setSeason] = useState({});
-    const [allMonitors, setAllMonitors] = useState([]);
-    const [allDays, setAllDays] = useState([]);
-  
+const SeasonPage = ({fieldTranslations, setError}) => {    
+    const seasonId = store.useSeasonStore(state => state.seasonId);
+    const season = store.useSeasonStore(state => state.season);
+    const setSeason = store.useSeasonStore(state => state.setSeason);
+    
+    const registers = store.useRegistersStore(state => state.registers);
+    const setRegisters = store.useRegistersStore(state => state.setRegisters);
+    const replaceRegister = store.useRegistersStore(state => state.replaceRegister);
+
+    const allMonitors = store.useMonitorStore(state => state.monitors);
+    const setAllMonitors = store.useMonitorStore(state => state.setMonitors);
+    
+    const allDays = store.useDaysStore(state => state.days);
+    const setAllDays = store.useDaysStore(state => state.setDays);
+    
     const onRegisterUpdated = (event, newRegister) => {
       event.stopPropagation();
       event.preventDefault();
@@ -28,12 +37,8 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations, setError, setMes
             seasonsApi
             .updateRegister(tmpRegister.id, tmpRegister)
             .then((result) => {
-                setEditMode(false);
                 console.log("update on RegisterDetails: ", result)
-                const updatedRegisterIndex = registers.findIndex(register => register.id == result.id);
-                const tmpRegisters = [...registers];
-                tmpRegisters[updatedRegisterIndex] = newRegister;
-                setRegisters(tmpRegisters);
+                replaceRegister(result);
               })
             .catch(err => {
                 if (err.response) {
@@ -86,7 +91,6 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations, setError, setMes
           .then(newSeason => {
               console.log("Season loaded: ", newSeason);
               setSeason(newSeason);
-              setSeasonId(newSeason.id);
             }
           );  
       daysApi
@@ -111,7 +115,6 @@ const SeasonPage = ({defaultSeason="active", fieldTranslations, setError, setMes
     return (
     <>
     <SeasonData 
-      season={season}
       fieldTranslations={fieldTranslations.season}
       onSeasonUpdated={onSeasonUpdated}/>
     <AddRegisterForm 

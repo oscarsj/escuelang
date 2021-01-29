@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'

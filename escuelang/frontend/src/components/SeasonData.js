@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Form, Col, Alert, Card } from 'react-bootstrap';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
 import seasons from '../client/seasons';
+import store from '../seasonStore';
 
 
-const SeasonData = ({season, fieldTranslations, onSeasonUpdated}) => {
+const SeasonData = ({fieldTranslations, onSeasonUpdated}) => {
     const [editMode, setEditMode] = useState(false);
     const [error, setError] = useState("");
     const [errors] = useState({});
+
+    const season = store.useSeasonStore(state => state.season);
     const [newSeason, setNewSeason] = useState(season);
     
     const handleChange = (field) =>
