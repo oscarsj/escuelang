@@ -78,13 +78,13 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
   <Form.Group>
   <Form.Label>{registerTranslations.monitor}</Form.Label>
     <Form.Control 
-      id={`register-${registerId}-monitor`} 
+      id={`register-${registerId}-monitors-${allMonitors.length}`} 
       as="select"
-      value={newRegister.monitor == 'undefined'? "select":newRegister.monitor}
+      value={newRegister.monitor == 'undefined'? "":newRegister.monitor}
       onChange={handleChangeMonitor}
       isInvalid={Boolean(errors?errors.monitor:false)}
       disabled={readOnly}>
-      {(newRegister.monitor == 'undefined') && <option key={`monitor-select`}>select</option>}
+      <option key={`monitor-empty`}></option>
       {allMonitors && allMonitors.map(monitor => 
       <option key={`monitor-${monitor.id}`}>{monitor.nick}</option>)}
     </Form.Control>

@@ -36,7 +36,7 @@ const useMonitorStore = create(set => ({
 }))
 
 const useDaysStore = create(set => ({
-    days: {},
+    days: [],
     setDays: (newDays) => set({days: newDays})
 }))
 

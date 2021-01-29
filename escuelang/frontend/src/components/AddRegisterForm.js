@@ -11,7 +11,7 @@ const AddRegisterForm = ({seasonId}) => {
   const [newRegister, setNewRegister] = useState({
     child: {},
     days: [],
-    monitor: "<seleccione>",
+    monitor: undefined,
     payment_set: []
   });
   const [error, setError] = useState("");
