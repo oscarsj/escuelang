@@ -8,7 +8,7 @@ import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';
 import trans from '../translations';
 
-const SeasonPage = ({defaultSeason="active", fieldTranslations}) => {
+const SeasonPage = ({defaultSeason="active", fieldTranslations, setError, setMessage}) => {
     const [registers, setRegisters] = useState("");
     const [seasonId, setSeasonId] = useState(defaultSeason);
     const [season, setSeason] = useState({});
