@@ -1,103 +1,76 @@
 import React, { useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
 import store from '../store';
+import trans from '../translations';
 
-const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, errors}) => {
-  const getMonitorStatus = (registerId, currentRegister) => {
-    if(allMonitors != undefined) { 
-      if(registerId == 'new') {
-        return allMonitors[0];
-      } else {
-        return allMonitors.filter(
-          (monitor) => monitor.nick == currentRegister.monitor
-        )[0];
-      }
-    }
-  }
-  const getDayStatus = (days, allDays) => {
-    const result = {};
-    if (allDays != undefined) {
-      allDays.forEach(day => {
-        result[day.name] = days!=undefined? days.includes(day.name):false;
-      });
-    }
-    return result;
-  }
-  const daysTranslations = fieldTranslations.days;
-  const registerTranslations = fieldTranslations.register;
-  const registerId = register.id? register.id:"new";
-  const [newRegister, setNewRegister] = useState(register);
-  const [newMonitor, setNewMonitor] = useState(getMonitorStatus(registerId, register.monitor));
-  const [newDays, setNewDays] = useState(getDayStatus(register.days, allDays));
-  const [newCompetition, setNewCompetition] = useState(register.competition);
+
+const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
+  const lang = store.useSettingsStore((state) => state.language);  
+  const fieldTranslations = trans.allTranslations[lang];
 
   const allMonitors = store.useMonitorStore(state => state.monitors);
   const allDays = store.useDaysStore(state => state.days);
 
-  const getDayList = (days) => allDays.filter(day => days[day.name]).map(day => day.name)
+  const daysTranslations = fieldTranslations.days;
+  const registerTranslations = fieldTranslations.register;
+  const registerId = register.id? register.id:"new";
+  const [newRegister, setNewRegister] = useState(register);
   
-    const getInputForField = (field, type='text') => {
-      return (  
-      <Form.Group>
-      <Form.Label>{registerTranslations[field]}</Form.Label>
-      <Form.Control 
-        type={type}
-        id={`${registerId}-${field}`}
-        placeholder={registerTranslations[field]} 
-        onChange={handleChange(field)} 
-        readOnly={readOnly} 
-        defaultValue={readOnly? newRegister[field]:""}
-        isInvalid={Boolean(errors?errors[field]:false)}/>
-      <Form.Control.Feedback type="invalid">
-        Error: {errors? errors[field]:""}
-      </Form.Control.Feedback>
-      </Form.Group>)
-    }
+  const getInputForField = (field, type='text') => {
+    return (  
+    <Form.Group>
+    <Form.Label>{registerTranslations[field]}</Form.Label>
+    <Form.Control 
+      type={type}
+      id={`${registerId}-${field}`}
+      placeholder={registerTranslations[field]} 
+      onChange={handleChange(field)} 
+      readOnly={readOnly} 
+      defaultValue={readOnly? newRegister[field]:""}
+      isInvalid={Boolean(errors?errors[field]:false)}/>
+    <Form.Control.Feedback type="invalid">
+      Error: {errors? errors[field]:""}
+    </Form.Control.Feedback>
+    </Form.Group>)
+  }
+
   const handleChange = (field) =>
     (event) => {
         event.stopPropagation();
         event.preventDefault();
-        const tmpRegister = {...newRegister,
-          monitor: newMonitor.nick,
-          payments_set: [],
-          days: getDayList(newDays),
-          competition: newCompetition};
+        const tmpRegister = {...newRegister};
         tmpRegister[field] = event.target.value;
         setNewRegister(tmpRegister);
         onRegisterUpdated(tmpRegister);
     }
   const handleChangeMonitor = (event) => {
     console.log("Monitor changed ", event.target.value);
-    const tmpMonitor = allMonitors.find((monitor => monitor.nick == event.target.value))
-    setNewMonitor(tmpMonitor);
+    const tmpMonitor = allMonitors.find((monitor) => monitor.nick == event.target.value)
     const tmpRegister = {...newRegister,
-      monitor: tmpMonitor.nick,
-      payments_set: [],
-      days: getDayList(newDays),
-      competition: newCompetition};
+      monitor: tmpMonitor.nick};
     setNewRegister(tmpRegister);
     onRegisterUpdated(tmpRegister);
   }
+
   const handleChangeDays = (event) => {
     console.log("Days changed ", event.target.id);
-    const tmpDays = {...newDays};
-    tmpDays[event.target.id] = !tmpDays[event.target.id];
-    setNewDays(tmpDays);
-    onRegisterUpdated({...newRegister,
-      monitor: newMonitor.nick,
-      payments_set: [],
-      days: getDayList(tmpDays),
-      competition: newCompetition
-    });
+    console.log("Current days ", newRegister.days);
+    const tmpRegister = {...newRegister};
+    if (newRegister.days.includes(event.target.id)) {
+      tmpRegister.days = newRegister.days.filter((day)=> day != event.target.id)
+    } else {
+      tmpRegister.days.push(event.target.id);
+    }
+    setNewRegister(tmpRegister);
+    onRegisterUpdated(tmpRegister);
   }
-  const handleChangeCompetition = (event) => {
-    setNewCompetition(!newCompetition);
-    onRegisterUpdated({...newRegister,
-      monitor: newMonitor.nick,
-      payments_set: [],
-      days: getDayList(newDays),
-      competition: !newCompetition
-    });
+    
+  const handleChangeCompetition = () => {
+    const tmpRegister = {...newRegister,
+      competition: !newRegister.competition
+    }
+    setNewRegister(tmpRegister);
+    onRegisterUpdated(tmpRegister);
   }
     return (<>
   <Form.Row>
@@ -107,7 +80,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
     <Form.Control 
       id={`register-${registerId}-monitor`} 
       as="select"
-      value={newMonitor? newMonitor.nick:""}
+      value={newRegister.monitor}
       onChange={handleChangeMonitor}
       isInvalid={Boolean(errors?errors.monitor:false)}
       disabled={readOnly}>
@@ -129,7 +102,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
        type="checkbox" 
        id={`${registerId}-competition`} 
        label={registerTranslations['competition']} 
-       defaultChecked={newCompetition} 
+       defaultChecked={newRegister.competition} 
        onChange={handleChangeCompetition}
        disabled={readOnly} />
   </Form.Group>
@@ -147,7 +120,7 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
             onChange={handleChangeDays}
             id={day.name}
             readOnly={readOnly} 
-            defaultChecked={register.days? register.days.includes(day.name): false}
+            defaultChecked={newRegister.days?newRegister.days.includes(day.name):false}
             label={daysTranslations[day.name]}
             disabled={readOnly}/>
           )}
