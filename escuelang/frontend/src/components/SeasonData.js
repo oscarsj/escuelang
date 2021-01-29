@@ -1,45 +1,49 @@
 import React, { useState } from 'react';
 import { Form, Col, Alert, Card } from 'react-bootstrap';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
-import seasons from '../client/seasons';
-import store from '../seasonStore';
+import seasonsApi from '../client/seasons';
+import store from '../store';
+import trans from "../translations";
 
 
-const SeasonData = ({fieldTranslations, onSeasonUpdated}) => {
-    const [editMode, setEditMode] = useState(false);
-    const [error, setError] = useState("");
-    const [errors] = useState({});
+const SeasonData = () => {
+  const [editMode, setEditMode] = useState(false);
+  const [error, setError] = useState("");
+  const [errors] = useState({});
 
-    const season = store.useSeasonStore(state => state.season);
-    const [newSeason, setNewSeason] = useState(season);
+  const season = store.useSeasonStore(state => state.season);
+  const setSeason = store.useSeasonStore(state => state.setSeason);
+  const [newSeason, setNewSeason] = useState(season);
+
+  const lang = store.useSettingsStore(state=>state.language);
+  const fieldTranslations = trans.allTranslations[lang].season;
     
-    const handleChange = (field) =>
-      (event) => {
-          event.stopPropagation();
-          event.preventDefault();
-          setNewSeason({
-              ...newSeason,
-              field: event.target.value
-        });
-      }
-      const handleSeasonUpdated = (event) => {
-          console.log("New season data: ", newSeason);
-          event.preventDefault();
-          event.stopPropagation();
-          console.log("New season data: ", newSeason);
-          const seasonData = Object.assign(newSeason, season);
-          seasons
-            .update(season.id, seasonData)
-            .then((result) => {
-                setEditMode(false);
-                onSeasonUpdated(result);
-            })
-            .catch((err) => {
-                console.log("Error updating season: ", err.response);
-                setError(err.response.error);
-            })
-      }
+  const handleChange = (field) =>
+    (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        const tmpSeason = {...newSeason};
+        tmpSeason[field] = event.target.value;
+        setNewSeason(tmpSeason);
+    }
 
+  const handleSeasonUpdated = (event) => {
+      console.log("New season data: ", newSeason);
+      event.preventDefault();
+      event.stopPropagation();
+      const seasonData = Object.assign(season, newSeason);
+      console.log("Setting season data: ", seasonData);
+      seasonsApi
+        .update(season.id, seasonData)
+        .then((result) => {
+            setEditMode(false);
+            setSeason(result);
+        })
+        .catch((err) => {
+            console.log("Error updating season: ", err.response);
+            setError(err.response.error);
+        })
+    }
     const getInputForField = (field, type='text') => {
       return (  
       <Form.Group>

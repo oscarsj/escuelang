@@ -2,57 +2,55 @@ import React, { useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
-import childrenApi from '../client/children';
+import trans from '../translations';
+import store from '../store';
 import seasonsApi from '../client/seasons';
 import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';
-import trans from '../translations';
-import store from '../seasonStore';
 
-const SeasonPage = ({fieldTranslations, setError}) => {    
+const SeasonPage = ({fieldTranslations}) => {    
     const seasonId = store.useSeasonStore(state => state.seasonId);
-    const season = store.useSeasonStore(state => state.season);
-    const setSeason = store.useSeasonStore(state => state.setSeason);
+    const storeSetSeason = store.useSeasonStore(state => state.setSeason);
     
     const registers = store.useRegistersStore(state => state.registers);
-    const setRegisters = store.useRegistersStore(state => state.setRegisters);
-    const replaceRegister = store.useRegistersStore(state => state.replaceRegister);
-
+    const storeSetRegisters = store.useRegistersStore(state => state.setRegisters);
+    const storeReplaceRegister = store.useRegistersStore(state => state.replaceRegister)
     const allMonitors = store.useMonitorStore(state => state.monitors);
-    const setAllMonitors = store.useMonitorStore(state => state.setMonitors);
-    
-    const allDays = store.useDaysStore(state => state.days);
-    const setAllDays = store.useDaysStore(state => state.setDays);
-    
+    const storeSetMonitors = store.useMonitorStore(state => state.setMonitors);
+
+    const allDays = store.useDaysStore(state => state.days);  
+    const storeSetDays = store.useDaysStore(state => state.setDays);
+
     const onRegisterUpdated = (event, newRegister) => {
       event.stopPropagation();
       event.preventDefault();
       childrenApi
-          .update(newRegister.child.id, newRegister.child)
+        .update(newRegister.child.id, newRegister.child)
+        .then((result) => {
+          console.log("update child on RegisterDetails: ", result)
+          const tmpRegister = {
+              ...newRegister,
+              child: result.id};
+          seasonsApi
+          .updateRegister(tmpRegister.id, tmpRegister)
           .then((result) => {
-            console.log("update child on RegisterDetails: ", result)
-            const tmpRegister = {
-                ...newRegister,
-                child: result.id};
-            seasonsApi
-            .updateRegister(tmpRegister.id, tmpRegister)
-            .then((result) => {
-                console.log("update on RegisterDetails: ", result)
-                replaceRegister(result);
-              })
-            .catch(err => {
-                if (err.response) {
-                    console.log('Error in update register', err.response);
-                    setError("Ha habido errores al guardar. Revise los valores introducidos");
-                    setErrors(err.response.data);
-                } else if (err.request) {
-                    // client never received a response, or request never left
-                } else {
-                    // anything else
-                }
+              console.log("update on RegisterDetails: ", result)
+              storeReplaceRegister(result);
             })
-        })
+          .catch(err => {
+              if (err.response) {
+                  console.log('Error in update register', err.response);
+                  setError("Ha habido errores al guardar. Revise los valores introducidos");
+                  setErrors(err.response.data);
+              } else if (err.request) {
+                  // client never received a response, or request never left
+              } else {
+                  // anything else
+              }
+          })
+      })
     }
+
     const onRegisterDeleted = (event, registerId) => {
       event.stopPropagation();
       event.preventDefault();
@@ -69,54 +67,53 @@ const SeasonPage = ({fieldTranslations, setError}) => {
 
     const onNewRegister = (register) => {
       console.log("new register received ", register);
-      setRegisters(registers.concat(register));
+      storeSetRegisters(registers.concat(register));
     }
-    const onSeasonUpdated = (newSeason) => {
-      console.log("New season data: ", newSeason);
-      const seasonData = Object.assign(newSeason, season);
+    
+    const loadRegisters = (seasonId) => {
       seasonsApi
-        .update(seasonId, seasonData)
-        .then((result) => {
-          setSeason(result)
-        })
-        .catch((err) => {
-          console.log("Error updating season: ", err.response);
-        })
+        .getRegisters(seasonId)
+        .then(registers => 
+          storeSetRegisters(registers)
+        );
+    }
+    const loadSeason = (id) => {
+      seasonsApi
+        .get(id)
+        .then(newSeason => {
+            console.log("Season loaded: ", newSeason);
+            storeSetSeason(newSeason);
+          }
+        );
+    }
+    
+  const loadDays = () => {
+    daysApi
+        .get()
+        .then(days => {
+          storeSetDays(days);
+        });
+  }
+
+  const loadMonitors = () => {
+    monitorsApi
+        .get()
+        .then(monitors => {
+          storeSetMonitors(monitors);
+        });
     }
 
     useEffect(() => {
       console.log("Getting registers for season ", seasonId);
-      seasonsApi
-          .get(seasonId)
-          .then(newSeason => {
-              console.log("Season loaded: ", newSeason);
-              setSeason(newSeason);
-            }
-          );  
-      daysApi
-        .get()
-        .then(days => {
-          setAllDays(days);
-        });
-      console.log("allDays: ", allDays);
-      monitorsApi
-        .get()
-        .then(monitors => {
-          setAllMonitors(monitors);
-        });
-        seasonsApi
-        .getRegisters(seasonId)
-        .then(registers => 
-          setRegisters(registers)
-        );
-    
+      loadSeason(seasonId);
+      loadDays();
+      loadMonitors();
+      loadRegisters(seasonId);
     }, []);
 
     return (
     <>
-    <SeasonData 
-      fieldTranslations={fieldTranslations.season}
-      onSeasonUpdated={onSeasonUpdated}/>
+    <SeasonData />
     <AddRegisterForm 
       seasonId={seasonId}
       onNewRegister={onNewRegister}
