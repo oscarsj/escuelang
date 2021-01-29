@@ -8,7 +8,7 @@ const InputChild = ({child, onChildUpdated, readOnly, errors}) => {
   const lang = store.useSettingsStore((state) => state.language);  
   const fieldTranslations = trans.allTranslations[lang].child;
 
-  const [newChild, setNewChild] = useState(child);
+  const [newChild, setNewChild] = useState(child?child:{});
   const handleChange = (field) =>
       (event) => {
           event.stopPropagation();

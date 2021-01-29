@@ -5,7 +5,6 @@ import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table } from 'react-bootstrap'
 import store from '../store';
 import trans from '../translations';
-import seasonsApi from '../client/seasons';
 
 
 const RegisterList = () => {

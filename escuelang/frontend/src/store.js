@@ -28,8 +28,11 @@ const useRegistersStore = create(set => ({
 )
 
 const useMonitorStore = create(set => ({
-    monitors: {},
-    setMonitors: (newMonitors) => set({monitors: newMonitors})
+    monitors: [],
+    defaultMonitor: "",
+    setMonitors: (newMonitors) => set({
+        monitors: newMonitors,
+        defaultMonitor: newMonitors[0].nick})
 }))
 
 const useDaysStore = create(set => ({

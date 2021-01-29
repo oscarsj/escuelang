@@ -73,7 +73,14 @@ const Register = ({register, visibleFields}) => {
         .catch(handleError)
     }
   }
-
+  const handleCancelEdit = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setNewRegister({});
+    console.log("Resetting original register ", register);
+    setNewRegister(register);
+    setEditMode(false);
+  }
   console.log("Register rendered: ", register);
   console.log("visible fields: ", visibleFields);
   return (<>
@@ -100,7 +107,11 @@ const Register = ({register, visibleFields}) => {
             readOnly={!editMode}
             errors={errors}/>
 
-        <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode} onDelete={onRegisterDeleted}/>
+        <EditSaveCancelButtons 
+          editMode={editMode}
+          onSetEditMode={setEditMode} 
+          onDelete={onRegisterDeleted}
+          onCancel={handleCancelEdit}/>
     </Form>
     </div>
     </td></tr>))}   

@@ -80,11 +80,12 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
     <Form.Control 
       id={`register-${registerId}-monitor`} 
       as="select"
-      value={newRegister.monitor}
+      value={newRegister.monitor == 'undefined'? "select":newRegister.monitor}
       onChange={handleChangeMonitor}
       isInvalid={Boolean(errors?errors.monitor:false)}
       disabled={readOnly}>
-    {allMonitors && allMonitors.map(monitor => 
+      {(newRegister.monitor == 'undefined') && <option key={`monitor-select`}>select</option>}
+      {allMonitors && allMonitors.map(monitor => 
       <option key={`monitor-${monitor.id}`}>{monitor.nick}</option>)}
     </Form.Control>
     <Form.Control.Feedback type="invalid">
