@@ -64,11 +64,6 @@ const SeasonPage = ({fieldTranslations}) => {
           .catch()
       }
     }
-
-    const onNewRegister = (register) => {
-      console.log("new register received ", register);
-      storeSetRegisters(registers.concat(register));
-    }
     
     const loadRegisters = (seasonId) => {
       seasonsApi
@@ -114,13 +109,7 @@ const SeasonPage = ({fieldTranslations}) => {
     return (
     <>
     <SeasonData />
-    <AddRegisterForm 
-      seasonId={seasonId}
-      onNewRegister={onNewRegister}
-      fieldTranslations={fieldTranslations} 
-      allDays={allDays}
-      allMonitors={allMonitors}
-    />
+    <AddRegisterForm seasonId={seasonId}/>
     <RegisterList 
       fieldTranslations={fieldTranslations} 
       registers={registers}

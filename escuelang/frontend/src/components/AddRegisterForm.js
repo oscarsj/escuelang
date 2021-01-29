@@ -5,14 +5,22 @@ import InputChild from './InputChild';
 import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import store from '../store';
+import trans from '../translations';
 
-
-const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, allMonitors}) => {
+const AddRegisterForm = ({seasonId}) => {
     const [newChild, setNewChild] = useState({});
     const [newRegister, setNewRegister] = useState({});
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({});
     const [unrolled, setUnrolled] = useState(false);
+    
+    const addRegister = store.useRegistersStore(state => state.addRegister);
+    
+    const lang = store.useSettingsStore(state=>state.language);  
+    const fieldTranslations = trans.allTranslations[lang];
+    const allMonitors = store.useMonitorStore(state => state.monitors);
+    const allDays = store.useDaysStore(state => state.days);  
     
     const updateChild = (event) => {
       console.log("Updating child", newChild);
@@ -38,7 +46,6 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
       })
     }
     const postNewChild = (event) => {
-        
         // Simple POST request with a JSON body using fetch
         console.log("Posting new child", newChild);
         return childrenApi
@@ -82,7 +89,7 @@ const AddRegisterForm = ({seasonId, onNewRegister, fieldTranslations, allDays, a
                   setUnrolled(buttonId == 'another');
                 }
                 console.log("Notifying upstream of addRegister");
-                onNewRegister({
+                addRegister({
                     ...register,
                     child: child
                 });
