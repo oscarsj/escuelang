@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Form, Col } from 'react-bootstrap'
+import { Form, Col } from 'react-bootstrap';
+import store from '../store';
 
-
-const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, allDays, allMonitors, errors}) => {
+const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly, errors}) => {
   const getMonitorStatus = (registerId, currentRegister) => {
     if(allMonitors != undefined) { 
       if(registerId == 'new') {
@@ -30,6 +30,9 @@ const InputRegister = ({register, onRegisterUpdated, fieldTranslations, readOnly
   const [newMonitor, setNewMonitor] = useState(getMonitorStatus(registerId, register.monitor));
   const [newDays, setNewDays] = useState(getDayStatus(register.days, allDays));
   const [newCompetition, setNewCompetition] = useState(register.competition);
+
+  const allMonitors = store.useMonitorStore(state => state.monitors);
+  const allDays = store.useDaysStore(state => state.days);
 
   const getDayList = (days) => allDays.filter(day => days[day.name]).map(day => day.name)
   

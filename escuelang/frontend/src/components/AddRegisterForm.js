@@ -23,6 +23,8 @@ const AddRegisterForm = ({seasonId}) => {
     const allDays = store.useDaysStore(state => state.days);  
     
     const updateChild = (event) => {
+      event.stopPropagation();
+      event.preventDefault();
       console.log("Updating child", newChild);
       return childrenApi
         .update(newChild.id, newChild)
@@ -46,9 +48,10 @@ const AddRegisterForm = ({seasonId}) => {
       })
     }
     const postNewChild = (event) => {
-        // Simple POST request with a JSON body using fetch
-        console.log("Posting new child", newChild);
-        return childrenApi
+      event.stopPropagation();
+      event.preventDefault();  
+      console.log("Posting new child", newChild);
+      return childrenApi
           .create(newChild)
           .then(child => {
             console.log('Child created!');
@@ -132,6 +135,8 @@ const AddRegisterForm = ({seasonId}) => {
     
   }
   const handleCancel = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     setNewChild({});
     setNewRegister({});
     setUnrolled(false);

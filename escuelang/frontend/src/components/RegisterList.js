@@ -3,11 +3,15 @@ import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table } from 'react-bootstrap'
+import store from '../store';
+import trans from '../translations';
+import seasonsApi from '../client/seasons';
 
 
-const RegisterList = ({registers, fieldTranslations, onRegisterUpdated, onRegisterDeleted, allDays, allMonitors}) => {
-  
-  console.log('Register list for ', registers);
+const RegisterList = () => {
+  const lang = store.useSettingsStore(state=>state.language);  
+  const fieldTranslations = trans.allTranslations[lang];
+  const registers = store.useRegistersStore((state) => state.registers);
   const [visibleFields, setVisibleFields] = useState(
     {
       'child': ['name', 'surname', 'birthdate','age'],
@@ -67,12 +71,7 @@ const RegisterList = ({registers, fieldTranslations, onRegisterUpdated, onRegist
         <Register 
            key={register.id}
            register={register}
-           visibleFields={visibleFields}
-           fieldTranslations={fieldTranslations}
-           onRegisterUpdated={onRegisterUpdated}
-           onRegisterDeleted={onRegisterDeleted}
-           allDays={allDays}
-           allMonitors={allMonitors}/>
+           visibleFields={visibleFields}/>
       )}
       </tbody>
     </Table>
