@@ -18,7 +18,9 @@ const useRegistersStore = create(set => ({
             return {registers: tmpRegisters};
         }),
     deleteRegister: (registerId) => 
-        set((state) => state.registers.filter((register) => register.id != registerId)),
+        set((state) =>
+            {return {registers: state.registers.filter(
+                (register) => register.id != registerId)}}),
     addRegister: (register) => set((state) => { 
         const tmpRegisters = [...state.registers];
         tmpRegisters.push(register);

@@ -66,6 +66,7 @@ const Register = ({register, visibleFields}) => {
     event.stopPropagation();
     event.preventDefault();
     if (window.confirm(trans.seasonTranslations.confirmDeleteRegister)) {
+      console.log("deleting register ", newRegister.id);
       seasonsApi
         .deleteRegister(newRegister.id)
         .then(() => {
