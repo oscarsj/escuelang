@@ -11,7 +11,7 @@ import seasonsApi from '../client/seasons';
 const Register = ({register, visibleFields}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [newRegister, setNewRegister] = useState(register);
+  const [newRegister, setNewRegisterPrivate] = useState(register);
   const [error, setError] = useState();
   const [errors, setErrors] = useState({});
   const lang = store.useSettingsStore((state) => state.language);  
@@ -20,8 +20,11 @@ const Register = ({register, visibleFields}) => {
   const storeDeleteRegister = store.useRegistersStore(state => state.deleteRegister);
   
   const setNewChild = (newChild) => {
-      setNewRegister({...newRegister,
+      setNewRegisterPrivate({...newRegister,
           child: newChild});
+  }
+  const setNewRegister = (register) => {
+    setNewRegisterPrivate({...register, child: newRegister.child});
   }
   const handleError = (err) => {
     if (err.response) {
@@ -40,6 +43,7 @@ const Register = ({register, visibleFields}) => {
     childrenApi
       .update(newRegister.child.id, newRegister.child)
       .then((resultChild) => {
+        setNewChild(resultChild);
         const tmpRegister = {
             ...newRegister,
             child: resultChild.id};

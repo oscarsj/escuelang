@@ -26,9 +26,6 @@ const AddRegisterForm = ({seasonId}) => {
       child: child});
   }
   const setNewRegister = (register) => {
-    console.log("AddRegisterForm setNewRegister ", register);
-    console.log("AddRegisterForm setNewRegister keeping child", newRegister.child);
-    
     setNewRegisterPrivate({...register, child: newRegister.child});
   }
   const addRegister = store.useRegistersStore(state => state.addRegister);
