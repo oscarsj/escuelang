@@ -37,10 +37,16 @@ const allTranslations = {
     }
 }
 const seasonTranslations = {
-    confirmDeleteRegister: '¿Estás seguro de querer borrar el registro? Esto cancelará el registro del alumno a la temporada actual'
+    'es_ES': {
+        confirmDeleteRegisterTitle: 'Borrar registro',
+        confirmDeleteRegister: '¿Estás seguro de querer borrar el registro? Esto cancelará el registro del alumno a la temporada actual, pero no borrará los datos personales del alumno de la base de datos.'
+    }
 }
 const oldChildrenTranslations = {
-    confirmDeleteChild: '¿Estás seguro de querer borrar el alumno? ¡Esto eliminará totalmente al alumno de la base de datos!'
+    'es_ES': {
+        confirmDeleteChildTitle: 'Borrar alumno',
+        confirmDeleteChild: '¿Estás seguro de querer borrar el alumno? ¡Esto eliminará totalmente al alumno de la base de datos!'
+    }
 }
 
 export default { allTranslations, seasonTranslations, oldChildrenTranslations };

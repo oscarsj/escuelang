@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Form, Alert } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Button, Modal } from 'react-bootstrap';
 import InputChild from './InputChild';
 import InputRegister from './InputRegister';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
@@ -9,13 +9,13 @@ import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
 
 const Register = ({register, visibleFields}) => {
+  const [showDelete, setShowDelete] = useState(false);
   const [rolledOut, setRolledOut] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [newRegister, setNewRegisterPrivate] = useState(register);
   const [error, setError] = useState();
   const [errors, setErrors] = useState({});
   const lang = store.useSettingsStore((state) => state.language);  
-  const fieldTranslations = trans.allTranslations[lang];
   const storeReplaceRegister = store.useRegistersStore(state => state.replaceRegister)
   const storeDeleteRegister = store.useRegistersStore(state => state.deleteRegister);
   
@@ -65,7 +65,6 @@ const Register = ({register, visibleFields}) => {
   const onRegisterDeleted = (event) => {
     event.stopPropagation();
     event.preventDefault();
-    if (window.confirm(trans.seasonTranslations.confirmDeleteRegister)) {
       console.log("deleting register ", newRegister.id);
       seasonsApi
         .deleteRegister(newRegister.id)
@@ -76,7 +75,6 @@ const Register = ({register, visibleFields}) => {
           storeDeleteRegister(newRegister.id);
         })
         .catch(handleError)
-    }
   }
   const handleCancelEdit = (event) => {
     event.stopPropagation();
@@ -86,8 +84,26 @@ const Register = ({register, visibleFields}) => {
     console.log("Resetting original register ", register);
     setEditMode(false);
   }
-
+  const cancelDelete = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setShowDelete(false);
+}
   return (<>
+    <Modal show={showDelete} onHide={cancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>{trans.seasonTranslations[lang].confirmDeleteRegisterTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{trans.seasonTranslations[lang].confirmDeleteRegister}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={onRegisterDeleted}>
+            Borrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
 <tr onClick={() => setRolledOut(!rolledOut)}>
 {visibleFields.child.map((field) => <td key={`td${newRegister.child[field]}`}>{newRegister.child[field]}</td>)}
 {visibleFields.register.map((field) => <td key={`td${newRegister[field]}`}>{field=='competition'? (newRegister[field]? 'Sí':'No'):newRegister[field]}</td>)}
@@ -113,7 +129,7 @@ const Register = ({register, visibleFields}) => {
         <EditSaveCancelButtons 
           editMode={editMode}
           onSetEditMode={setEditMode} 
-          onDelete={onRegisterDeleted}
+          onDelete={(event) => setShowDelete(true)}
           onCancel={handleCancelEdit}/>
     </Form>
     </div>

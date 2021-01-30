@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Alert } from 'react-bootstrap'
+import { Form, Modal, Button } from 'react-bootstrap'
 import trans from "../translations";
 import store from "../store";
 import InputChild from './InputChild';
@@ -7,6 +7,7 @@ import EditSaveCancelButtons from './EditSaveCancelButtons';
 import childrenApi from '../client/children';
 
 const Child = ({child, visibleFields}) => {
+    const [showDelete, setShowDelete] = useState(false);
     const [rolledOut, setRolledOut] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [newChild, setNewChild] = useState(child);
@@ -48,8 +49,7 @@ const Child = ({child, visibleFields}) => {
     const onChildDeleted = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        if (window.confirm(trans.oldChildrenTranslations.confirmDeleteChild)) {
-            childrenApi
+        childrenApi
             .deleteChild(newChild.id)
             .then(() => {
                 deleteChild(newChild.id)
@@ -59,9 +59,9 @@ const Child = ({child, visibleFields}) => {
                 setRolledOut(false);
                 setEditMode(false);
                 setNewChild({});
+                setShowDelete(false);
             })
             .catch(errorHandler)
-        }
     }
     const handleCancelEdit = (event) => {
         event.stopPropagation();
@@ -70,7 +70,26 @@ const Child = ({child, visibleFields}) => {
         console.log("Resetting original child ", child);
         setEditMode(false);
       }
+    const cancelDelete = (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        setShowDelete(false);
+    }
     return (<>
+    <Modal show={showDelete} onHide={cancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>{trans.oldChildrenTranslations[lang].confirmDeleteChildTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{trans.oldChildrenTranslations[lang].confirmDeleteChild}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={onChildDeleted}>
+            Borrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
 <tr onClick={() => setRolledOut(!rolledOut)}>
 {visibleFields.map((field) => <td key={`td${child[field]}`}>{child[field]}</td>)}
 </tr>
@@ -89,7 +108,7 @@ const Child = ({child, visibleFields}) => {
         <EditSaveCancelButtons
             editMode={editMode}
             onSetEditMode={setEditMode}
-            onDelete={onChildDeleted}
+            onDelete={(event) => setShowDelete(true)}
             onCancel={handleCancelEdit}/>
     </Form>
     </div>
