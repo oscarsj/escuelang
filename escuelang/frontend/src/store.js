@@ -50,10 +50,26 @@ const useSeasonStore = create(set => ({
         seasonId: newSeason.id}),
 }))
 
+const useOldChildrenStore = create(set => ({
+    children: [],
+    setChildren: (children) => set({children: children}),
+    replaceChild: (newChild) => set((state) => {
+        const updatedChildIndex = state.children.findIndex(child => child.id == newChild.id);
+        const children = [...state.children];
+        children[updatedChildIndex] = newChild;
+        return {children: children}
+    }),
+    deleteChild: (childId) => 
+        set((state) =>
+            {return {children: state.children.filter(
+                (child) => child.id != childId)}}),
+}))
+
 export default {
     useRegistersStore,
     useMonitorStore,
     useDaysStore,
     useSeasonStore,
-    useSettingsStore
+    useSettingsStore,
+    useOldChildrenStore
 };

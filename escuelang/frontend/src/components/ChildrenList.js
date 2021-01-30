@@ -3,8 +3,15 @@ import { Table } from 'react-bootstrap'
 import Child from "./Child";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
+import trans from "../translations";
+import store from "../store";
 
-const ChildrenList = ({children, fieldTranslations, onChildUpdated, onChildDeleted}) => {
+
+const ChildrenList = () => {
+  const lang = store.useSettingsStore((state) => state.language);
+  const fieldTranslations = trans.allTranslations[lang].child;
+  const children = store.useOldChildrenStore((state) => state.children)
+  
   const [orderBy, setOrder] = useState({
     field:'surname',
     reversed: false}
@@ -49,11 +56,9 @@ const ChildrenList = ({children, fieldTranslations, onChildUpdated, onChildDelet
         .map((child) => (
           <Child 
             key={child.id} 
-            fieldTranslations={fieldTranslations} 
             child={child} 
             visibleFields={visibleFields}
-            onChildUpdated={onChildUpdated}
-            onChildDeleted={onChildDeleted}/>)
+            />)
         )}
       </tbody>
     </Table>

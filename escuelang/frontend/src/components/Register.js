@@ -81,13 +81,12 @@ const Register = ({register, visibleFields}) => {
   const handleCancelEdit = (event) => {
     event.stopPropagation();
     event.preventDefault();
-    setNewRegister({});
-    console.log("Resetting original register ", register);
+    setNewChild(register.child);
     setNewRegister(register);
+    console.log("Resetting original register ", register);
     setEditMode(false);
   }
-  console.log("Register rendered: ", register);
-  console.log("visible fields: ", visibleFields);
+
   return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
 {visibleFields.child.map((field) => <td key={`td${newRegister.child[field]}`}>{newRegister.child[field]}</td>)}
@@ -102,7 +101,6 @@ const Register = ({register, visibleFields}) => {
             key={newRegister.child.id}
             child={newRegister.child} 
             onChildUpdated={setNewChild}
-            fieldTranslations={fieldTranslations.child} 
             readOnly={!editMode}
             errors={errors}/>
         <InputRegister 

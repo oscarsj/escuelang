@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Overlay, Popover } from "react-bootstrap";
 
-const VisibleFieldsSelector = ({onSubmit, initialFields=[], translations=[]}) => {
+const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
     const [show, setShow] = useState(false);
     const [target, setTarget] = useState(null);
     const [visibleFields, setVisibleFields] = useState(initialFields);
