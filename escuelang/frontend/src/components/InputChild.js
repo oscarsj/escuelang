@@ -13,7 +13,7 @@ const InputChild = ({child, onChildUpdated, readOnly, errors}) => {
       (event) => {
           event.stopPropagation();
           event.preventDefault();
-          const tmpChild = {...child};
+          const tmpChild = {...newChild};
           tmpChild[field] = event.target.value;
           console.log("InputChild: ", tmpChild);
           setNewChild(tmpChild);

@@ -8,21 +8,28 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import store from '../store';
 
 const AddRegisterForm = ({seasonId}) => {
-  const [newRegister, setNewRegister] = useState({
+  const init_reg = {
     child: {},
     days: [],
     monitor: undefined,
     payments_set: []
-  });
+  }
+  const [newRegister, setNewRegisterPrivate] = useState(init_reg);
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
   const [unrolled, setUnrolled] = useState(false);
   
   const setNewChild = (child) => {
     console.log("AddRegisterForm setNewChild ", child);
-    setNewRegister(
+    setNewRegisterPrivate(
       {...newRegister,
       child: child});
+  }
+  const setNewRegister = (register) => {
+    console.log("AddRegisterForm setNewRegister ", register);
+    console.log("AddRegisterForm setNewRegister keeping child", newRegister.child);
+    
+    setNewRegisterPrivate({...register, child: newRegister.child});
   }
   const addRegister = store.useRegistersStore(state => state.addRegister);
   
@@ -99,7 +106,7 @@ const AddRegisterForm = ({seasonId}) => {
                 setUnrolled(buttonId == 'another');
               }
               addRegister(tmpRegister);
-              setNewRegister({});
+              setNewRegister(init_reg);
           })
           .catch(err => {
               if (err.response) {
@@ -133,8 +140,7 @@ const AddRegisterForm = ({seasonId}) => {
   const handleCancel = (event) => {
     event.stopPropagation();
     event.preventDefault();
-    setNewChild({});
-    setNewRegister({});
+    setNewRegister(init_reg);
     setUnrolled(false);
   }
 
