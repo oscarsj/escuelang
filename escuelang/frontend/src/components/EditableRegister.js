@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Modal } from 'react-bootstrap';
+import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import InputChild from './InputChild';
 import InputRegister from './InputRegister';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
@@ -7,34 +7,48 @@ import trans from '../translations';
 import store from '../store';
 
 
-const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted, error, errors}) => {
+const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted}) => {
     const [showDelete, setShowDelete] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [newRegister, setNewRegisterPrivate] = useState(register);
     const lang = store.useSettingsStore((state) => state.language);  
-        
+    const [error, setError] = useState();
+    const [errors, setErrors] = useState({});
+  
     const setNewChild = (newChild) => {
         setNewRegisterPrivate({...newRegister,
         child: newChild});
     }
-    const setNewRegister = (register) => {
-        setNewRegisterPrivate({...register, child: newRegister.child});
+    const setNewRegister = (reg) => {
+        setNewRegisterPrivate({...reg, child: newRegister.child});
     }
-
+    const onSuccess = () => {
+        setNewRegister(register);
+        setError();
+        setErrors({});
+        setEditMode(false);
+    }
+    const onFailure = (newError, newErrors={}) => {
+        console.log('Error editing register: ', newError);
+        setError(newError);
+        setErrors(newErrors);
+        setEditMode(true);
+    }
     const handleSubmit = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        setEditMode(false);
-        onRegisterUpdated(newRegister);
+        onRegisterUpdated(newRegister, onSuccess, onFailure);
     }
 
     const handleCancelEdit = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        setNewChild(register.child);
-        setNewRegister(register);
+        setNewRegisterPrivate(register);
         console.log("Resetting original register ", register);
+        setError();
+        setErrors({});
         setEditMode(false);
+
       }
 
       const cancelDelete = (event) => {

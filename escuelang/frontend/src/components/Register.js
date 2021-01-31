@@ -8,21 +8,19 @@ const Register = ({register, visibleFields}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const storeReplaceRegister = store.useRegistersStore(state => state.replaceRegister)
   const storeDeleteRegister = store.useRegistersStore(state => state.deleteRegister);
-  const [error, setError] = useState("");
-  const [errors, setErrors] = useState({});
 
-  const handleError = (err) => {
+  const handleError = (onFailure) =>
+   (err) => {
     if (err.response) {
         console.log('Error in update register', err.response);
-        setError("Ha habido errores al guardar. Revise los valores introducidos");
-        setErrors(err.response.data);
+        onFailure("Ha habido errores al guardar. Revise los valores introducidos", err.response.data);
     } else if (err.request) {
         // client never received a response, or request never left
     } else {
         // anything else
     }
   }
-  const onRegisterSaved = (newRegister) => {
+  const onRegisterSaved = (newRegister, onSuccess, onFailure) => {
     childrenApi
       .update(newRegister.child.id, newRegister.child)
       .then((resultChild) => {
@@ -32,14 +30,15 @@ const Register = ({register, visibleFields}) => {
         seasonsApi
         .updateRegister(tmpRegister.id, tmpRegister)
         .then((resultRegister) => {
-            setRolledOut(false);
-            const tmpRegister = {
+            storeReplaceRegister({
               ...resultRegister,
-              child: resultChild}
-            storeReplaceRegister(tmpRegister);
+              child: resultChild});
+              onSuccess();
+
           })
-        .catch(handleError)
+        .catch(handleError(onFailure))
     })
+    .catch(handleError(onFailure))
   }
 
   const onRegisterDeleted = (newRegister) => {
@@ -51,7 +50,7 @@ const Register = ({register, visibleFields}) => {
           setRolledOut(false);
           storeDeleteRegister(newRegister.id);
         })
-        .catch(handleError)
+        .catch(handleError(()=>{}))
   }
   return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
@@ -65,8 +64,7 @@ const Register = ({register, visibleFields}) => {
       register={register}
       onRegisterUpdated={onRegisterSaved}
       onRegisterDeleted={onRegisterDeleted}
-      error={error}
-      errors={errors}/>
+    />
     </div>
     </td></tr>))}   
 </> 

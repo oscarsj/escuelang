@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Modal, Button } from 'react-bootstrap'
+import { Form, Modal, Button, Alert } from 'react-bootstrap'
 import trans from "../translations";
 import InputChild from './InputChild';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
