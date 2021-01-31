@@ -11,10 +11,7 @@ import childrenApi from '../client/children';
 
 const SeasonPage = () => {    
     const seasonId = store.useSeasonStore(state => state.seasonId);
-    const [error, setError] = useState();
-    const [errors, setErrors] = useState({});
-    const [errorRegister, setErrorRegister] = useState();
-
+    
     const storeSetSeason = store.useSeasonStore(state => state.setSeason);    
     const storeSetRegisters = store.useRegistersStore(state => state.setRegisters);
     const storeSetMonitors = store.useMonitorStore(state => state.setMonitors);
@@ -62,23 +59,26 @@ const SeasonPage = () => {
       loadRegisters(seasonId);
     }, []);
 
-    const handleError = (err) => {
-      if (err.response) {
-          console.log('Error in update child: ', err.response);
-          if(err.response.data.child[0] == "This field must be unique.") {
-            setError("¡El alumno ya está registrado en esta temporada!");
-          } else {
-            const nonFieldErrors = err.response.data.non_field_errors;
-            setError(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos");
-          }
-          setErrors(err.response.data);
-      } else if (err.request) {
-          // client never received a response, or request never left
-          setError("Error con el servidor :( Reintente más tarde")
-
-      } else {
-          // anything else
-          setError("Error desconocido :( Reintente más tarde")
+    const handleError = (onFailure) => {
+      return (err) => {
+        if (err.response) {
+            console.log('Error in update child: ', err.response);
+            if(err.response.data.child != undefined) {
+              if(err.response.data.child[0] == "This field must be unique.")
+                onFailure("¡El alumno ya está registrado en esta temporada!", err.response.data);
+              else
+                onFailure("Error en los datos del alumno");
+            } else {
+              const nonFieldErrors = err.response.data.non_field_errors;
+              onFailure(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos", err.response.data);
+            }
+        } else if (err.request) {
+            // client never received a response, or request never left
+            onFailure("Error con el servidor :( Reintente más tarde");
+        } else {
+            // anything else
+            onFailure("Error desconocido :( Reintente más tarde");
+        }
       }
     }
 
@@ -101,45 +101,33 @@ const SeasonPage = () => {
           })
     }
 
-    const onRegisterAdded = (newRegister) => {
+    const onRegisterAdded = (newRegister, onSuccess, onFailure) => {
       // Simple POST request with a JSON body using fetch
     console.log("Posting new register", newRegister);
-    setErrorRegister(newRegister);
     const childPromise = newRegister.child.id == undefined? postNewChild(newRegister.child): updateChild(newRegister.child);
-    childPromise.then(child => {
+    childPromise
+      .then(child => {
         seasonsApi
           .registerChild(seasonId, {
               ...newRegister,
               child: child.id
           })
           .then(register => {
-              console.log('Register created!');
-              const tmpRegister = {
+            onSuccess();  
+            addRegister({
                 ...register,
                 child: child
-              }
-              setError();
-              setErrors({});
-              setErrorRegister();
-              addRegister(tmpRegister);
+              });
           })
-          .catch(handleError)
-    })
-    .catch(handleError)
+          .catch(handleError(onFailure))
+      })
+      .catch(handleError(onFailure))
   }
   
-  const onAddCanceled = () => {
-    setError("");
-    setErrors({});
-  }
   return (<>
     <SeasonData />
     <AddRegisterForm 
-      defaultRegister={errorRegister}
-      onRegisterAdded={onRegisterAdded}
-      onCanceled={onAddCanceled}
-      error={error}
-      errors={errors}/>
+      onRegisterAdded={onRegisterAdded} />
     <RegisterList />
     </>
     )

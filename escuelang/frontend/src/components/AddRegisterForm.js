@@ -12,10 +12,11 @@ const initReg = {
   payments_set: []
 }
 
-const AddRegisterForm = ({defaultRegister, onRegisterAdded, onAddCanceled, error, errors}) => {
-
-  const [newRegister, setNewRegisterPrivate] = useState(defaultRegister != undefined? defaultRegister:initReg);
+const AddRegisterForm = ({onRegisterAdded}) => {
+  const [newRegister, setNewRegisterPrivate] = useState(initReg);
   const [unrolled, setUnrolled] = useState(false);
+  const [error, setError] = useState();
+  const [errors, setErrors] = useState({});
 
   const setNewChild = (child) => {
     console.log("AddRegisterForm setNewChild ", child);
@@ -30,14 +31,27 @@ const AddRegisterForm = ({defaultRegister, onRegisterAdded, onAddCanceled, error
     console.log("Resetting add register form contents...");
     setNewRegisterPrivate({...initReg, id: "added_register", child: {id: "added_child"}});
   }
+
+  const onSuccess = (buttonId) => 
+    () => {
+      console.log('Register created!');
+      if (buttonId != 'another') {
+        setUnrolled(false);
+      }
+      initRegister();
+      setError();
+      setErrors({});
+    }
+
+  const onFailure = (newError, newErrors={}) => {
+    console.log('Error creating register: ', newError);
+    setError(newError);
+    setErrors(newErrors);
+  }
   const handleRegisterAdded = (event, buttonId) => {        
     event.stopPropagation();
     event.preventDefault();
-    if (buttonId != 'another') {
-      setUnrolled(false);
-    }
-    onRegisterAdded(newRegister);
-    initRegister();
+    onRegisterAdded(newRegister, onSuccess(buttonId), onFailure);
   }
 
   const fetchChild = (child) => {
@@ -61,12 +75,11 @@ const AddRegisterForm = ({defaultRegister, onRegisterAdded, onAddCanceled, error
     event.preventDefault();
     initRegister();
     setUnrolled(false);
-    onAddCanceled();
   }
 
   return (<>
-  {!(unrolled || error) && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
-    {(unrolled || error) && <>
+  {!error && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
+    {unrolled && <>
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>  
     
     <Form>
