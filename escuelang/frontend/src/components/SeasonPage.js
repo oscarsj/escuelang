@@ -80,10 +80,8 @@ const SeasonPage = () => {
         .update(newChild.id, newChild)
         .then(child => {
           console.log('Child updated!');
-          setError("");
           return child;
         })
-        .catch(handleError)
     }
     const postNewChild = (newChild) => {
       console.log("Posting new child", newChild);
@@ -91,16 +89,13 @@ const SeasonPage = () => {
           .create(newChild)
           .then(child => {
             console.log('Child created!');
-            setError("");
             return child;
           })
-          .catch(handleError)
     }
 
     const onRegisterAdded = (newRegister) => {
       // Simple POST request with a JSON body using fetch
     console.log("Posting new register", newRegister);
-
     const childPromise = newRegister.child.id == undefined? postNewChild(newRegister.child): updateChild(newRegister.child);
     childPromise.then(child => {
         seasonsApi
@@ -115,17 +110,25 @@ const SeasonPage = () => {
                 child: child
               }
               setError("");
+              setErrors({});
               addRegister(tmpRegister);
           })
           .catch(handleError)
     })
+    .catch(handleError)
   }
-    return (<>
+  
+  const onAddCanceled = () => {
+    setError("");
+    setErrors({});
+  }
+  return (<>
     <SeasonData />
     <AddRegisterForm 
-        onRegisterAdded={onRegisterAdded}
-        error={error}
-        errors={errors}/>
+      onRegisterAdded={onRegisterAdded}
+      onCanceled={onAddCanceled}
+      error={error}
+      errors={errors}/>
     <RegisterList />
     </>
     )

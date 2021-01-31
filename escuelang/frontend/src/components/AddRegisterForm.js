@@ -5,13 +5,15 @@ import InputChild from './InputChild';
 import childrenApi from '../client/children';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 
-const AddRegisterForm = ({onRegisterAdded, error, errors}) => {
-  const initReg = {
-    child: {},
-    days: [],
-    monitor: undefined,
-    payments_set: []
-  }
+const initReg = {
+  child: {},
+  days: [],
+  monitor: undefined,
+  payments_set: []
+}
+
+const AddRegisterForm = ({onRegisterAdded, onAddCanceled, error, errors}) => {
+
   const [newRegister, setNewRegisterPrivate] = useState(initReg);
   const [unrolled, setUnrolled] = useState(false);
 
@@ -31,11 +33,10 @@ const AddRegisterForm = ({onRegisterAdded, error, errors}) => {
   const handleRegisterAdded = (event, buttonId) => {        
     event.stopPropagation();
     event.preventDefault();
-    onRegisterAdded(newRegister);
     if (buttonId != 'another') {
       setUnrolled(false);
     }
-    initRegister();
+    onRegisterAdded(newRegister);
   }
 
   const fetchChild = (child) => {
@@ -59,11 +60,12 @@ const AddRegisterForm = ({onRegisterAdded, error, errors}) => {
     event.preventDefault();
     initRegister();
     setUnrolled(false);
+    onAddCanceled();
   }
 
   return (<>
-  {!unrolled && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
-    {unrolled && <>
+  {!(unrolled || error) && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
+    {(unrolled || error) && <>
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>  
     
     <Form>
