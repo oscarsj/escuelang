@@ -40,6 +40,13 @@ const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) =
         event.preventDefault();
         setShowDelete(false);
     }
+
+    const confirmDelete = (event) => { 
+        event.stopPropagation();
+        event.preventDefault();
+        console.log("Opening delete confirmation");
+        setShowDelete(true)
+    }
     return (<>
         <Modal show={showDelete} onHide={cancelDelete}>
             <Modal.Header closeButton>
@@ -67,7 +74,7 @@ const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) =
         <EditSaveCancelButtons
             editMode={editMode}
             onSetEditMode={setEditMode}
-            onDelete={(event) => setShowDelete(true)}
+            onDelete={confirmDelete}
             onCancel={handleCancelEdit}/>
     </Form>
     </>)

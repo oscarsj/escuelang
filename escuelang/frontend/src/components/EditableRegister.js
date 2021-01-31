@@ -11,7 +11,6 @@ const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted, error
     const [showDelete, setShowDelete] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [newRegister, setNewRegisterPrivate] = useState(register);
-
     const lang = store.useSettingsStore((state) => state.language);  
         
     const setNewChild = (newChild) => {
@@ -49,8 +48,14 @@ const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted, error
         event.stopPropagation();
         event.preventDefault();
         setShowDelete(false);
-        setEditMode(false);
         onRegisterDeleted(newRegister);
+    }
+
+    const confirmDelete = (event) => { 
+        event.stopPropagation();
+        event.preventDefault();
+        console.log("Opening delete confirmation");
+        setShowDelete(true)
     }
     
     return (<>
@@ -86,7 +91,7 @@ const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted, error
         <EditSaveCancelButtons 
           editMode={editMode}
           onSetEditMode={setEditMode} 
-          onDelete={(event) => setShowDelete(true)}
+          onDelete={confirmDelete}
           onCancel={handleCancelEdit}/>
     </Form>
     </>
