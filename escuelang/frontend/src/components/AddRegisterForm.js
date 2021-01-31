@@ -12,9 +12,9 @@ const initReg = {
   payments_set: []
 }
 
-const AddRegisterForm = ({onRegisterAdded, onAddCanceled, error, errors}) => {
+const AddRegisterForm = ({defaultRegister, onRegisterAdded, onAddCanceled, error, errors}) => {
 
-  const [newRegister, setNewRegisterPrivate] = useState(initReg);
+  const [newRegister, setNewRegisterPrivate] = useState(defaultRegister != undefined? defaultRegister:initReg);
   const [unrolled, setUnrolled] = useState(false);
 
   const setNewChild = (child) => {
@@ -37,6 +37,7 @@ const AddRegisterForm = ({onRegisterAdded, onAddCanceled, error, errors}) => {
       setUnrolled(false);
     }
     onRegisterAdded(newRegister);
+    initRegister();
   }
 
   const fetchChild = (child) => {
