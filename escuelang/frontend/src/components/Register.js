@@ -8,7 +8,7 @@ const Register = ({register, visibleFields}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const storeReplaceRegister = store.useRegistersStore(state => state.replaceRegister)
   const storeDeleteRegister = store.useRegistersStore(state => state.deleteRegister);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
 
   const handleError = (err) => {
@@ -55,7 +55,7 @@ const Register = ({register, visibleFields}) => {
   }
   return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
-{visibleFields.child.map((field) => <td key={`td${register.child[field]}`}>{register.child[field]}</td>)}
+{visibleFields.child.map((field) => <td key={`td$-${field}-${register.child[field]}`}>{register.child[field]}</td>)}
 {visibleFields.register.map((field) => <td key={`td${register[field]}`}>{field=='competition'? (register[field]? 'Sí':'No'):register[field]}</td>)}
 </tr>
 {(rolledOut && (<tr>

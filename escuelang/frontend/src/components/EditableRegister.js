@@ -37,10 +37,11 @@ const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted, error
         console.log("Resetting original register ", register);
         setEditMode(false);
       }
-      
+
       const cancelDelete = (event) => {
         event.stopPropagation();
         event.preventDefault();
+        console.log("Delete canceled");
         setShowDelete(false);
     }
 
