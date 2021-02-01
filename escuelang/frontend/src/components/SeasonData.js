@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Form, Col, Alert, Card } from 'react-bootstrap';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
-import seasonsApi from '../client/seasons';
 import { useSeasonStore, useSettingsStore } from '../store';
 import { allTranslations } from "../translations";
 
 
-const SeasonData = () => {
+const SeasonData = ({onSeasonUpdated}) => {
   const [editMode, setEditMode] = useState(false);
   const [error, setError] = useState("");
   const [errors] = useState({});
 
   const season = useSeasonStore(state => state.season);
-  const setSeason = useSeasonStore(state => state.setSeason);
   const [newSeason, setNewSeason] = useState(season);
 
   const lang = useSettingsStore(state=>state.language);
@@ -27,23 +25,21 @@ const SeasonData = () => {
         setNewSeason(tmpSeason);
     }
 
+  const onUpdateSuccess = () => {
+
+  }
+
+  const onUpdateFailure = (err) => {
+    setError(err);
+  }
+
   const handleSeasonUpdated = (event) => {
       console.log("New season data: ", newSeason);
       event.preventDefault();
       event.stopPropagation();
-      const seasonData = Object.assign(season, newSeason);
-      console.log("Setting season data: ", seasonData);
-      seasonsApi
-        .update(season.id, seasonData)
-        .then((result) => {
-            setEditMode(false);
-            setSeason(result);
-        })
-        .catch((err) => {
-            console.log("Error updating season: ", err.response);
-            setError(err.response.error);
-        })
+      onSeasonUpdated(newSeason, onUpdateSuccess, onUpdateFailure);
     }
+
     const getInputForField = (field, type='text') => {
       return (  
       <Form.Group>
@@ -54,7 +50,7 @@ const SeasonData = () => {
         placeholder={fieldTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={!editMode} 
-        defaultValue={season[field]}
+        defaultValue={newSeason[field]}
         isInvalid={Boolean(errors?errors[field]:false)}/>
       <Form.Control.Feedback type="invalid">
         Error: {errors? errors[field]:""}
@@ -74,7 +70,7 @@ const SeasonData = () => {
         placeholder={fieldTranslations.name} 
         onChange={handleChange('name')} 
         readOnly={!editMode} 
-        defaultValue={season.name}
+        defaultValue={newSeason.name}
         isInvalid={Boolean(errors?errors.name:false)}/>
       <Form.Control.Feedback type="invalid">
         Error: {errors? errors.name:""}
@@ -87,7 +83,7 @@ const SeasonData = () => {
         placeholder={fieldTranslations.course} 
         onChange={handleChange('course')} 
         readOnly={!editMode} 
-        defaultValue={season.course}
+        defaultValue={newSeason.course}
         isInvalid={Boolean(errors?errors.course:false)}/>
       <Form.Control.Feedback type="invalid">
         Error: {errors? errors.course:""}

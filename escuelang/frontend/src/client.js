@@ -15,6 +15,11 @@ const loadSeason = (seasonId) => {
       .then(newSeason => newSeason);
 }
 
+const updateSeason = (season) => {
+  return seasonsApi
+    .update(season.id, season)
+    .then((result) => result)
+}
 const loadDays = () => {
     return daysApi
         .get()
@@ -28,7 +33,6 @@ const loadMonitors = () => {
 }
 
 const updateChild = (newChild) => {
-    console.log("Updating child", newChild);
     return childrenApi
       .update(newChild.id, newChild)
       .then(child => {
@@ -37,11 +41,9 @@ const updateChild = (newChild) => {
       })
   }
   const postNewChild = (newChild) => {
-    console.log("Posting new child", newChild);
     return childrenApi
         .create(newChild)
         .then(child => {
-          console.log('Child created!');
           return child;
         })
   }
@@ -68,6 +70,7 @@ const addRegisterAndUpdateOrCreateChild = (newRegister) => {
 export default { 
     loadRegisters, 
     loadSeason, 
+    updateSeason,
     loadDays, 
     loadMonitors,
     addRegisterAndUpdateOrCreateChild };

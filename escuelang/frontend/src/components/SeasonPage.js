@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
@@ -20,7 +20,7 @@ const SeasonPage = () => {
     const addRegister = useRegistersStore(state => state.addRegister);
 
     useEffect(() => {
-      console.log("Getting registers for season ", seasonId);
+      console.log("Fetching data from server - season: ", seasonId);
       client.loadSeason(seasonId).then(storeSetSeason);
       client.loadDays().then(storeSetDays);
       client.loadMonitors().then(storeSetMonitors);
@@ -50,8 +50,7 @@ const SeasonPage = () => {
       }
     }
 
-    const onRegisterAdded = (newRegister, onSuccess, onFailure) => {
-      // Simple POST request with a JSON body using fetch
+  const onRegisterAdded = (newRegister, onSuccess, onFailure) => {
     console.log("Posting new register", newRegister);
     client.addRegisterAndUpdateOrCreateChild(newRegister)
       .then(register => {
@@ -61,13 +60,23 @@ const SeasonPage = () => {
                 child: child
               });
           })
-          .catch(handleError(onFailure))
+      .catch(handleError(onFailure))
   }
   
+  const onSeasonUpdated = (newSeason, onSuccess, onFailure) => {
+    client
+    .updateSeason(newSeason)
+    .then((result) => {
+      storeSetSeason(result);
+      onSuccess();
+    })
+    .catch((err) => {
+      onFailure(err);
+    })
+  }
   return (<>
-    <SeasonData />
-    <AddRegisterForm 
-      onRegisterAdded={onRegisterAdded} />
+    <SeasonData onSeasonUpdated={onSeasonUpdated}/>
+    <AddRegisterForm onRegisterAdded={onRegisterAdded}/>
     <RegisterList />
     </>
     )
