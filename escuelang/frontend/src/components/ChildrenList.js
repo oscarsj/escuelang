@@ -3,14 +3,14 @@ import { Table } from 'react-bootstrap'
 import Child from "./Child";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
-import trans from "../translations";
-import store from "../store";
+import {allTranslations} from "../translations";
+import {useOldChildrenStore, useSettingsStore} from "../store";
 
 
 const ChildrenList = () => {
-  const lang = store.useSettingsStore((state) => state.language);
-  const fieldTranslations = trans.allTranslations[lang].child;
-  const children = store.useOldChildrenStore((state) => state.children)
+  const lang = useSettingsStore((state) => state.language);
+  const fieldTranslations = allTranslations[lang].child;
+  const children = useOldChildrenStore((state) => state.children)
   
   const [orderBy, setOrder] = useState({
     field:'surname',

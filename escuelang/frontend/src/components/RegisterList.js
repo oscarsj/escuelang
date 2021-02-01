@@ -3,14 +3,14 @@ import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table } from 'react-bootstrap'
-import store from '../store';
-import trans from '../translations';
+import {useSettingsStore, useRegistersStore} from '../store';
+import {allTranslations} from '../translations';
 
 
 const RegisterList = () => {
-  const lang = store.useSettingsStore(state=>state.language);  
-  const fieldTranslations = trans.allTranslations[lang];
-  const registers = store.useRegistersStore((state) => state.registers);
+  const lang = useSettingsStore(state=>state.language);  
+  const fieldTranslations = allTranslations[lang];
+  const registers = useRegistersStore((state) => state.registers);
   const [visibleFields, setVisibleFields] = useState(
     {
       'child': ['name', 'surname', 'birthdate','age'],

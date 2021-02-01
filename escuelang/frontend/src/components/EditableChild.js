@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Form, Modal, Button, Alert } from 'react-bootstrap'
-import trans from "../translations";
+import {oldChildrenTranslations} from "../translations";
 import InputChild from './InputChild';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
-import store from "../store";
+import {useSettingsStore} from "../store";
 
 
 const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) => {
     const [showDelete, setShowDelete] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [newChild, setNewChild] = useState(child);
-    const lang = store.useSettingsStore((state) => state.language);
-    
+    const lang = useSettingsStore((state) => state.language);
+    const trans = oldChildrenTranslations[lang];
     const handleChildUpdated = (event) => {
         event.stopPropagation();
         event.preventDefault();
@@ -50,9 +50,9 @@ const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) =
     return (<>
         <Modal show={showDelete} onHide={cancelDelete}>
             <Modal.Header closeButton>
-              <Modal.Title>{trans.oldChildrenTranslations[lang].confirmDeleteChildTitle}</Modal.Title>
+              <Modal.Title>{trans.confirmDeleteChildTitle}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>{trans.oldChildrenTranslations[lang].confirmDeleteChild}</Modal.Body>
+            <Modal.Body>{trans.confirmDeleteChild}</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={cancelDelete}>
                 Cancelar

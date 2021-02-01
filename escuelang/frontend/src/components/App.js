@@ -1,9 +1,7 @@
-import React, {useState} from "react";
-import { Alert } from 'react-bootstrap';
+import React from "react";
 import SeasonPage from './SeasonPage';
 import OldChildrenPage from './OldChildrenPage';
 import EscuelaNavbar from "./EscuelaNavbar";
-import trans from "../translations";
 import {
   BrowserRouter as Router,
   Switch, Route
@@ -11,31 +9,19 @@ import {
 
 
 const App = () => {
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const language = 'es_ES';
-  // TODO: move this to proper string translations
-  const translations = trans.allTranslations[language];
-  console.log("Got translations: ", translations);
   return (
 <div className="container">
 <Router>
   <EscuelaNavbar title="Escuela de Fútbol"/>
-  {(error && <Alert variant="danger">{error}</Alert>)}
-  {(message && <Alert variant="success">{message}</Alert>)}
   <div className="container center-block">
       <Switch>
         <Route exact path="/reports">
         </Route>
         <Route exact path="/">
-          <SeasonPage 
-            fieldTranslations={translations} 
-            setError={setError} 
-            setMessage={setMessage}/>
+          <SeasonPage/>
         </Route>
         <Route exact path="/children">
-          <OldChildrenPage 
-            fieldTranslations={translations.child}/>
+          <OldChildrenPage/>
         </Route>
       </Switch>
       <div>

@@ -65,7 +65,7 @@ const useOldChildrenStore = create(set => ({
                 (child) => child.id != childId)}}),
 }))
 
-export default {
+export {
     useRegistersStore,
     useMonitorStore,
     useDaysStore,

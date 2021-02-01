@@ -3,15 +3,16 @@ import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import InputChild from './InputChild';
 import InputRegister from './InputRegister';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
-import trans from '../translations';
-import store from '../store';
+import {seasonTranslations} from '../translations';
+import {useSettingsStore} from '../store';
 
 
 const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted}) => {
     const [showDelete, setShowDelete] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [newRegister, setNewRegisterPrivate] = useState(register);
-    const lang = store.useSettingsStore((state) => state.language);  
+    const lang = useSettingsStore((state) => state.language);  
+    const trans = seasonTranslations[lang];
     const [error, setError] = useState();
     const [errors, setErrors] = useState({});
   
@@ -75,9 +76,9 @@ const EditableRegister = ({register, onRegisterUpdated, onRegisterDeleted}) => {
     return (<>
     <Modal show={showDelete} onHide={cancelDelete}>
         <Modal.Header closeButton>
-          <Modal.Title>{trans.seasonTranslations[lang].confirmDeleteRegisterTitle}</Modal.Title>
+          <Modal.Title>{trans.confirmDeleteRegisterTitle}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{trans.seasonTranslations[lang].confirmDeleteRegister}</Modal.Body>
+        <Modal.Body>{trans.confirmDeleteRegister}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={cancelDelete}>
             Cancelar

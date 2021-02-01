@@ -4,7 +4,8 @@ import InputRegister from './InputRegister';
 import InputChild from './InputChild';
 import childrenApi from '../client/children';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
-
+import { addRegisterTranslations } from '../translations';
+import { useSettingsStore } from '../store';
 const initReg = {
   child: {},
   days: [],
@@ -17,7 +18,8 @@ const AddRegisterForm = ({onRegisterAdded}) => {
   const [unrolled, setUnrolled] = useState(false);
   const [error, setError] = useState();
   const [errors, setErrors] = useState({});
-
+  const lang = useSettingsStore((state)=>state.language);
+  const trans = addRegisterTranslations[lang]
   const setNewChild = (child) => {
     console.log("AddRegisterForm setNewChild ", child);
     setNewRegisterPrivate(
@@ -84,13 +86,20 @@ const AddRegisterForm = ({onRegisterAdded}) => {
   }
 
   return (<>
-  {!error && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
+  {!error && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
+    <Button 
+      type="primary" 
+      onClick={() => setUnrolled(true)} 
+      style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} 
+      size='sm'><AiOutlineUsergroupAdd/>
+        {trans.add_register_button}
+    </Button></div>}
     <Modal 
       show={unrolled}
       size="lg"
       onHide={onClose}>
       <Modal.Header>
-        Añadir alumno
+        {trans.add_register_title}
       </Modal.Header>
     <Modal.Body>
     <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>      
@@ -109,9 +118,9 @@ const AddRegisterForm = ({onRegisterAdded}) => {
         readOnly={false}
         errors={errors}/>
     <Modal.Footer>
-    <Button id='new' variant="primary" onClick={(event)=>handleRegisterAdded(event, "new")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
-    <Button id='another' variant="secondary" onClick={(event)=>handleRegisterAdded(event, "another")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>
-    <Button id='cancel' variant="secondary" onClick={handleCancel} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Cancelar</Button>
+    <Button id='new' variant="primary" onClick={(event)=>handleRegisterAdded(event, "new")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>{trans.save_button}</Button>
+    <Button id='another' variant="secondary" onClick={(event)=>handleRegisterAdded(event, "another")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>{trans.save_and_add_button}</Button>
+    <Button id='cancel' variant="secondary" onClick={handleCancel} style={{ padding: "10px", marginRight: "10px"}} size='sm'>{trans.cancel_button}</Button>
     </Modal.Footer>    
     </Form>
     </div>

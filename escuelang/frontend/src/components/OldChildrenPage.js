@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import ChildrenList from './ChildrenList';
 import childrenApi from "../client/children";
-import store from "../store";
+import {useOldChildrenStore} from "../store";
 
 const OldChildrenPage = () => {
-    const setChildren = store.useOldChildrenStore((state) => state.setChildren)
+    const setChildren = useOldChildrenStore((state) => state.setChildren)
 
     useEffect(() => {
         childrenApi

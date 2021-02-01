@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import store from "../store";
+import {useOldChildrenStore} from "../store";
 import childrenApi from '../client/children';
 import EditableChild from './EditableChild';
 
@@ -7,8 +7,8 @@ import EditableChild from './EditableChild';
 const Child = ({child, visibleFields}) => {
     const [rolledOut, setRolledOut] = useState(false);
     
-    const replaceChild = store.useOldChildrenStore((state) => state.replaceChild)
-    const deleteChild = store.useOldChildrenStore((state) => state.deleteChild)
+    const replaceChild = useOldChildrenStore((state) => state.replaceChild)
+    const deleteChild = useOldChildrenStore((state) => state.deleteChild)
     
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({});

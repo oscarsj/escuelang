@@ -49,4 +49,20 @@ const oldChildrenTranslations = {
     }
 }
 
-export default { allTranslations, seasonTranslations, oldChildrenTranslations };
+const addRegisterTranslations = {
+    es_ES: {
+        add_register_button: 'Añadir alumno',
+        add_register_title: 'Añadir nuevo alumno a esta temporada',
+        save_button: 'Guardar',
+        save_and_add_button: 'Guardar y seguir añadiendo',
+        cancel_button: 'Cancel',
+    }
+
+}
+
+export { 
+    allTranslations,
+    seasonTranslations,
+    oldChildrenTranslations,
+    addRegisterTranslations
+};

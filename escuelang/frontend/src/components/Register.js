@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import store from '../store';
+import {useRegistersStore} from '../store';
 import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
 import EditableRegister from './EditableRegister';
 
 const Register = ({register, visibleFields}) => {
   const [rolledOut, setRolledOut] = useState(false);
-  const storeReplaceRegister = store.useRegistersStore(state => state.replaceRegister)
-  const storeDeleteRegister = store.useRegistersStore(state => state.deleteRegister);
+  const storeReplaceRegister = useRegistersStore(state => state.replaceRegister)
+  const storeDeleteRegister = useRegistersStore(state => state.deleteRegister);
 
   const handleError = (onFailure) =>
    (err) => {

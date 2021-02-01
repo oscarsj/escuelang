@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Col } from 'react-bootstrap'
-import store from '../store';
-import trans from '../translations';
+import {useSettingsStore} from '../store';
+import {allTranslations} from '../translations';
 
 
 const InputChild = ({child, onChildUpdated, readOnly, errors}) => {
-  const lang = store.useSettingsStore((state) => state.language);  
-  const fieldTranslations = trans.allTranslations[lang].child;
+  const lang = useSettingsStore((state) => state.language);  
+  const fieldTranslations = allTranslations[lang].child;
 
   const [newChild, setNewChild] = useState(child);
   const handleChange = (field) =>

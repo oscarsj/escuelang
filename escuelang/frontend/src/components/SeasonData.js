@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Form, Col, Alert, Card } from 'react-bootstrap';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
 import seasonsApi from '../client/seasons';
-import store from '../store';
-import trans from "../translations";
+import { useSeasonStore, useSettingsStore } from '../store';
+import { allTranslations } from "../translations";
 
 
 const SeasonData = () => {
@@ -11,12 +11,12 @@ const SeasonData = () => {
   const [error, setError] = useState("");
   const [errors] = useState({});
 
-  const season = store.useSeasonStore(state => state.season);
-  const setSeason = store.useSeasonStore(state => state.setSeason);
+  const season = useSeasonStore(state => state.season);
+  const setSeason = useSeasonStore(state => state.setSeason);
   const [newSeason, setNewSeason] = useState(season);
 
-  const lang = store.useSettingsStore(state=>state.language);
-  const fieldTranslations = trans.allTranslations[lang].season;
+  const lang = useSettingsStore(state=>state.language);
+  const fieldTranslations = allTranslations[lang].season;
     
   const handleChange = (field) =>
     (event) => {

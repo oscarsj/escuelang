@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Form, Col } from 'react-bootstrap';
-import store from '../store';
-import trans from '../translations';
+import {
+  useSettingsStore,
+  useMonitorStore,
+  useDaysStore } from '../store';
+import { allTranslations } from '../translations';
 
 
 const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
-  const lang = store.useSettingsStore((state) => state.language);  
-  const fieldTranslations = trans.allTranslations[lang];
+  const lang = useSettingsStore((state) => state.language);  
+  const fieldTranslations = allTranslations[lang];
 
-  const allMonitors = store.useMonitorStore(state => state.monitors);
-  const allDays = store.useDaysStore(state => state.days);
+  const allMonitors = useMonitorStore(state => state.monitors);
+  const allDays = useDaysStore(state => state.days);
 
   const daysTranslations = fieldTranslations.days;
   const registerTranslations = fieldTranslations.register;

@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
-import store from '../store';
+import {
+  useSeasonStore, 
+  useRegistersStore,
+  useMonitorStore,
+  useDaysStore } from '../store';
 import seasonsApi from '../client/seasons';
 import daysApi from '../client/days';
 import monitorsApi from '../client/monitors';
@@ -10,13 +14,13 @@ import childrenApi from '../client/children';
 
 
 const SeasonPage = () => {    
-    const seasonId = store.useSeasonStore(state => state.seasonId);
+    const seasonId = useSeasonStore(state => state.seasonId);
     
-    const storeSetSeason = store.useSeasonStore(state => state.setSeason);    
-    const storeSetRegisters = store.useRegistersStore(state => state.setRegisters);
-    const storeSetMonitors = store.useMonitorStore(state => state.setMonitors);
-    const storeSetDays = store.useDaysStore(state => state.setDays);
-    const addRegister = store.useRegistersStore(state => state.addRegister);
+    const storeSetSeason =useSeasonStore(state => state.setSeason);    
+    const storeSetRegisters = useRegistersStore(state => state.setRegisters);
+    const storeSetMonitors = useMonitorStore(state => state.setMonitors);
+    const storeSetDays = useDaysStore(state => state.setDays);
+    const addRegister = useRegistersStore(state => state.addRegister);
 
   const loadRegisters = (seasonId) => {
     seasonsApi
