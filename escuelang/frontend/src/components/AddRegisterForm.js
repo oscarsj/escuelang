@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button, Alert, Modal } from 'react-bootstrap'
 import InputRegister from './InputRegister';
 import InputChild from './InputChild';
 import childrenApi from '../client/children';
@@ -70,18 +70,30 @@ const AddRegisterForm = ({onRegisterAdded}) => {
         .catch()
     } 
   }
+  const onClose = () => {
+    initRegister();
+    setUnrolled(false);
+    setError();
+    setErrors({});
+  }
+
   const handleCancel = (event) => {
     event.stopPropagation();
     event.preventDefault();
-    initRegister();
-    setUnrolled(false);
+    onClose();
   }
 
   return (<>
   {!error && <div style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}><Button type="primary" onClick={() => setUnrolled(true)} style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}} size='sm'><AiOutlineUsergroupAdd/>Añadir alumnos</Button></div>}
-    {unrolled && <>
-    <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>  
-    
+    <Modal 
+      show={unrolled}
+      size="lg"
+      onHide={onClose}>
+      <Modal.Header>
+        Añadir alumno
+      </Modal.Header>
+    <Modal.Body>
+    <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>      
     <Form>
     {(error && <Alert variant="danger">{error}</Alert>)}
       <InputChild 
@@ -96,15 +108,15 @@ const AddRegisterForm = ({onRegisterAdded}) => {
         onRegisterUpdated={setNewRegister}
         readOnly={false}
         errors={errors}/>
-
+    <Modal.Footer>
     <Button id='new' variant="primary" onClick={(event)=>handleRegisterAdded(event, "new")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar</Button>
     <Button id='another' variant="secondary" onClick={(event)=>handleRegisterAdded(event, "another")} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Guardar y añadir otro</Button>
     <Button id='cancel' variant="secondary" onClick={handleCancel} style={{ padding: "10px", marginRight: "10px"}} size='sm'>Cancelar</Button>
-    
+    </Modal.Footer>    
     </Form>
     </div>
-    </>}
-
+    </Modal.Body>
+    </Modal>
     </>
     )
 }
