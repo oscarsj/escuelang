@@ -34,18 +34,62 @@ const allTranslations = {
             default_price: "Precio base",
             active: "Temporada actual"
         }
+    },
+    en_US: {
+        child: {
+            name: 'Name', 
+            surname: 'Surname',
+            birthdate: 'Birthdate',
+            age: 'Age',
+            address: 'Address',
+            town: 'Town',
+            postcode: 'Postcode',
+            school: 'School',
+            dni: 'ID',
+            email: 'Email',
+            notes: 'Misc'
+        },
+        register: {
+            monitor: 'Monitor',
+            days: 'Days',
+            price_month: 'Price month',
+            competition: 'Competition?'
+        },
+        days:{
+            Monday: 'Monday',
+            Tuesday: 'Tuesday',
+            Wednesday: 'Wednesday',
+            Thursday: 'Thursday',
+            Friday: 'Friday'
+        },
+        season: {
+            name: 'Name',
+            course: 'Course',
+            start_date: 'Start date',
+            end_date: 'End date',
+            default_price: 'Base price',
+            active: 'Active season'
+        }
     }
 }
 const seasonTranslations = {
     'es_ES': {
         confirmDeleteRegisterTitle: 'Borrar registro',
         confirmDeleteRegister: '¿Estás seguro de querer borrar el registro? Esto cancelará el registro del alumno a la temporada actual, pero no borrará los datos personales del alumno de la base de datos.'
+    },
+    'en_US': {
+        confirmDeleteRegisterTitle: 'Delete register?',
+        confirmDeleteRegister: 'Are you sure you want to delete the register? this will unsubscribe child from current season, But will not remove child personal data from database.'
     }
 }
 const oldChildrenTranslations = {
     'es_ES': {
         confirmDeleteChildTitle: 'Borrar alumno',
         confirmDeleteChild: '¿Estás seguro de querer borrar el alumno? ¡Esto eliminará totalmente al alumno de la base de datos!'
+    },
+    'es_ES': {
+        confirmDeleteChildTitle: 'Delete child?',
+        confirmDeleteChild: 'Are you sure you want to fully delete child from database? This cannot be undone'
     }
 }
 
@@ -55,9 +99,15 @@ const addRegisterTranslations = {
         add_register_title: 'Añadir nuevo alumno a esta temporada',
         save_button: 'Guardar',
         save_and_add_button: 'Guardar y seguir añadiendo',
-        cancel_button: 'Cancel',
+        cancel_button: 'Cancelar'
+    },
+    en_US: {
+        add_register_button: 'Add child',
+        add_register_title: 'Add new child to this season',
+        save_button: 'Save',
+        save_and_add_button: 'Save and keep adding',
+        cancel_button: 'Cancel'
     }
-
 }
 
 export { 

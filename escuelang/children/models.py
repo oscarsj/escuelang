@@ -139,3 +139,11 @@ class Payments(models.Model):
 
     def __str__(self):
         return "%s: %s" % (self.date, self.amount)
+
+
+class Settings(models.Model):
+    key = models.CharField(max_length=100)
+    value = models.CharField(max_length=500)
+    
+    def __str__(self):
+        return "%s: %s" % (self.key, self.value)

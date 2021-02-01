@@ -36,16 +36,18 @@ const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
         }
         setTarget(event.target);
     }
+
     const renderedOptions = []
+
     for (var key in translations) {
-        renderedOptions.push(
-            <Form.Check 
+       renderedOptions.push(
+            <Form.Check inline
             key={`check${key}`}
             type="switch"
             id={`check${key}`}
             defaultChecked={visibleFields.includes(key)}
-            label={translations[key]}/>
-        )
+            label={translations[key]}
+            size="lg"/>); 
     }
 
     return (

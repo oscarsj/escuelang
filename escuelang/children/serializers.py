@@ -1,7 +1,14 @@
 from rest_framework import serializers
 from .models import (
-    Season, Course, Child, RegisteredChild, Monitor, Days, Payments
+    Season, Course, Child, Settings,
+    RegisteredChild, Monitor, Days, Payments
 )
+
+
+class SettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Settings
+        fields = ('key', 'value')
 
 
 class CourseSerializer(serializers.ModelSerializer):

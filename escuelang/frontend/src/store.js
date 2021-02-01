@@ -2,7 +2,7 @@ import create from 'zustand';
 
 
 const useSettingsStore = create(set => ({
-    language: 'es_ES',
+    language: 'en_US',
     setLanguage: (lang) => set({language: lang})
 }))
 
@@ -47,7 +47,7 @@ const useSeasonStore = create(set => ({
     seasonId: "active",
     setSeason: (newSeason) => set({
         season: newSeason,
-        seasonId: newSeason.id}),
+        seasonId: newSeason.id})
 }))
 
 const useOldChildrenStore = create(set => ({

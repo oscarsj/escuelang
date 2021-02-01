@@ -7,60 +7,24 @@ import {
   useRegistersStore,
   useMonitorStore,
   useDaysStore } from '../store';
-import seasonsApi from '../client/seasons';
-import daysApi from '../client/days';
-import monitorsApi from '../client/monitors';
-import childrenApi from '../client/children';
+import client from '../client';
 
 
 const SeasonPage = () => {    
     const seasonId = useSeasonStore(state => state.seasonId);
     
-    const storeSetSeason =useSeasonStore(state => state.setSeason);    
+    const storeSetSeason = useSeasonStore(state => state.setSeason);    
     const storeSetRegisters = useRegistersStore(state => state.setRegisters);
     const storeSetMonitors = useMonitorStore(state => state.setMonitors);
     const storeSetDays = useDaysStore(state => state.setDays);
     const addRegister = useRegistersStore(state => state.addRegister);
 
-  const loadRegisters = (seasonId) => {
-    seasonsApi
-      .getRegisters(seasonId)
-      .then(registers => 
-        storeSetRegisters(registers)
-      );
-  }
-  const loadSeason = (id) => {
-    seasonsApi
-      .get(id)
-      .then(newSeason => {
-          console.log("Season loaded: ", newSeason);
-          storeSetSeason(newSeason);
-        }
-      );
-  }
-  
-  const loadDays = () => {
-    daysApi
-        .get()
-        .then(days => {
-          storeSetDays(days);
-        });
-  }
-
-  const loadMonitors = () => {
-    monitorsApi
-        .get()
-        .then(monitors => {
-          storeSetMonitors(monitors);
-        });
-    }
-
     useEffect(() => {
       console.log("Getting registers for season ", seasonId);
-      loadSeason(seasonId);
-      loadDays();
-      loadMonitors();
-      loadRegisters(seasonId);
+      client.loadSeason(seasonId).then(storeSetSeason);
+      client.loadDays().then(storeSetDays);
+      client.loadMonitors().then(storeSetMonitors);
+      client.loadRegisters(seasonId).then(storeSetRegisters);
     }, []);
 
     const handleError = (onFailure) => {
@@ -86,37 +50,11 @@ const SeasonPage = () => {
       }
     }
 
-    const updateChild = (newChild) => {
-      console.log("Updating child", newChild);
-      return childrenApi
-        .update(newChild.id, newChild)
-        .then(child => {
-          console.log('Child updated!');
-          return child;
-        })
-    }
-    const postNewChild = (newChild) => {
-      console.log("Posting new child", newChild);
-      return childrenApi
-          .create(newChild)
-          .then(child => {
-            console.log('Child created!');
-            return child;
-          })
-    }
-
     const onRegisterAdded = (newRegister, onSuccess, onFailure) => {
       // Simple POST request with a JSON body using fetch
     console.log("Posting new register", newRegister);
-    const childPromise = newRegister.child.id == undefined? postNewChild(newRegister.child): updateChild(newRegister.child);
-    childPromise
-      .then(child => {
-        seasonsApi
-          .registerChild(seasonId, {
-              ...newRegister,
-              child: child.id
-          })
-          .then(register => {
+    client.addRegisterAndUpdateOrCreateChild(newRegister)
+      .then(register => {
             onSuccess();  
             addRegister({
                 ...register,
@@ -124,8 +62,6 @@ const SeasonPage = () => {
               });
           })
           .catch(handleError(onFailure))
-      })
-      .catch(handleError(onFailure))
   }
   
   return (<>

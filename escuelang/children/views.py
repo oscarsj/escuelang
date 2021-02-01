@@ -2,12 +2,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from .models import (
-    Course, Season, Child, RegisteredChild, Monitor, Days, Payments
+    Course, Season, Child, RegisteredChild, 
+    Monitor, Days, Payments, Settings
 )
 from .serializers import (
     CourseSerializer, ChildrenSerializer, RegisterSerializer,
     MonitorSerializer, DaysSerializer, SeasonSerializer,
-    PaymentsSerializer, RegisterReadOnlySerializer
+    PaymentsSerializer, RegisterReadOnlySerializer,
+    SettingsSerializer
 )
 
 
@@ -88,3 +90,7 @@ class SearchChildView(generics.ListAPIView):
         return Child.objects.filter(
                 name=self.request.query_params.get('name', None),
                 surname=self.request.query_params.get('surname', None))
+
+class SettingsView(viewsets.ModelViewSet):
+    serializer_class = SettingsSerializer
+    queryset = Settings.objects.all()
