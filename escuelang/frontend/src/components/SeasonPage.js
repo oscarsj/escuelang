@@ -3,11 +3,13 @@ import RegisterList from './RegisterList';
 import SeasonData from './SeasonData';
 import AddRegisterForm from './AddRegisterForm';
 import {
+  useSettingsStore,
   useSeasonStore, 
   useRegistersStore,
   useMonitorStore,
   useDaysStore } from '../store';
 import client from '../client';
+import { addAPITranslations } from '../translations';
 
 
 const SeasonPage = () => {    
@@ -18,7 +20,9 @@ const SeasonPage = () => {
     const storeSetMonitors = useMonitorStore(state => state.setMonitors);
     const storeSetDays = useDaysStore(state => state.setDays);
     const addRegister = useRegistersStore(state => state.addRegister);
-
+    const lang = useSettingsStore((state)=>state.language);
+    const trans = addAPITranslations[lang]
+  
     useEffect(() => {
       console.log("Fetching data from server - season: ", seasonId);
       client.loadSeason(seasonId).then(storeSetSeason);
@@ -33,12 +37,12 @@ const SeasonPage = () => {
             console.log('Error in update child: ', err.response);
             if(err.response.data.child != undefined) {
               if(err.response.data.child[0] == "This field must be unique.")
-                onFailure("¡El alumno ya está registrado en esta temporada!", err.response.data);
+                onFailure(trans.child_already_registered, err.response.data);
               else
-                onFailure("Error en los datos del alumno");
+                onFailure(trans.child_data_error);
             } else {
               const nonFieldErrors = err.response.data.non_field_errors;
-              onFailure(nonFieldErrors || "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos", err.response.data);
+              onFailure(nonFieldErrors || trans.child_data_error, err.response.data);
             }
         } else if (err.request) {
             // client never received a response, or request never left

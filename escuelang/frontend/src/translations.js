@@ -126,10 +126,22 @@ const addRegisterTranslations = {
     }
 }
 
+const addAPITranslations = {
+    es_ES: {
+        child_already_registered: "¡El alumno ya está registrado en esta temporada!",
+        child_data_error: "Ha habido errores al añadir el nuevo alumno. Revise los valores introducidos"
+    },
+    en_US: {
+        child_already_registered: "Child already registered",
+        child_data_error: "Error in child data"
+    }
+}
+
 export { 
     allTranslations,
     seasonTranslations,
     oldChildrenTranslations,
     addRegisterTranslations,
-    visibleFieldsTranslations
+    visibleFieldsTranslations,
+    addAPITranslations
 };
