@@ -5,7 +5,6 @@ import InputChild from './InputChild';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
 import {useSettingsStore} from "../store";
 
-
 const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) => {
     const [showDelete, setShowDelete] = useState(false);
     const [editMode, setEditMode] = useState(false);
@@ -44,7 +43,6 @@ const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) =
     const confirmDelete = (event) => { 
         event.stopPropagation();
         event.preventDefault();
-        console.log("Opening delete confirmation");
         setShowDelete(true)
     }
     return (<>
@@ -55,10 +53,10 @@ const EditableChild = ({child, onChildUpdated, onChildDeleted, error, errors}) =
             <Modal.Body>{trans.confirmDeleteChild}</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={cancelDelete}>
-                Cancelar
+                {trans.cancel_button}
               </Button>
               <Button variant="primary" onClick={handleChildDeleted}>
-                Borrar
+              {trans.delete_button}
               </Button>
             </Modal.Footer>
           </Modal>

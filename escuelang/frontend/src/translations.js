@@ -85,21 +85,37 @@ const seasonTranslations = {
 const oldChildrenTranslations = {
     'es_ES': {
         confirmDeleteChildTitle: 'Borrar alumno',
-        confirmDeleteChild: '¿Estás seguro de querer borrar el alumno? ¡Esto eliminará totalmente al alumno de la base de datos!'
+        confirmDeleteChild: '¿Estás seguro de querer borrar el alumno? ¡Esto eliminará totalmente al alumno de la base de datos!',
+        accept_button: 'Aceptar',
+        cancel_button: 'Cancelar',
+        delete_button: 'Borrar',
     },
-    'es_ES': {
+    'en_US': {
         confirmDeleteChildTitle: 'Delete child?',
-        confirmDeleteChild: 'Are you sure you want to fully delete child from database? This cannot be undone'
+        confirmDeleteChild: 'Are you sure you want to fully delete child from database? This cannot be undone',
+        accept_button: 'OK',
+        cancel_button: 'Cancel',
+        delete_button: 'Delete',   
     }
 }
-
+const visibleFieldsTranslations = {
+    es_ES: {
+        show_button: 'Campos visibles',
+        title: 'Selecciona campos visibles'
+    },
+    en_US: {
+        show_button: 'Show fields',
+        title: 'Select fields to show'
+    }
+}
 const addRegisterTranslations = {
     es_ES: {
         add_register_button: 'Añadir alumno',
         add_register_title: 'Añadir nuevo alumno a esta temporada',
         save_button: 'Guardar',
         save_and_add_button: 'Guardar y seguir añadiendo',
-        cancel_button: 'Cancelar'
+        cancel_button: 'Cancelar',
+        delete_button: 'Borrar'
     },
     en_US: {
         add_register_button: 'Add child',
@@ -114,5 +130,6 @@ export {
     allTranslations,
     seasonTranslations,
     oldChildrenTranslations,
-    addRegisterTranslations
+    addRegisterTranslations,
+    visibleFieldsTranslations
 };

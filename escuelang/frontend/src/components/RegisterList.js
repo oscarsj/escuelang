@@ -54,7 +54,11 @@ const RegisterList = () => {
 
   return (
      <div className="container">
-       <VisibleFieldsSelector className="float-left" initialFields={flattenFields(visibleFields)} onSubmit={handleSetVisibleFields} translations={allFieldTranslations}/>
+       <VisibleFieldsSelector 
+         className="float-left" 
+         initialFields={flattenFields(visibleFields)} 
+         onSubmit={handleSetVisibleFields} 
+         translations={allFieldTranslations}/>
     <Table striped bordered hover>
       <thead>
         <tr>

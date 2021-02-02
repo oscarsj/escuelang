@@ -1,12 +1,16 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Overlay, Popover } from "react-bootstrap";
+import {visibleFieldsTranslations} from '../translations';
+import {useSettingsStore} from '../store';
 
 const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
     const [show, setShow] = useState(false);
     const [target, setTarget] = useState(null);
     const [visibleFields, setVisibleFields] = useState(initialFields);
     const ref = useRef(null);
-
+    const lang = useSettingsStore((state) => state.language);  
+    const trans = visibleFieldsTranslations[lang];
+    
     const onShow = (event) => {
         setShow(!show);
         if (event != null) {
@@ -53,7 +57,7 @@ const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
     return (
         <div ref={ref}>
 <Button className="mb-2" variant="outline-primary" size="sm" onClick={onShow}>
-    Campos visibles
+    {trans.show_button}
 </Button>
 <Overlay
         show={show}
@@ -63,7 +67,7 @@ const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
         containerPadding={20}
       >
       <Popover id="popover-basic">
-<Popover.Title as="h3">Selecciona campos visibles</Popover.Title>
+<Popover.Title as="h3">{trans.title}</Popover.Title>
 <Popover.Content>
   <Form onSubmit={handleSubmit}>
     <Form.Group>
