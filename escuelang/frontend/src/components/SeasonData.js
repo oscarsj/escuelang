@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Form, Col, Alert, Card } from 'react-bootstrap';
 import EditSaveCancelButtons from './EditSaveCancelButtons';
-import { useSeasonStore, useSettingsStore } from '../store';
+import { useSettingsStore } from '../store';
 import { allTranslations } from "../translations";
 
 
-const SeasonData = ({onSeasonUpdated}) => {
+const SeasonData = ({season, onSeasonUpdated}) => {
   const [editMode, setEditMode] = useState(false);
   const [error, setError] = useState("");
-  const [errors] = useState({});
-
-  const season = useSeasonStore(state => state.season);
+  const [errors, setErrors] = useState({});
   const [newSeason, setNewSeason] = useState(season);
 
   const lang = useSettingsStore(state=>state.language);
@@ -26,13 +24,22 @@ const SeasonData = ({onSeasonUpdated}) => {
     }
 
   const onUpdateSuccess = () => {
-
+    setNewSeason(season);
+    setError();
+    setErrors({});
+    setEditMode(false);
   }
 
   const onUpdateFailure = (err) => {
     setError(err);
+    setErrors(err.data);
   }
-
+  const handleCancelEdit = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setNewSeason(season);
+    setEditMode(false);
+}
   const handleSeasonUpdated = (event) => {
       console.log("New season data: ", newSeason);
       event.preventDefault();
@@ -50,7 +57,7 @@ const SeasonData = ({onSeasonUpdated}) => {
         placeholder={fieldTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={!editMode} 
-        defaultValue={newSeason[field]}
+        defaultValue={newSeason? newSeason[field]:""}
         isInvalid={Boolean(errors?errors[field]:false)}/>
       <Form.Control.Feedback type="invalid">
         Error: {errors? errors[field]:""}
@@ -64,30 +71,10 @@ const SeasonData = ({onSeasonUpdated}) => {
     
     <Form.Row>
   <Col xs={4}>
-  <Form.Control 
-        type='text'
-        id='name' 
-        placeholder={fieldTranslations.name} 
-        onChange={handleChange('name')} 
-        readOnly={!editMode} 
-        defaultValue={newSeason.name}
-        isInvalid={Boolean(errors?errors.name:false)}/>
-      <Form.Control.Feedback type="invalid">
-        Error: {errors? errors.name:""}
-      </Form.Control.Feedback>
+{getInputForField('name')}
   </Col>
   <Col xs={4}>
-  <Form.Control 
-        type='text'
-        id='course' 
-        placeholder={fieldTranslations.course} 
-        onChange={handleChange('course')} 
-        readOnly={!editMode} 
-        defaultValue={newSeason.course}
-        isInvalid={Boolean(errors?errors.course:false)}/>
-      <Form.Control.Feedback type="invalid">
-        Error: {errors? errors.course:""}
-      </Form.Control.Feedback>
+{getInputForField('course')}
   </Col>
   </Form.Row>
   <Form.Row>
@@ -101,7 +88,10 @@ const SeasonData = ({onSeasonUpdated}) => {
     {getInputForField('default_price')}
   </Col>
   </Form.Row>
-  <EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/>
+  <EditSaveCancelButtons
+    editMode={editMode}
+    onSetEditMode={setEditMode}
+    onCancel={handleCancelEdit}/>
   </Form>
   </div>)}
   {(!editMode && 
@@ -113,7 +103,11 @@ const SeasonData = ({onSeasonUpdated}) => {
     <div>De {season.start_date} a {season.end_date}</div>
     <div>Precio por alumno {season.default_price}</div>
     </Card.Text>
-    <Card.Link href="#"><EditSaveCancelButtons editMode={editMode} onSetEditMode={setEditMode}/></Card.Link>
+    <Card.Link href="#">
+    <EditSaveCancelButtons
+      editMode={editMode} 
+      onSetEditMode={setEditMode}
+      onCancel={handleCancelEdit}/></Card.Link>
   </Card.Body>
 </Card>
     )}

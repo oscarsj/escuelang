@@ -12,7 +12,7 @@ import client from '../client';
 
 const SeasonPage = () => {    
     const seasonId = useSeasonStore(state => state.seasonId);
-    
+    const season = useSeasonStore(state => state.season);
     const storeSetSeason = useSeasonStore(state => state.setSeason);    
     const storeSetRegisters = useRegistersStore(state => state.setRegisters);
     const storeSetMonitors = useMonitorStore(state => state.setMonitors);
@@ -75,7 +75,9 @@ const SeasonPage = () => {
     })
   }
   return (<>
-    <SeasonData onSeasonUpdated={onSeasonUpdated}/>
+    <SeasonData 
+      season={season}
+      onSeasonUpdated={onSeasonUpdated}/>
     <AddRegisterForm onRegisterAdded={onRegisterAdded}/>
     <RegisterList />
     </>
