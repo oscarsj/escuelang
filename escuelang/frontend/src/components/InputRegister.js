@@ -74,7 +74,7 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
   }
     return (<>
   <Form.Row>
-  <Col xs={4}>
+  <Col xs={3}>
   <Form.Group>
   <Form.Label>{registerTranslations.monitor}</Form.Label>
     <Form.Control 
@@ -93,24 +93,7 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
     </Form.Control.Feedback>
   </Form.Group>
   </Col>
-  <Col>
-      {getInputForField('price_month')}
-  </Col>
-  <Col xs={2}>
-  <Form.Group controlId="formBasicCheckbox">
-  <Form.Label></Form.Label>
-    <Form.Check
-       type="checkbox" 
-       id={`${registerId}-competition`} 
-       label={registerTranslations['competition']} 
-       defaultChecked={newRegister.competition} 
-       onChange={handleChangeCompetition}
-       disabled={readOnly} />
-  </Form.Group>
-  </Col>
-  </Form.Row> 
-  <Form.Row>
-  <Col xs={4}>
+  <Col xs={3}>
   <Form.Group>
     <Form.Label>{registerTranslations.days}</Form.Label>
     <Form.Control 
@@ -127,6 +110,21 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
     <Form.Control.Feedback type="invalid">
         Error: {errors? errors.days:""}
     </Form.Control.Feedback>
+  </Form.Group>
+  </Col>
+  <Col>
+      {getInputForField('price_month')}
+  </Col>
+  <Col xs={2}>
+  <Form.Group controlId="formBasicCheckbox">
+  <Form.Label></Form.Label>
+    <Form.Check
+       type="checkbox" 
+       id={`${registerId}-competition`} 
+       label={registerTranslations['competition']} 
+       defaultChecked={newRegister.competition} 
+       onChange={handleChangeCompetition}
+       disabled={readOnly} />
   </Form.Group>
   </Col>
   </Form.Row>

@@ -16,7 +16,7 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
     const daysTranslations = fieldTranslations.days;
 
     const [field, setField] = useState();
-    
+    const [content, setContent] = useState("");
     const getKeyByValue = (object, value) => { 
         return Object.keys(object).find(key => object[key] === value); 
     } 
@@ -24,8 +24,9 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
     const onNewFilterDays = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        const content = getKeyByValue(daysTranslations, event.target.value);
-        console.log("Days to filter: ", content);
+        const tmpContent = getKeyByValue(daysTranslations, event.target.value);
+        console.log("Days to filter: ", tmpContent);
+        setContent(tmpContent);
         onFilterUpdated(field && content? {field: field, content: content}:undefined)
     }
 
@@ -57,6 +58,7 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
             id='content'
             size="sm"
             placeholder='filtro...' 
+            value={content}
             onChange={onNewFilter} 
         />)
     }
@@ -65,13 +67,15 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
         event.stopPropagation();
         event.preventDefault();
         setField('Elige un campo...');
+        setContent("");
         onFilterUpdated(undefined);
     }
     const onNewFilter = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        const content = event.target.value;
-        onFilterUpdated(field && content? {field: field, content: content}:undefined)
+        const tmpContent = event.target.value;
+        setContent(tmpContent);
+        onFilterUpdated(field && tmpContent? {field: field, content: tmpContent}:undefined)
     };
     return (<Form inline>
     <Form.Group>
