@@ -39,7 +39,7 @@ class MonitorSerializer(serializers.ModelSerializer):
 class DaysSerializer(serializers.ModelSerializer):
     class Meta:
         model = Days
-        fields = ('id', 'name', 'dow')
+        fields = ('id', 'name')
 
 
 class ChildrenSerializer(serializers.ModelSerializer):
@@ -58,8 +58,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                                            slug_field='nick')
     days = serializers.SlugRelatedField(read_only=False,
                                         queryset=Days.objects.all(),
-                                        slug_field='name',
-                                        many=True)
+                                        slug_field='name')
     season = serializers.StringRelatedField()
 
     class Meta:
@@ -94,8 +93,7 @@ class RegisterReadOnlySerializer(serializers.ModelSerializer):
     monitor = serializers.SlugRelatedField(read_only=True,
                                            slug_field='nick')
     days = serializers.SlugRelatedField(read_only=True,
-                                        slug_field='name',
-                                        many=True)
+                                        slug_field='name')
     season = serializers.StringRelatedField()
     payments_set = serializers.StringRelatedField(read_only=True, many=True)
     child = ChildrenSerializer()

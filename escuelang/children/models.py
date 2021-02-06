@@ -96,7 +96,6 @@ class PricesPerDay(models.Model):
 class Days(models.Model):
 
     name = models.CharField(max_length=25)
-    dow = models.IntegerField()
 
     def __str__(self):
         return "%s" % self.name
@@ -119,7 +118,8 @@ class RegisteredChild(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     price_month = MoneyField(decimal_places=2, max_digits=8,
                              default_currency='EUR')
-    days = models.ManyToManyField(Days)
+    days = models.ForeignKey(Days, blank=True, null=True,
+                            on_delete=models.CASCADE)
     monitor = models.ForeignKey(Monitor, blank=True, null=True,
                                 on_delete=models.CASCADE)
     payment_method = models.OneToOneField(PaymentMethods, null=True,

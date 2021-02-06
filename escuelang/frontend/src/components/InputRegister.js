@@ -56,14 +56,11 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
   }
 
   const handleChangeDays = (event) => {
-    console.log("Days changed ", event.target.id);
+    console.log("Days changed ", event.target.selectedOptions[0].id);
     console.log("Current days ", newRegister.days);
-    const tmpRegister = {...newRegister};
-    if (newRegister.days.includes(event.target.id)) {
-      tmpRegister.days = newRegister.days.filter((day)=> day != event.target.id)
-    } else {
-      tmpRegister.days.push(event.target.id);
-    }
+    const tmpRegister = {...newRegister,
+      days: event.target.selectedOptions[0].id
+    };
     setNewRegister(tmpRegister);
     onRegisterUpdated(tmpRegister);
   }
@@ -87,7 +84,7 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
       onChange={handleChangeMonitor}
       isInvalid={Boolean(errors?errors.monitor:false)}
       disabled={readOnly}>
-      <option key={`monitor-empty`}></option>
+      <option key="monitor-empty"></option>
       {allMonitors && allMonitors.map(monitor => 
       <option key={`monitor-${monitor.id}`}>{monitor.nick}</option>)}
     </Form.Control>
@@ -116,19 +113,20 @@ const InputRegister = ({register, onRegisterUpdated, readOnly, errors}) => {
   <Col xs={4}>
   <Form.Group>
     <Form.Label>{registerTranslations.days}</Form.Label>
-      {allDays && allDays.map((day) => {
-        return (
-          <Form.Check 
-            key={`check-day${day.id}`}
-            type="switch"
-            onChange={handleChangeDays}
-            id={day.name}
-            readOnly={readOnly} 
-            defaultChecked={newRegister.days?newRegister.days.includes(day.name):false}
-            label={daysTranslations[day.name]}
-            disabled={readOnly}/>
-          )}
-        )}
+    <Form.Control 
+      id={`register-${registerId}-days-${allDays.length}`} 
+      as="select"
+      value={newRegister.days == undefined? "":daysTranslations[newRegister.days]}
+      onChange={handleChangeDays}
+      isInvalid={Boolean(errors?errors.days:false)}
+      disabled={readOnly}>
+      <option key="days-empty"></option>
+      {allDays && allDays.map(days => 
+      <option key={`days-${days.id}`} id={days.name}>{daysTranslations[days.name]}</option>)}
+    </Form.Control>
+    <Form.Control.Feedback type="invalid">
+        Error: {errors? errors.days:""}
+    </Form.Control.Feedback>
   </Form.Group>
   </Col>
   </Form.Row>

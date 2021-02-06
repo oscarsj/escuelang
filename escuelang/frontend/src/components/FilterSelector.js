@@ -16,6 +16,18 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
     const daysTranslations = fieldTranslations.days;
 
     const [field, setField] = useState();
+    
+    const getKeyByValue = (object, value) => { 
+        return Object.keys(object).find(key => object[key] === value); 
+    } 
+
+    const onNewFilterDays = (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        const content = getKeyByValue(daysTranslations, event.target.value);
+        console.log("Days to filter: ", content);
+        onFilterUpdated(field && content? {field: field, content: content}:undefined)
+    }
 
     const getInputControl = (field) => {
         if(field == 'days') {
@@ -23,7 +35,7 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
                 id="filter-days"
                 as="select"
                 size="sm"
-                onChange={onNewFilter}>
+                onChange={onNewFilterDays}>
                 <option key="days-empty">Elige día</option>
                 {allDays && allDays.map(day => 
                 <option key={day.name} value={daysTranslations[day.name]}>{daysTranslations[day.name]}</option>)}
@@ -48,10 +60,12 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
             onChange={onNewFilter} 
         />)
     }
+
     const handleReset = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        setField(undefined);
+        setField('Elige un campo...');
+        onFilterUpdated(undefined);
     }
     const onNewFilter = (event) => {
         event.stopPropagation();

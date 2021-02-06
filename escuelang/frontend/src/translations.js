@@ -20,11 +20,8 @@ const allTranslations = {
             competition: 'Compite'
         },
         days:{
-            Monday: 'Lunes',
-            Tuesday: 'Martes',
-            Wednesday: 'Miércoles',
-            Thursday: 'Jueves',
-            Friday: 'Viernes'
+            "Monday and wednesday": 'Lunes y miércoles',
+            "Tuesday and thursday": 'Martes y jueves',
         },
         season: {
             name: "Nombre",
@@ -56,11 +53,8 @@ const allTranslations = {
             competition: 'Competition?'
         },
         days:{
-            Monday: 'Monday',
-            Tuesday: 'Tuesday',
-            Wednesday: 'Wednesday',
-            Thursday: 'Thursday',
-            Friday: 'Friday'
+            "Monday and wednesday": 'Monday and wednesday',
+            "Tuesday and thursday": 'Tuesday and thursday',
         },
         season: {
             name: 'Name',
