@@ -12,8 +12,7 @@ import client from '../client';
 import { addAPITranslations } from '../translations';
 
 
-const SeasonPage = () => {    
-    const seasonId = useSeasonStore(state => state.seasonId);
+const SeasonPage = ({seasonId='active'}) => {    
     const season = useSeasonStore(state => state.season);
     const storeSetSeason = useSeasonStore(state => state.setSeason);    
     const storeSetRegisters = useRegistersStore(state => state.setRegisters);

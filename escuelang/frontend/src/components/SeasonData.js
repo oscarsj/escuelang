@@ -49,15 +49,15 @@ const SeasonData = ({season, onSeasonUpdated}) => {
 
     const getInputForField = (field, type='text') => {
       return (  
-      <Form.Group>
+      <Form.Group id={`${season.id}-${field}`}>
       <Form.Label>{fieldTranslations[field]}</Form.Label>
-      <Form.Control 
+      <Form.Control
         type={type}
-        id={field} 
+        id={`${season.id}-${field}`}
         placeholder={fieldTranslations[field]} 
         onChange={handleChange(field)} 
         readOnly={!editMode} 
-        defaultValue={newSeason? newSeason[field]:""}
+        defaultValue={season[field]}
         isInvalid={Boolean(errors?errors[field]:false)}/>
       <Form.Control.Feedback type="invalid">
         Error: {errors? errors[field]:""}
@@ -65,16 +65,15 @@ const SeasonData = ({season, onSeasonUpdated}) => {
       </Form.Group>)
     }
     return (<>
-    {(editMode && <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
-    <Form onSubmit={handleSeasonUpdated}>
-        {(error && <Alert variant="danger">{error}</Alert>)}
-    
-    <Form.Row>
+  {(editMode && (season != undefined) && <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
+  <Form onSubmit={handleSeasonUpdated}>
+    {(error && <Alert variant="danger">{error}</Alert>)}
+  <Form.Row>
   <Col xs={4}>
-{getInputForField('name')}
+  {getInputForField('name')}
   </Col>
   <Col xs={4}>
-{getInputForField('course')}
+  {getInputForField('course')}
   </Col>
   </Form.Row>
   <Form.Row>
