@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
+import FilterSelector from './FilterSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table } from 'react-bootstrap'
 import {useSettingsStore, useRegistersStore} from '../store';
@@ -10,18 +11,23 @@ import {allTranslations} from '../translations';
 const RegisterList = () => {
   const lang = useSettingsStore(state=>state.language);  
   const fieldTranslations = allTranslations[lang];
+  const allFields = {
+    'child': Object.keys(fieldTranslations.child),
+    'register': Object.keys(fieldTranslations.register)
+  }
+  const initFields = {
+    'child': ['name', 'surname', 'birthdate','age'],
+    'register': ['monitor']
+  }
+  
   const registers = useRegistersStore((state) => state.registers);
-  const [visibleFields, setVisibleFields] = useState(
-    {
-      'child': ['name', 'surname', 'birthdate','age'],
-      'register': ['monitor']
-    }
-  );
+  const [visibleFields, setVisibleFields] = useState(initFields);
+  const [filter, setFilter] = useState();
   const handleSetVisibleFields = (visibleFieldsList) => {
     console.log("visibleFieldList changed: ", visibleFieldsList);
     setVisibleFields({
-      child: visibleFieldsList.filter(field => Object.keys(fieldTranslations.child).includes(field)),
-      register: visibleFieldsList.filter(field => Object.keys(fieldTranslations.register).includes(field))
+      child: visibleFieldsList.filter(field => allTranslations.child.includes(field)),
+      register: visibleFieldsList.filter(field => allTranslations.register.includes(field))
     })
   }
   const [orderBy, setOrder] = useState({
@@ -51,6 +57,14 @@ const RegisterList = () => {
     return fields.child.concat(fields.register);
   }
   const allFieldTranslations = Object.assign({}, fieldTranslations.child, fieldTranslations.register)
+  const fieldIsChild = (field) => 
+    allFields.child.includes(field)
+
+  const filterRegister = (register) => 
+    filter != undefined? 
+      fieldIsChild(filter.field)? register.child[filter.field].includes(filter.content):
+        register[filter.field].includes(filter.content)
+      :true;
 
   return (
      <div className="container">
@@ -59,6 +73,10 @@ const RegisterList = () => {
          initialFields={flattenFields(visibleFields)} 
          onSubmit={handleSetVisibleFields} 
          translations={allFieldTranslations}/>
+      <FilterSelector 
+        fields={flattenFields(allFields)}
+        onFilterUpdated={setFilter}
+        translations={allFieldTranslations}/>
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -69,6 +87,7 @@ const RegisterList = () => {
       </thead>
       <tbody>
         {registers && registers
+          .filter(filterRegister) 
           .sort(sortByField)
           .map((register) =>
         <Register 

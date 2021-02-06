@@ -65,7 +65,7 @@ const SeasonData = ({season, onSeasonUpdated}) => {
       </Form.Group>)
     }
     return (<>
-  {(editMode && (season != undefined) && <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
+  {(editMode && <div className="border border-primary rounded mb-0" style={{ padding: "10px", marginTop: "10px", marginBottom: "10px"}}>
   <Form onSubmit={handleSeasonUpdated}>
     {(error && <Alert variant="danger">{error}</Alert>)}
   <Form.Row>
