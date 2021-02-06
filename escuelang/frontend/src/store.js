@@ -2,7 +2,7 @@ import create from 'zustand';
 
 
 const useSettingsStore = create(set => ({
-    language: 'en_US',
+    language: 'es_ES',
     setLanguage: (lang) => set({language: lang})
 }))
 
