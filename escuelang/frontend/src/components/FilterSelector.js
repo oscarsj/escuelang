@@ -22,8 +22,9 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
             return (<Form.Control 
                 id="filter-days"
                 as="select"
+                size="sm"
                 onChange={onNewFilter}>
-                <option key="days-empty"></option>
+                <option key="days-empty">Elige día</option>
                 {allDays && allDays.map(day => 
                 <option key={day.name} value={daysTranslations[day.name]}>{daysTranslations[day.name]}</option>)}
                 </Form.Control>)
@@ -32,8 +33,9 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
             return (<Form.Control 
                 id="filter-monitors"
                 as="select"
+                size="sm"
                 onChange={onNewFilter}>
-                <option key="monitors-empty"></option>
+                <option key="monitors-empty">Elige monitor</option>
                 {allMonitors && allMonitors.map(monitor => 
                 <option key={monitor.nick} value={monitor.nick}>{monitor.nick}</option>)}
                 </Form.Control>)
@@ -41,7 +43,8 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
         return (<Form.Control 
             type='text'
             id='content'
-            placeholder='content' 
+            size="sm"
+            placeholder='filtro...' 
             onChange={onNewFilter} 
         />)
     }
@@ -57,21 +60,24 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
         onFilterUpdated(field && content? {field: field, content: content}:undefined)
     };
     return (<Form inline>
-        <Form.Label>
-          Filtro: 
-        </Form.Label>
+    <Form.Group>
+    <Form.Label>
+          Filtrar: 
+    </Form.Label>
     <Form.Control 
       id="filter-fields"
       as="select"
       value={field}
+      size="sm"
       onChange={(event) => setField(event.target.value)}
       >
-      <option key="field-empty"></option>
+      <option key="field-empty">Elige un campo...</option>
       {fields && fields.map(field => 
       <option key={field} value={field}>{translations[field]}</option>)}
     </Form.Control>
+    </Form.Group>
     {getInputControl(field)}
-    <Button variant="secondary" onClick={handleReset} className="mb-2">
+    <Button variant="outline-secondary" size="sm" onClick={handleReset} >
     <MdCancel/>
     </Button>
     </Form>);

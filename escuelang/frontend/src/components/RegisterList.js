@@ -3,7 +3,7 @@ import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import FilterSelector from './FilterSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
-import { Table } from 'react-bootstrap'
+import { Table, Row, Col, Container } from 'react-bootstrap'
 import {useSettingsStore, useRegistersStore} from '../store';
 import {allTranslations} from '../translations';
 
@@ -68,16 +68,23 @@ const RegisterList = () => {
 
   return (
      <div className="container">
-       <VisibleFieldsSelector 
+     <Container>
+  <Row>
+    <Col><VisibleFieldsSelector 
          className="float-left" 
          initialFields={flattenFields(visibleFields)} 
          onSubmit={handleSetVisibleFields} 
          translations={allFieldTranslations}/>
-      <FilterSelector 
+    </Col>
+    <Col>
+    <FilterSelector 
         fields={flattenFields(allFields)}
         onFilterUpdated={setFilter}
         translations={allFieldTranslations}/>
-    <Table striped bordered hover>
+    </Col>
+  </Row>
+</Container>
+<Table striped bordered hover>
       <thead>
         <tr>
         {(flattenFields(visibleFields).map((field) => {

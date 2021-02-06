@@ -56,7 +56,7 @@ const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
 
     return (
         <div ref={ref}>
-<Button className="mb-2" variant="outline-primary" size="sm" onClick={onShow}>
+<Button className="mb-2" variant="outline-secondary" size="sm" onClick={onShow}>
     {trans.show_button}
 </Button>
 <Overlay
