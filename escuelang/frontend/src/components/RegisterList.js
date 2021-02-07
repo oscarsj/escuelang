@@ -36,7 +36,9 @@ const RegisterList = () => {
     reversed: false
   });
   const handleOnClick = (field) => {
-    return () => {
+    return (event) => {
+      event.stopPropagation();
+      event.preventDefault();
       setOrder({
           field: field,
           reversed: field==orderBy.field? !orderBy.reversed : orderBy.reversed

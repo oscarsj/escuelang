@@ -20,7 +20,9 @@ const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
         setTarget(event.target);
     }
     const handleSubmit = (event) => {
-        console.log(event.target)
+      event.preventDefault();
+      event.stopPropagation();  
+      console.log(event.target)
         const selected = [...event.target];
         const result = selected
           .map((option) => option.checked? option.id.replace('check','') : null)
@@ -29,8 +31,6 @@ const VisibleFieldsSelector = ({onSubmit, initialFields, translations}) => {
         setVisibleFields(result);
         onSubmit(result);
         setTarget(event.target);
-        event.preventDefault();
-        event.stopPropagation();
     }
     const onCancel = (event) => {
         setShow(false);
