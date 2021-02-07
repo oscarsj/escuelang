@@ -47,10 +47,16 @@ const RegisterList = () => {
       (orderBy.reversed? <BsCaretUpFill/>:<BsCaretDownFill/>) : <BsCaretDown/>
 
   const sortByField = (a, b) => {
-    if (a.child[orderBy.field] == null) return orderBy.reversed?-1 : 1;
-    if (b.child[orderBy.field] == null) return orderBy.reversed? 1 : -1;
-    if (typeof(a.child[orderBy.field]) != 'string') return a.child[orderBy.field] < (b.child[orderBy.field])? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
-    return a.child[orderBy.field].localeCompare(b.child[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
+    if(fieldIsChild(orderBy.field)) {
+      if (a.child[orderBy.field] == null) return orderBy.reversed?-1 : 1;
+      if (b.child[orderBy.field] == null) return orderBy.reversed? 1 : -1;
+      if (typeof(a.child[orderBy.field]) != 'string') return a.child[orderBy.field] < (b.child[orderBy.field])? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
+      return a.child[orderBy.field].localeCompare(b.child[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)
+    } else {
+      if (a[orderBy.field] == null) return orderBy.reversed?-1 : 1;
+      if (b[orderBy.field] == null) return orderBy.reversed? 1 : -1;
+      return a[orderBy.field].localeCompare(b[orderBy.field])==1? (orderBy.reversed? -1 : 1) : (orderBy.reversed? 1 : -1)  
+    }
   }
 
   const flattenFields = (fields) => {
