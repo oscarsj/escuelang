@@ -23,11 +23,12 @@ const RegisterList = () => {
   const registers = useRegistersStore((state) => state.registers);
   const [visibleFields, setVisibleFields] = useState(initFields);
   const [filter, setFilter] = useState();
+  
   const handleSetVisibleFields = (visibleFieldsList) => {
     console.log("visibleFieldList changed: ", visibleFieldsList);
     setVisibleFields({
-      child: visibleFieldsList.filter(field => allTranslations.child.includes(field)),
-      register: visibleFieldsList.filter(field => allTranslations.register.includes(field))
+      child: visibleFieldsList.filter(field => field in fieldTranslations.child),
+      register: visibleFieldsList.filter(field => field in fieldTranslations.register)
     })
   }
   const [orderBy, setOrder] = useState({
