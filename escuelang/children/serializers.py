@@ -39,7 +39,7 @@ class MonitorSerializer(serializers.ModelSerializer):
 class DaysSerializer(serializers.ModelSerializer):
     class Meta:
         model = Days
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'dows')
 
 
 class ChildrenSerializer(serializers.ModelSerializer):

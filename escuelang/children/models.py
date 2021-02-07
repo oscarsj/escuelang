@@ -96,6 +96,7 @@ class PricesPerDay(models.Model):
 class Days(models.Model):
 
     name = models.CharField(max_length=25)
+    dows = models.CharField(max_length=5)
 
     def __str__(self):
         return "%s" % self.name

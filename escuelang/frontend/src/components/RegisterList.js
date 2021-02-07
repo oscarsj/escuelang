@@ -101,8 +101,10 @@ const RegisterList = () => {
     <PrintDialog
      registers={registers
           .filter(filterRegister) 
-          .sort(sortByField)}/>
-    <Button size='sm' target="_blank" 
+          .sort(sortByField)}
+      fields={flattenFields(visibleFields)}
+      translations={fieldTranslations}/>
+    <Button size='sm' target="_blank" variant="outline-secondary"
       href={getMailTo()}><AiOutlineMail/></Button>
     </Col>
   </Row>
