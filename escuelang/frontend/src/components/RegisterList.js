@@ -6,6 +6,7 @@ import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
 import { Table, Row, Col, Container } from 'react-bootstrap'
 import {useSettingsStore, useRegistersStore} from '../store';
 import {allTranslations} from '../translations';
+import PrintDialog from './PrintDialog';
 
 
 const RegisterList = () => {
@@ -19,7 +20,7 @@ const RegisterList = () => {
     'child': ['name', 'surname', 'birthdate','age'],
     'register': ['monitor', 'days']
   }
-  
+
   const registers = useRegistersStore((state) => state.registers);
   const [visibleFields, setVisibleFields] = useState(initFields);
   const [filter, setFilter] = useState();
@@ -79,17 +80,24 @@ const RegisterList = () => {
      <div className="container">
      <Container>
   <Row>
-    <Col><VisibleFieldsSelector 
+    <Col>
+    <VisibleFieldsSelector 
          className="float-left" 
          initialFields={flattenFields(visibleFields)} 
          onSubmit={handleSetVisibleFields} 
          translations={allFieldTranslations}/>
     </Col>
-    <Col>
+    <Col xs={6}>
     <FilterSelector 
         fields={flattenFields(allFields)}
         onFilterUpdated={setFilter}
         translations={allFieldTranslations}/>
+    </Col>
+    <Col>
+    <PrintDialog
+     registers={registers
+          .filter(filterRegister) 
+          .sort(sortByField)}/>
     </Col>
   </Row>
 </Container>

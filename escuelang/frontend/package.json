@@ -38,6 +38,7 @@
     "react-bootstrap": "^1.4.0",
     "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
+    "react-to-print": "^2.12.3",
     "reactstrap": "^8.6.0",
     "redux": "^4.0.5",
     "regenerator-runtime": "^0.13.7",
