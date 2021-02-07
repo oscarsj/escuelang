@@ -3,11 +3,11 @@ import Register from "./Register";
 import VisibleFieldsSelector from './VisibleFieldsSelector';
 import FilterSelector from './FilterSelector';
 import { BsCaretDown, BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'
-import { Table, Row, Col, Container } from 'react-bootstrap'
+import { Table, Row, Col, Container, Button } from 'react-bootstrap'
 import {useSettingsStore, useRegistersStore} from '../store';
 import {allTranslations} from '../translations';
 import PrintDialog from './PrintDialog';
-
+import {AiOutlineMail} from 'react-icons/ai';
 
 const RegisterList = () => {
   const lang = useSettingsStore(state=>state.language);  
@@ -72,10 +72,14 @@ const RegisterList = () => {
 
   const filterRegister = (register) => 
     filter != undefined? 
-      fieldIsChild(filter.field)? register.child[filter.field].includes(filter.content):
-        register[filter.field].includes(filter.content)
+      fieldIsChild(filter.field)? 
+        register.child[filter.field]? register.child[filter.field].includes(filter.content):false
+        :
+        register[filter.field]? register[filter.field].includes(filter.content):false
       :true;
-
+  const getMailTo = () => 
+    'mailto:?bcc=' + registers.filter(filterRegister) 
+      .sort(sortByField).map((register) => register.child.email).join(',')
   return (
      <div className="container">
      <Container>
@@ -98,6 +102,8 @@ const RegisterList = () => {
      registers={registers
           .filter(filterRegister) 
           .sort(sortByField)}/>
+    <Button size='sm' target="_blank" 
+      href={getMailTo()}><AiOutlineMail/></Button>
     </Col>
   </Row>
 </Container>

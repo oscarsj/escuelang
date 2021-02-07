@@ -30,7 +30,7 @@ return (<>
     </Modal.Footer>
     </Modal>
       
-    <Button onClick={() => setShow(true)}><AiOutlinePrinter/></Button>
+    <Button onClick={() => setShow(true)} size='sm'><AiOutlinePrinter/></Button>
     </>)
 }
 
