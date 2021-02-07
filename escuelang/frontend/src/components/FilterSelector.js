@@ -27,7 +27,7 @@ const FilterSelector = ({fields, onFilterUpdated, translations}) => {
         const tmpContent = getKeyByValue(daysTranslations, event.target.value);
         console.log("Days to filter: ", tmpContent);
         setContent(tmpContent);
-        onFilterUpdated(field && content? {field: field, content: content}:undefined)
+        onFilterUpdated(field && tmpContent? {field: field, content: tmpContent}:undefined)
     }
 
     const getInputControl = (field) => {

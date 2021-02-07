@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import {useRegistersStore} from '../store';
+import {useSettingsStore, useRegistersStore} from '../store';
 import childrenApi from '../client/children';
 import seasonsApi from '../client/seasons';
 import EditableRegister from './EditableRegister';
+import { allTranslations } from '../translations';
+
 
 const Register = ({register, visibleFields}) => {
   const [rolledOut, setRolledOut] = useState(false);
   const storeReplaceRegister = useRegistersStore(state => state.replaceRegister)
   const storeDeleteRegister = useRegistersStore(state => state.deleteRegister);
+  const lang = useSettingsStore((state) => state.language);  
+  const fieldTranslations = allTranslations[lang];
+  const daysTranslations = fieldTranslations.days;
 
   const handleError = (onFailure) =>
    (err) => {
@@ -40,6 +45,11 @@ const Register = ({register, visibleFields}) => {
     })
     .catch(handleError(onFailure))
   }
+  const translate = (field, value) => 
+   field=='days'? daysTranslations[value]
+   :
+   field=='competition'? 
+    (value? 'Sí':'No'):value
 
   const onRegisterDeleted = (newRegister) => {
       console.log("deleting register ", newRegister.id);
@@ -55,7 +65,7 @@ const Register = ({register, visibleFields}) => {
   return (<>
 <tr onClick={() => setRolledOut(!rolledOut)}>
 {visibleFields.child.map((field) => <td key={`td$-${field}-${register.child[field]}`}>{register.child[field]}</td>)}
-{visibleFields.register.map((field) => <td key={`td${register[field]}`}>{field=='competition'? (register[field]? 'Sí':'No'):register[field]}</td>)}
+{visibleFields.register.map((field) => <td key={`td${register[field]}`}>{translate(field, register[field])}</td>)}
 </tr>
 {(rolledOut && (<tr>
     <td key={`tdUnrolled${register.id}`} colSpan="12">

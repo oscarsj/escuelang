@@ -17,7 +17,7 @@ const RegisterList = () => {
   }
   const initFields = {
     'child': ['name', 'surname', 'birthdate','age'],
-    'register': ['monitor']
+    'register': ['monitor', 'days']
   }
   
   const registers = useRegistersStore((state) => state.registers);
